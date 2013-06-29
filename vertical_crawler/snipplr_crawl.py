@@ -32,6 +32,7 @@ class SnipplrDownloader(threading.Thread):
         self.any_true = lambda predicate, sequence: True in itertools.imap(predicate, sequence)
         self.fi = open('./all_scrapy_urls', 'w')
         self.urls = set()
+        self.cnt = 0
 
     def run(self):
         while 1:
@@ -40,8 +41,12 @@ class SnipplrDownloader(threading.Thread):
                 print url
                 self.urls.add(url)
                 if len(self.urls) > 300:
+                    self.fi.write( '%s-%s' % (self.cnt * 300, self.cnt * 300 + 299) )
+                    self.cnt += 1
                     for url in self.urls:
                         self.fi.write(url)
+                    self.fi.write('\n')
+                    self.fi.flush()
                     self.urls.clear()
 
                 time.sleep(random.random())
