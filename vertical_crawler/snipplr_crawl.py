@@ -30,12 +30,20 @@ class SnipplrDownloader(threading.Thread):
         threading.Thread.__init__(self)
         self.queue = queue
         self.any_true = lambda predicate, sequence: True in itertools.imap(predicate, sequence)
+        self.fi = open('./all_scrapy_urls', 'w')
+        self.urls = set()
 
     def run(self):
         while 1:
             url = self.queue.get()
             try:
                 print url
+                self.urls.add(url)
+                if len(self.urls) > 300:
+                    for url in self.urls:
+                        self.fi.write(url)
+                    self.urls.clear()
+
                 time.sleep(random.random())
                 header = {
                         'User-Agent': random.choice(user_agent)
@@ -48,12 +56,16 @@ class SnipplrDownloader(threading.Thread):
                     if self.any_true(url.endswith, ('.jpg', '.gif', '.png')) is False:
                         if url.startswith('http') is False:
                             url = resp.url + url
+
                         self.queue.put(url)
 
             except Exception as e:
                 print e
 
             self.queue.task_done()
+
+        def __del__(self):
+            self.fi.close()
 
 class SnipplrAnalyze(threading.Thread):
     def __init__(self, queue):
@@ -70,6 +82,7 @@ class Test(unittest.TestCase):
         self.client = [SnipplrDownloader(self.queue) for i in xrange(10)]
 
     def tearDown(self):
+        for i in self.client: del i
         pass
 
     def test_main(self):
