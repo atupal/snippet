@@ -5,6 +5,7 @@ import requests
 import random
 import itertools
 import time
+import hashlib
 
 user_agent = [
         'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)',
@@ -24,13 +25,14 @@ user_agent = [
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:7.0.1) Gecko/20100101 Firefox/7.0.1',
         ]
 
+index_hash = set()
 
 class SnipplrDownloader(threading.Thread):
-    def __init__(self, queue):
+    def __init__(self, queue, index):
         threading.Thread.__init__(self)
         self.queue = queue
         self.any_true = lambda predicate, sequence: True in itertools.imap(predicate, sequence)
-        self.fi = open('./all_scrapy_urls', 'w')
+        self.fi = open('./all_scrapy_urls' + "_%s"%index, 'w')
         self.urls = set()
         self.cnt = 0
 
@@ -45,6 +47,7 @@ class SnipplrDownloader(threading.Thread):
                     self.cnt += 1
                     for url in self.urls:
                         self.fi.write(url)
+                        self.fi.write('\n')
                     self.fi.write('\n')
                     self.fi.flush()
                     self.urls.clear()
@@ -60,9 +63,14 @@ class SnipplrDownloader(threading.Thread):
                 for url in res:
                     if self.any_true(url.endswith, ('.jpg', '.gif', '.png')) is False:
                         if url.startswith('http') is False:
-                            url = resp.url + url
+                            url = 'http://snipplr.com/'  + url
+                        else:
+                            continue
 
-                        self.queue.put(url)
+                        h = hashlib.md5(url).hexdigest()
+                        if not h in index_hash:
+                            index_hash.add(h)
+                            self.queue.put(url)
 
             except Exception as e:
                 print e
@@ -84,7 +92,7 @@ class Test(unittest.TestCase):
         from Queue import Queue
         self.queue = Queue()
         self.queue.put('http://snipplr.com/all/tags/scrapy/')
-        self.client = [SnipplrDownloader(self.queue) for i in xrange(10)]
+        self.client = [SnipplrDownloader(self.queue, i) for i in xrange(10)]
 
     def tearDown(self):
         for i in self.client: del i
