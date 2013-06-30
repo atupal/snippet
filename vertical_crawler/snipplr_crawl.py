@@ -26,6 +26,7 @@ user_agent = [
         ]
 
 index_hash = set()
+content_hash = set()
 
 class SnipplrDownloader(threading.Thread):
     def __init__(self, queue, index):
@@ -40,30 +41,24 @@ class SnipplrDownloader(threading.Thread):
         while 1:
             url = self.queue.get()
             try:
-                print url
-                self.urls.add(url)
-                if len(self.urls) > 300:
-                    self.fi.write( '%s-%s' % (self.cnt * 300, self.cnt * 300 + 299) )
-                    self.cnt += 1
-                    for url in self.urls:
-                        self.fi.write(url)
-                        self.fi.write('\n')
-                    self.fi.write('\n')
-                    self.fi.flush()
-                    self.urls.clear()
-
                 time.sleep(random.random())
                 header = {
                         'User-Agent': random.choice(user_agent)
                         }
                 resp = requests.get(url, headers = header)
+                c_h = hashlib.md5(resp.content).hexdigest()
+                if c_h in content_hash:
+                    continue
+                else:
+                    content_hash.add(c_h)
+
                 xparser = lxml.html.fromstring(resp.content)
                 res = xparser.xpath("//@href")
                 res.extend(xparser.xpath("//@src"))
                 for url in res:
                     if self.any_true(url.endswith, ('.jpg', '.gif', '.png')) is False:
                         if url.startswith('http') is False:
-                            url = 'http://snipplr.com/'  + url
+                            url = 'http://snipplr.com/'  + url.lstrip('/')
                         else:
                             continue
 
@@ -71,6 +66,18 @@ class SnipplrDownloader(threading.Thread):
                         if not h in index_hash:
                             index_hash.add(h)
                             self.queue.put(url)
+
+                            print url
+                            self.urls.add(url)
+                            if len(self.urls) > 300:
+                                self.fi.write( '%s-%s' % (self.cnt * 300, self.cnt * 300 + 299) )
+                                self.cnt += 1
+                                for url in self.urls:
+                                    self.fi.write(url)
+                                    self.fi.write('\n')
+                                self.fi.write('\n')
+                                self.fi.flush()
+                                self.urls.clear()
 
             except Exception as e:
                 print e
