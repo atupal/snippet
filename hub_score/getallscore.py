@@ -27,7 +27,7 @@ def download(ID):
   if '201110090' not in resp.content and 'script' not in resp.content:
     pat = r'''U([0-9]{9,9})'''
     ret = re.findall(pat, resp.content)
-    if len(ret) > 0 and str(ret[0]) not in id_set:
+    if len(ret) > 0 and str(ret[0]) not in id_set and str(ret[0]) not in score_set:
       print '\033[31mget %s' % (ret[0])
       score_set[ ret[0] ] = resp.content.decode('gbk')
 
