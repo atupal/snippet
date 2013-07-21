@@ -28,7 +28,7 @@ def download(ID):
   if '201110090' not in resp.content and 'script' not in resp.content:
     pat = r'''U([0-9]{9,9})'''
     ret = re.findall(pat, resp.content)
-    if len(ret) > 0 and str(ret[0]) not in id_set:
+    if len(ret) > 0 and not str(ret[0]) not in id_set:
       print '\033[31mget %s' % (ret[0])
       score_set[ ret[0] ] = resp.content.decode('gbk')
 
@@ -42,6 +42,7 @@ def update_id():
 
     print 'crawler count: %d' % len(id_set)
 
+update_id()
 
 class Crawler(threading.Thread):
   def __init__(self, queue):
@@ -54,7 +55,7 @@ class Crawler(threading.Thread):
       try:
         time.sleep(0.1)
         download(ID)
-        if len(score_set) > 5:
+        if len(score_set) > 10:
           dictlock.acquire()
           try:
             with open('./score_grade.json', 'aw') as fi:

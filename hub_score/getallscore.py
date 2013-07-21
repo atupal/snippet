@@ -41,6 +41,8 @@ def update_id():
 
     print 'crawler count: %d' % len(id_set)
 
+update_id()
+
 
 class Crawler(threading.Thread):
   def __init__(self, queue):
