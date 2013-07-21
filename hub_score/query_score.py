@@ -33,5 +33,6 @@ def update_id():
 if __name__ == "__main__":
   #score_all(201117460)
   update_id()
-  score_grade(201015958)
-
+  import sys
+  score_grade(sys.argv[1])
+  #score_grade(201015958)

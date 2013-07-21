@@ -119,7 +119,7 @@ class Crawler(threading.Thread):
       try:
         time.sleep(0.1)
         download(task[0], task[1])
-        print '\033[32m %s' % str(task)
+        print '\033[32m %s' % str(task),
         if len(score_set) > 10:
           dictlock.acquire()
           try:
