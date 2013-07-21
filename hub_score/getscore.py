@@ -4,11 +4,20 @@ import threading
 from Queue import Queue
 import json
 from random import randint as rand
+import urllib2, random
 
 
 score_set = dict()
 dictlock = threading.Lock()
 id_set = set()
+
+
+class Resp(object):
+  def __init__(self, content):
+    self.content = content
+
+with open('./proxy.lst') as fi:
+  proxies = [_.rstrip('\n') for _ in fi]
 
 def download(ID):
   url = ('http://bksjw.hust.edu.cn/reportServlet?action=18&file=student_personal_score_grade' +
@@ -19,10 +28,14 @@ def download(ID):
       #'cookie': 'usertype=xs; hub_service=Fjde1oXdvHjTn3JXXgIw+dpmaj1+eZxJvJXv6KIko0d/eb+2Y/Gq0P8D/T3aNoN9thW1eh7A7mtj0g==; JSESSIONID=0000Z6YRuKLmWMoaZ4xaKV2i-ma:166nc7rnq'
       }
 
-  resp = requests.get(url, headers = headers)
-  if resp.status_code != 200:
-    print 'watting 1 min'
-    time.sleep(60)
+  #resp = requests.get(url, headers = headers)
+  #if resp.status_code != 200:
+  #  print 'watting 1 min'
+  #  time.sleep(60)
+
+
+  opener = urllib2.build_opener( urllib2.ProxyHandler({'http': random.choice(proxies)}) )
+  resp = Resp( opener.open(url).read()  )
 
   if '201110090' not in resp.content and 'script' not in resp.content:
     pat = r'''U([0-9]{9,9})'''
@@ -53,7 +66,8 @@ class Crawler(threading.Thread):
       try:
         time.sleep(0.1)
         download(ID)
-        if len(score_set) > 10:
+        print '\033[32m %s' % ID
+        if len(score_set) > 5:
           dictlock.acquire()
           try:
             with open('./score_grade.json', 'aw') as fi:
@@ -77,9 +91,10 @@ class Crawler(threading.Thread):
 if __name__ == "__main__":
   update_id()
   queue = Queue()
+  base = 103708
   for  i in xrange(1, 90000, 1):
-    queue.put(103608 + i)
-    queue.put(103608 - i)
+    queue.put(base + i)
+    queue.put(base - i)
 
 
   for i in xrange(5):
