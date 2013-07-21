@@ -24,11 +24,10 @@ def download(ID):
     print 'watting 1 min'
     time.sleep(60)
 
-  print resp.content
   if '201110090' not in resp.content and 'script' not in resp.content:
     pat = r'''U([0-9]{9,9})'''
     ret = re.findall(pat, resp.content)
-    if len(ret) > 0 and not str(ret[0]) not in id_set:
+    if len(ret) > 0 and str(ret[0]) not in id_set:
       print '\033[31mget %s' % (ret[0])
       score_set[ ret[0] ] = resp.content.decode('gbk')
 
@@ -42,7 +41,6 @@ def update_id():
 
     print 'crawler count: %d' % len(id_set)
 
-update_id()
 
 class Crawler(threading.Thread):
   def __init__(self, queue):
@@ -77,6 +75,7 @@ class Crawler(threading.Thread):
 
 
 if __name__ == "__main__":
+  update_id()
   queue = Queue()
   for  i in xrange(1, 90000, 1):
     queue.put(103608 + i)
