@@ -26,26 +26,27 @@ class GetQuestionId(threading.Thread):
             url = 'http://www.zhihu.com/question/%s' % num
             try:
                 resp = requests.get(url, timeout = 20)
+
+                if resp.status_code is 200:
+                    xparser = lxml.html.fromstring(resp.content)
+                    res = xparser.xpath('//*[@id="zh-question-title"]/h2/text()')
+                    try:
+                        global cnt
+                        self.question_set.append({
+                            'url':url,
+                            'question': res[0],
+                            'id': cnt
+                         })
+                        cnt += 1
+                        print "%s:%s\n%s" % (cnt, url, res[0])
+                    except Exception as e:
+                        print e
+
             except Exception as e:
                 print e, num
                 self.queue.task_done()
                 self.queue.put(num)
                 continue
-
-            if resp.status_code is 200:
-                xparser = lxml.html.fromstring(resp.content)
-                res = xparser.xpath('//*[@id="zh-question-title"]/h2/text()')
-                try:
-                    global cnt
-                    self.question_set.append({
-                        'url':url,
-                        'question': res[0],
-                        'id': cnt
-                     })
-                    cnt += 1
-                    print "%s:%s\n%s" % (cnt, url, res[0])
-                except Exception as e:
-                    print e
 
             if len(self.question_set) > 30:
                 for i in self.question_set:
