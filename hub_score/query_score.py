@@ -1,3 +1,4 @@
+#!/bin/env python2.7
 import json
 
 
@@ -8,18 +9,19 @@ def score_grade(ID):
     score = json.loads("["  +  fi.read().strip().strip(',').strip('\n').strip(',')  +  "]" )
     for s in score:
       for ss in s:
-        if str(ss) == str(ID):
-          print s[ss]
-          return
+        if str(ss).startswith( str(ID) ):
+          print '\033[31m%s' % s[ss]
+        elif not ID.isdigit():
+          if s[ss].find(ID.decode('utf-8')) != -1:
+            print '\033[31m%s' % s[ss]
 
 def score_all(ID):
   with open('./score.json', 'r') as fi:
     score = json.loads("["  +  fi.read().strip().strip(',').strip('\n').strip(',')  +  "]" )
     for s in score:
       for ss in s:
-        if str(ss) == str(ID):
+        if str(ss).startswith( str(ID) ):
           print s[ss]
-          return
 
 def update_id():
   with open('./score_grade.json', 'r') as fi:

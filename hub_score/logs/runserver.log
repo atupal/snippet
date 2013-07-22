@@ -1,0 +1,28 @@
+[22/Jul/2013 11:48:39 +0000] settings     INFO     Welcome to Hue 2.3.0
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Loaded Desktop Libraries: hadoop, liboozie
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/desktop/core/static
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/about/static
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/beeswax/static
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/catalog/static
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/impala/static
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/jobbrowser/static
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/jobsub/static
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/oozie/static
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/pig/static
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/useradmin/static
+[22/Jul/2013 11:48:39 +0000] appmanager   DEBUG    Loaded Desktop Applications: about, beeswax, catalog, filebrowser, help, impala, jobbrowser, jobsub, oozie, pig, proxy, shell, useradmin, zkui
+[22/Jul/2013 11:48:39 +0000] settings     DEBUG    Installed Django modules: DesktopModule(hadoop: hadoop),DesktopModule(liboozie: liboozie),DesktopModule(Hue: desktop),DesktopModule(About: about),DesktopModule(Beeswax (Hive UI): beeswax),DesktopModule(Table Browser: catalog),DesktopModule(File Browser: filebrowser),DesktopModule(Help: help),DesktopModule(Cloudera Impala (TM) Query UI: impala),DesktopModule(Job Browser: jobbrowser),DesktopModule(Job Designer: jobsub),DesktopModule(Oozie Editor/Dashboard: oozie),DesktopModule(Pig: pig),DesktopModule(Proxy: proxy),DesktopModule(Hue Shell: shell),DesktopModule(User Admin: useradmin),DesktopModule(ZooKeeper Browser: zkui)
+[22/Jul/2013 03:48:39 +0000] settings     INFO     Welcome to Hue 2.3.0
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Loaded Desktop Libraries: hadoop, liboozie
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/desktop/core/static
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/about/static
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/beeswax/static
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/catalog/static
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/impala/static
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/jobbrowser/static
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/jobsub/static
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/oozie/static
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/pig/static
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Old-style static directory: /home/atupal/Dropbox/src/work/xiaomi/cloud/infra/hue-2.3.0/apps/useradmin/static
+[22/Jul/2013 03:48:39 +0000] appmanager   DEBUG    Loaded Desktop Applications: about, beeswax, catalog, filebrowser, help, impala, jobbrowser, jobsub, oozie, pig, proxy, shell, useradmin, zkui
+[22/Jul/2013 03:48:39 +0000] settings     DEBUG    Installed Django modules: DesktopModule(hadoop: hadoop),DesktopModule(liboozie: liboozie),DesktopModule(Hue: desktop),DesktopModule(About: about),DesktopModule(Beeswax (Hive UI): beeswax),DesktopModule(Table Browser: catalog),DesktopModule(File Browser: filebrowser),DesktopModule(Help: help),DesktopModule(Cloudera Impala (TM) Query UI: impala),DesktopModule(Job Browser: jobbrowser),DesktopModule(Job Designer: jobsub),DesktopModule(Oozie Editor/Dashboard: oozie),DesktopModule(Pig: pig),DesktopModule(Proxy: proxy),DesktopModule(Hue Shell: shell),DesktopModule(User Admin: useradmin),DesktopModule(ZooKeeper Browser: zkui)
