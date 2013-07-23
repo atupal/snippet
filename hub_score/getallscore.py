@@ -1,4 +1,8 @@
 #-*- coding=utf-8 -*-
+'''
+  author: atupal
+  2013.7.21
+'''
 import requests, time, re
 import threading
 from Queue import Queue

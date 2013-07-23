@@ -1,4 +1,9 @@
 #-*- coding=utf-8 -*-
+'''
+  author: atupal
+  2013.7.21
+'''
+
 #import requests,
 import time
 import re

@@ -1,4 +1,9 @@
 #!/bin/env python2.7
+# -*- coding: utf-8 -*-
+'''
+  author: atupal
+  2013.7.21
+'''
 import json
 
 
