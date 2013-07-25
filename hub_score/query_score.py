@@ -38,7 +38,7 @@ def update_id():
     print 'crawler count: %d' % len(id_set)
 
 if __name__ == "__main__":
-  #score_all(201117460)
+  #score_all(201110791)
   update_id()
   import sys
   score_grade(sys.argv[1])

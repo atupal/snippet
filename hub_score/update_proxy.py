@@ -23,18 +23,20 @@ import lxml.html
 
 def update_proxy():
   url = 'http://proxy.ipcn.org/proxylist.html'
+  fi = open('./proxy.lst.ts', 'w')
   try:
     resp = requests.get(url, headers = {
       'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.71 Safari/537.36'
       })
     xparser = lxml.html.fromstring(resp.content)
     ret = xparser.xpath("//pre/text()")
-    print ret[0]
+    fi.write(ret[0][90:].strip().strip().encode('utf-8', errors=""))
   except:
     import traceback, sys
     print '\033[33m'
     traceback.print_exc(file = sys.stdout)
     print '\033[31m %s' % 'failed! please retri!'
+  fi.close()
 
 
 def get_good_proxy():
@@ -57,3 +59,4 @@ def get_good_proxy():
 
 if __name__ == "__main__":
   update_proxy()
+  #get_good_proxy()
