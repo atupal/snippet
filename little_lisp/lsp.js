@@ -1,3 +1,6 @@
+/*
+ * origin src: http://maryrosecook.com/
+ */
 
 var library = {
   first: function(x) {
