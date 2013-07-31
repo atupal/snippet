@@ -2,3 +2,6 @@
 *.o
 ts
 ts.*
+#sinpple:
+all_scrapy_urls*
+zhihu_*
