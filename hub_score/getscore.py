@@ -1,3 +1,4 @@
+#!/bin/python2
 #-*- coding=utf-8 -*-
 '''
   author: atupal
@@ -31,7 +32,7 @@ saveAsName=none
 cachedId=A_5410
 
 [bool]
-get_all=true
+get_all=false
 
 [other]
 seed=97895
