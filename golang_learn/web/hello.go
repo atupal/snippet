@@ -24,7 +24,7 @@ func sayhelloName(w http.ResponseWriter, r *http.Request) {
 
 func main() {
   http.HandleFunc("/", sayhelloName)
-  err := http.ListenAndServe(":9090", nil)
+  err := http.ListenAndServe(":9090", nil) // 第二个参数是handler，传递nil时会调用默认的DefaultServerMux，即一个路由器
   if err != nil {
     log.Fatal("ListenAndServer:", err)
   }
