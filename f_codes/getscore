@@ -1,0 +1,42 @@
+#!/usr/bin/env python2
+#coding:utf-8
+import pycurl
+import sys
+c=pycurl.Curl()
+if len(sys.argv)<3:
+    print "Usage: getscore USER PERIOD"
+    sys.exit(1)
+else:
+    user = sys.argv[1]
+    period = sys.argv[2]
+c.setopt(pycurl.URL,"http://bksjw.hust.edu.cn/reportJsp/showReport.jsp?raq=personal_score_term_report.raq&xqh="+period+"&sfid="+user)
+import StringIO
+b = StringIO.StringIO()
+c.setopt(pycurl.WRITEFUNCTION, b.write)
+c.setopt(pycurl.REFERER, "http://bksjw.hust.edu.cn/aam/score/retrieve/QueryScore.jsp")
+c.perform()
+aa=b.getvalue().decode('gbk')
+#print aa
+a=aa.split(u'备注')[1].split('height=15')[0]
+import re
+d=re.compile('\<td.+?\>(.*?)\<\/td')
+dyx=re.compile(u'(院系：.+?\&)')
+dbj=re.compile(u'(班级：.+?\&)')
+dxm=re.compile(u'(姓名：.+?\&)')
+dxh=re.compile(u'(学号：.+?\<)')
+e=d.findall(a)
+try:
+	print dyx.findall(aa)[0][:-1]+'\t'+dbj.findall(aa)[0][:-1]
+	print dxm.findall(aa)[0][:-1]+'\t'+dxh.findall(aa)[0][:-1]
+except IndexError:
+	print aa
+	sys.exit(1)
+for i in enumerate(e):
+	if i[0]>0 and i[0]%4==0:
+		print
+	print i[1].replace('&nbsp;',' ')+'\t',
+	if i[0]%4==0 and len(i[1])<8:
+		print '\t',
+		if i[0]%4==0 and len(i[1])<3:
+			print '\t',
+print
