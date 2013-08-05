@@ -27,7 +27,11 @@ func login(w http.ResponseWriter, r *http.Request) {
     t, _ := template.ParseFiles("login.gtpl")
     t.Execute(w, nil)
   } else {
-    //r.ParseForm()
+    /*
+      这里需要显示的调用ParseForm不然返回的就是空数组
+      也可以使用r.FormValue("username"), 这样就会自动调用r.ParseForm, 此方法只会返回同名参数中的第一个，若不存在则返回空字符串
+    */
+    r.ParseForm()
     fmt.Println("username:", r.Form["username"])
     fmt.Println("password:", r.Form["password"])
   }
