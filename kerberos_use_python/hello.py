@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import requests
+import sys
+sys.path.insert(0, './lib/kerberos-1.1.1/build/lib.linux-x86_64-2.7')
 import kerberos
+print kerberos.__file__
 from pprint import pprint as printf
 
 URL = "http://10.2.201.65:32201/webhdfs/v1/?op=liststatus"
@@ -14,8 +17,12 @@ def un_auth():
   print resp.content
 
 def negotiate_auth():
-  _, krb_context = kerberos.authGSSClientInit("h_yukangle@xxx.xxx")
-  kerberos.authGSSClientStep(krb_context, "")
+  _, krb_context = kerberos.authGSSClientInit("HTTP/hadoop")
+  try:
+    kerberos.authGSSClientStep(krb_context, "")
+  except:
+    import traceback ,sys
+    traceback.print_exc(file=sys.stdout)
 
  
 if __name__ == "__main__":
