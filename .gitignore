@@ -7,3 +7,5 @@ all_scrapy_urls*
 zhihu_0
 zhihu_1
 zhihu_2
+build
+*.so
