@@ -1,0 +1,22 @@
+diff -ruNa cyrus-sasl-2.1.23/plugins/gssapi.c fqdn-cyrus-sasl-2.1.23/plugins/gssapi.c
+--- cyrus-sasl-2.1.23/plugins/gssapi.c	2009-04-28 23:09:17.000000000 +0800
++++ fqdn-cyrus-sasl-2.1.23/plugins/gssapi.c	2013-08-08 10:15:17.801395177 +0800
+@@ -666,7 +666,8 @@
+ 		sasl_gss_free_context_contents(text);
+ 		return SASL_NOMEM;
+ 	    }
+-	    sprintf(name_token.value,"%s@%s", params->service, params->serverFQDN);
++
++	    sprintf(name_token.value,"%s@hadoop", params->service);
+ 	    
+ 	    GSS_LOCK_MUTEX(params->utils);
+ 	    maj_stat = gss_import_name (&min_stat,
+@@ -1360,7 +1361,7 @@
+ 		return SASL_FAIL;
+ 	    }
+ 	    
+-	    sprintf(name_token.value,"%s@%s", params->service, params->serverFQDN);
++	    sprintf(name_token.value,"%s@hadoop", params->service);
+ 	    
+ 	    GSS_LOCK_MUTEX(params->utils);
+ 	    maj_stat = gss_import_name (&min_stat,

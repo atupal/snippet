@@ -41,7 +41,7 @@ setup (
         Extension(
             "kerberos",
             extra_link_args = commands.getoutput("krb5-config --libs gssapi").split(),
-            extra_compile_args = commands.getoutput("krb5-config --cflags gssapi").split(),
+            extra_compile_args = commands.getoutput("krb5-config --cflags gssapi").split().append("-g"),
             sources = [
                 "src/kerberos.c",
                 "src/kerberosbasic.c",
