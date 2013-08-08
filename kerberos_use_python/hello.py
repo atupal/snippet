@@ -17,12 +17,8 @@ def un_auth():
   print resp.content
 
 def negotiate_auth():
-  _, krb_context = kerberos.authGSSClientInit("HTTP/hadoop")
-  try:
-    kerberos.authGSSClientStep(krb_context, "")
-  except:
-    import traceback ,sys
-    traceback.print_exc(file=sys.stdout)
+  _, krb_context = kerberos.authGSSClientInit("HTTP/hadoop@10.2.201.65")
+  kerberos.authGSSClientStep(krb_context, "")
 
  
 if __name__ == "__main__":

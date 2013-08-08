@@ -1,0 +1,52 @@
+== Info: About to connect() to 10.2.201.65 port 32201 (#0)
+== Info:   Trying 10.2.201.65... == Info: connected
+== Info: Connected to 10.2.201.65 (10.2.201.65) port 32201 (#0)
+=> Send header, 197 bytes (0xc5)
+0000: GET /webhdfs/v1/?op=liststauts HTTP/1.1
+0029: User-Agent: curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7
+0069:  NSS/3.13.1.0 zlib/1.2.3 libidn/1.18 libssh2/1.2.2
+009d: Host: 10.2.201.65:32201
+00b6: Accept: */*
+00c3: 
+<= Recv header, 15 bytes (0xf)
+0000: HTTP/1.1 401 
+<= Recv header, 45 bytes (0x2d)
+0000: Content-Type: text/html; charset=iso-8859-1
+== Info: gss_init_sec_context() failed: : Server krbtgt/BJ@XIAOMI.HADOOP not found in Kerberos database<= Recv header, 29 bytes (0x1d)
+0000: WWW-Authenticate: Negotiate
+<= Recv header, 71 bytes (0x47)
+0000: Set-Cookie: hadoop.auth=;Path=/;Expires=Thu, 01-Jan-1970 00:00:0
+0040: 0 GMT
+<= Recv header, 50 bytes (0x32)
+0000: Cache-Control: must-revalidate,no-cache,no-store
+<= Recv header, 22 bytes (0x16)
+0000: Content-Length: 1358
+<= Recv header, 34 bytes (0x22)
+0000: Server: Jetty(6.1.26.cloudera.2)
+<= Recv header, 2 bytes (0x2)
+0000: 
+<= Recv data, 1358 bytes (0x54e)
+0000: <html>.<head>.<meta http-equiv="Content-Type" content="text/html
+0040: ; charset=ISO-8859-1"/>.<title>Error 401 </title>.</head>.<body>
+0080: <h2>HTTP ERROR 401</h2>.<p>Problem accessing /webhdfs/v1/. Reaso
+00c0: n:.<pre>    </pre></p><hr /><i><small>Powered by Jetty://</small
+0100: ></i><br/>                                                .<br/>
+0140:                                                 .<br/>          
+0180:                                       .<br/>                    
+01c0:                             .<br/>                              
+0200:                   .<br/>                                        
+0240:         .<br/>                                                .<
+0280: br/>                                                .<br/>      
+02c0:                                           .<br/>                
+0300:                                 .<br/>                          
+0340:                       .<br/>                                    
+0380:             .<br/>                                              
+03c0:   .<br/>                                                .<br/>  
+0400:                                               .<br/>            
+0440:                                     .<br/>                      
+0480:                           .<br/>                                
+04c0:                 .<br/>                                          
+0500:       .<br/>                                                ..</
+0540: body>.</html>.
+== Info: Connection #0 to host 10.2.201.65 left intact
+== Info: Closing connection #0
