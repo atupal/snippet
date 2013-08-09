@@ -7,6 +7,7 @@ sys.path.insert(0, './lib/kerberos-1.1.1/build/lib.linux-x86_64-2.7')
 import kerberos
 print kerberos.__file__
 from pprint import pprint as printf
+import ipdb
 
 URL = "http://10.2.201.65:32201/webhdfs/v1/?op=liststatus"
 
@@ -18,6 +19,7 @@ def un_auth():
 
 def negotiate_auth():
   #_, krb_context = kerberos.authGSSClientInit("HTTP@hadoop")
+  #ipdb.set_trace()
   _, krb_context = kerberos.authGSSClientInit("HTTP@10.2.201.65")
   kerberos.authGSSClientStep(krb_context, "")
   negotiate_details = kerberos.authGSSClientResponse(krb_context)
