@@ -1,5 +1,11 @@
 #!/bin/bash
 
+sed -e "s@python2.5/Python.h@& python2.7/Python.h@g" \
+    -e "s@-lpython2.5]@&,\n  AC_CHECK_LIB(python2.7,main,[PYTHON_LIB=-lpython2.7])@g" \
+    -i configure.in &&
+sed -e "s@interp->result@Tcl_GetStringResult(interp)@g" \
+    -i kadmin/testing/util/tcl_kadm5.c &&
+autoconf &&
 ./configure $@ \
             CFLAGS=" -g -O0 " \
             CPPFLAGS="-I/usr/include/et -I/usr/include/ss" \
