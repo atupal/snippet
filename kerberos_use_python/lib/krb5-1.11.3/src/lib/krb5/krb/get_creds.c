@@ -506,7 +506,7 @@ try_fallback(krb5_context context, krb5_tkt_creds_context ctx)
                                         &hrealms);
     printf("atupal,hrealm:%s\n", hrealms[0]);
     hrealms[0] = (char *) malloc (sizeof(char) * 255);
-    strcpy(hrealms[0], "XIAOMI.HADOOP");
+    //strcpy(hrealms[0], "XIAOMI.HADOOP");
     if (code != 0)
         return code;
 
