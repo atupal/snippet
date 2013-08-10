@@ -20,11 +20,11 @@ def un_auth():
 def negotiate_auth():
   #_, krb_context = kerberos.authGSSClientInit("HTTP@hadoop")
   #ipdb.set_trace()
-  _, krb_context = kerberos.authGSSClientInit("HTTP@10.2.201.65")
+  _, krb_context = kerberos.authGSSClientInit("HTTP@10.2.201.70")
   kerberos.authGSSClientStep(krb_context, "")
   negotiate_details = kerberos.authGSSClientResponse(krb_context)
   headers = {"Authorization": "Negotiate" + negotiate_details}
-  resp = requests.get("http://10.2.201.65:32201/webhdfs/v1/?op=liststatus", headers = headers)
+  resp = requests.get("http://10.2.201.70:32201/webhdfs/v1/?op=liststatus", headers = headers)
   print resp.status_code
   print resp.content
 
