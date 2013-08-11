@@ -1,7 +1,7 @@
 #!/bin/bash
 
-./configure \
-        --prefix= ~/bin \
+make distclean
+./configure --prefix=$HOME/bin/vim74 \
          --with-features=huge \
          --enable-rubyinterp \
          --enable-pythoninterp \
