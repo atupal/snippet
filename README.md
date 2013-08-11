@@ -40,3 +40,5 @@ Use to save some usful or nice code snippet but not convinent save on gist;
 ####zhihu_crawl####
 > zhihu question crawler
 
+####vim74_tarball####
+> build vim74 from tarball
