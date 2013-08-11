@@ -323,11 +323,13 @@ func! CompileCode()
     elseif &filetype == "perl"
         exec "!perl %<.pl"
     elseif &filetype == "python"
-        exec "!python %<.py"
+        exec "!python2 %<.py"
     elseif &filetype == "go"
         exec "!go run %<.go"
     elseif &filetype == "ruby"
         exec "!ruby %<.rb"
+    elseif &filetype == "javascript"
+        exec "!node %<.js"
     endif
 endfunc
  
@@ -343,7 +345,7 @@ func! RunCode()
     elseif &filetype == "perl"
         exec "!perl %<.pl"
     elseif &filetype == "python"
-        exec "!python %<.py"
+        exec "!python2 %<.py"
     elseif &filetype == "ruby"
         exec "!ruby %<.rb"
     elseif &filetype == "go"
