@@ -189,6 +189,28 @@ ter_color="\[\e[0;32m\]"
 
 #PS1='\[\e[0;31m\]\u\[\e[0;33m\] @\[\e[0;32m\]\h\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[0;31m\]\$ \[\e[m\]\[\e[0;36m\]date:$BOLD\D{%c} $RED(parse_git_branch) \n> '
 PS1="$user@$host $fdir $prompt $data $git_branch $ter_color\n>"
+#PROMPT_COMMAND and PS1?
+
+export PROMPT_COMMAND='RET=$?;\
+  BRANCH="";\
+  ERRMSG="";\
+  if [[ $RET != 0 ]]; then\
+    ERRMSG=" $RET";\
+  fi;\
+  if git branch 2>/dev/null 1>/dev/null; then\
+    BRANCH=$(git branch 2>/dev/null | grep \* |  cut -d " " -f 2);\
+  fi;
+  user="\[\e[0;31m\]\u"
+  host="\[\e[0;32m\]\h"
+  fdir="\[\e[1;34m\]\w"
+  prompt="\[\e[0;31m\]\$"
+  data="\[\e[0;36m\]date:$BOLD\D{%c}"
+  git_branch="\[\e[0;33m\]$BRANCH\[\e[m\]"
+  ter_color="\[\e[0;32m\]"
+  PS1="$user@$host $fdir $prompt $data $git_branch $ter_color\n>"
+  #PS1="$GREEN\u@\h $BLUE\W $CYAN$BRANCH$RED$ERRMSG \$ $LIGHT_GRAY";'
+
+
 [[ $- != *i* ]] && return
 
 #---------------------------------------------------------------------------------
