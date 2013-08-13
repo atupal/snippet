@@ -9,19 +9,13 @@ alias ls='ls --color=auto'
 PS1='[\u@\h \W]\$ '
 export LC_ALL="en_US.UTF-8"
 
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS="@im=fcitx"
-export GTK_IM_MODULE=xim
-export QT_IM_MODULE=xim
-export EDITOR="vim"
 
 #export http_proxy=192.168.122.1:3128
 #export HTTP_PROXY=192.168.122.1:3128
 #export https_proxy=192.168.122.1:3128
 #export HTTPS_PROXY=192.168.122.1:3128
 
-export PATH=/home/atupal/bin:/usr/lib/jvm/java/jdk1.6.0_35/bin:$PATH
+export PATH=/home/atupal/usr/:/home/atupal/bin:/usr/lib/jvm/java/jdk1.6.0_35/bin:$PATH
 
 export CLASSPATH=.:/usr/lib/jvm/java/jdk1.6.0_35/lib
 export JAVA_HOME=/usr/lib/jvm/java/jdk1.6.0_35
@@ -108,22 +102,7 @@ xterm*|rxvt*)
     ;;
 esac
 
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -152,25 +131,60 @@ fi
 
 
 
-
-
 ##################################################################################################
 #
 # ~/.bashrc
 #
 
 # If not running interactively, don't do anything
-
-
 echo hello atupal!
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+export GTK_IM_MODULE=xim
+export QT_IM_MODULE=xim
+export EDITOR="vim"
 
 #term
 if [ $TERM == "xterm" ] ; then
     export TERM=xterm-color
 fi
 
+#parse_git_branch() {
+#  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/' 
+#}
+
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
 #
-PS1='\[\e[0;31m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[0;31m\]\$ \[\e[m\]\[\e[0;36m\]date:$BOLD\D{%c} $RED \n> '
+user="\[\e[0;31m\]\u"
+host="\[\e[0;32m\]\h"
+fdir="\[\e[1;34m\]\w"
+prompt="\[\e[0;31m\]\$"
+data="\[\e[0;36m\]date:$BOLD\D{%c}"
+git_branch="\[\e[0;33m\]$(parse_git_branch)\[\e[m\]"
+ter_color="\[\e[0;32m\]"
+#PS1='\[\e[0;31m\]\u\[\e[0;33m\] @\[\e[0;32m\]\h\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[0;31m\]\$ \[\e[m\]\[\e[0;36m\]date:$BOLD\D{%c} $RED(parse_git_branch) \n> '
+PS1="$user@$host $fdir $git_branch $prompt $data\n>$ter_color"
 [[ $- != *i* ]] && return
 
 #---------------------------------------------------------------------------------
@@ -200,6 +214,7 @@ export XDG_CONFIG_HOME=~/.config                                                
 #export ftp_proxy=127.0.0.1:8087                                                #|
 #export LD_LIBRARY_PATH=                                                        #|
 #---------------------------------------------------------------------------------
+
 set -o vi
 
 
@@ -233,7 +248,6 @@ alias cls='clear'                                                               
 alias gvim='gvim -p --remote-tab-silent "%1"'                                                                                   #|
 alias chrome='nohup google-chrome --disk-cache-dir="/dev/shm/chrome/"   --ignore-certificate-errors --omnibox-popup-count=10 &' #|
 alias ydc='ydcv `xclip -o`'                                                                                                     #|
-alias python='python2'                                                                                                          #|
 #---------------------------------------------------------------------------------------------------------------------------------
 
 #xinput set-button-map "USB Optical Mouse" 3 2 1 4 5 6 7 8 9 10 11 12 13
@@ -252,3 +266,5 @@ dropbox
 
 export GOPATH=~/src/go
 export PATH=$PATH:~/src/go/bin
+export VBOX_USB=usbfs
+export PATH=$PATH:/home/atupal/src/tools/android/apktool1.5.2:/home/atupal/src/tools/android/apktool-install-linux-r05-ibot
