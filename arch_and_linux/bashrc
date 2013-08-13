@@ -183,8 +183,12 @@ prompt="\[\e[0;31m\]\$"
 data="\[\e[0;36m\]date:$BOLD\D{%c}"
 git_branch="\[\e[0;33m\]$(parse_git_branch)\[\e[m\]"
 ter_color="\[\e[0;32m\]"
+
+#the_date_in_Weekday_Month_Date_format="\d"
+# more you can find in 'https://github.com/xta/HalloweenBash/blob/master/assets/profile.js'
+
 #PS1='\[\e[0;31m\]\u\[\e[0;33m\] @\[\e[0;32m\]\h\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[0;31m\]\$ \[\e[m\]\[\e[0;36m\]date:$BOLD\D{%c} $RED(parse_git_branch) \n> '
-PS1="$user@$host $fdir $git_branch $prompt $data\n>$ter_color"
+PS1="$user@$host $fdir $prompt $data $git_branch $ter_color\n>"
 [[ $- != *i* ]] && return
 
 #---------------------------------------------------------------------------------
