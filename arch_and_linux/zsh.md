@@ -1,3 +1,4 @@
+[referer](http://lostjs.com/2012/09/27/zsh/)
 
 ```
 Miscellaneous: Zsh: prompts
