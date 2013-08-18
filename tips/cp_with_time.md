@@ -1,6 +1,5 @@
 ```
 #!/bin/sh  
-# Last modified: 2003年07月05日 星期六 00时09分44秒 [test]  
   
 SOURCE=$1  
 TARGET=$2  
