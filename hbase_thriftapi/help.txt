@@ -1,0 +1,644 @@
+Help on instance of Client in module hbase.Hbase:
+
+class Client(Iface)
+ |  Methods defined here:
+ |  
+ |  __init__(self, iprot, oprot=None)
+ |  
+ |  atomicIncrement(self, tableName, row, column, value)
+ |      Atomically increment the column value specified.  Returns the next value post increment.
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: row to increment
+ |       - column: name of column
+ |       - value: amount to increment by
+ |  
+ |  compact(self, tableNameOrRegionName)
+ |      Parameters:
+ |       - tableNameOrRegionName
+ |  
+ |  createTable(self, tableName, columnFamilies)
+ |      Create a table with the specified column families.  The name
+ |      field for each ColumnDescriptor must be set and must end in a
+ |      colon (:). All other fields are optional and will get default
+ |      values if not explicitly specified.
+ |      
+ |      @throws IllegalArgument if an input parameter is invalid
+ |      
+ |      @throws AlreadyExists if the table name already exists
+ |      
+ |      Parameters:
+ |       - tableName: name of table to create
+ |       - columnFamilies: list of column family descriptors
+ |  
+ |  deleteAll(self, tableName, row, column, attributes)
+ |      Delete all cells that match the passed row and column.
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: Row to update
+ |       - column: name of column whose value is to be deleted
+ |       - attributes: Delete attributes
+ |  
+ |  deleteAllRow(self, tableName, row, attributes)
+ |      Completely delete the row's cells.
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: key of the row to be completely deleted.
+ |       - attributes: Delete attributes
+ |  
+ |  deleteAllRowTs(self, tableName, row, timestamp, attributes)
+ |      Completely delete the row's cells marked with a timestamp
+ |      equal-to or older than the passed timestamp.
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: key of the row to be completely deleted.
+ |       - timestamp: timestamp
+ |       - attributes: Delete attributes
+ |  
+ |  deleteAllTs(self, tableName, row, column, timestamp, attributes)
+ |      Delete all cells that match the passed row and column and whose
+ |      timestamp is equal-to or older than the passed timestamp.
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: Row to update
+ |       - column: name of column whose value is to be deleted
+ |       - timestamp: timestamp
+ |       - attributes: Delete attributes
+ |  
+ |  deleteTable(self, tableName)
+ |      Deletes a table
+ |      
+ |      @throws IOError if table doesn't exist on server or there was some other
+ |      problem
+ |      
+ |      Parameters:
+ |       - tableName: name of table to delete
+ |  
+ |  disableTable(self, tableName)
+ |      Disables a table (takes it off-line) If it is being served, the master
+ |      will tell the servers to stop serving it.
+ |      
+ |      Parameters:
+ |       - tableName: name of the table
+ |  
+ |  enableTable(self, tableName)
+ |      Brings a table on-line (enables it)
+ |      
+ |      Parameters:
+ |       - tableName: name of the table
+ |  
+ |  get(self, tableName, row, column, attributes)
+ |      Get a single TCell for the specified table, row, and column at the
+ |      latest timestamp. Returns an empty list if no such value exists.
+ |      
+ |      @return value for specified row/column
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: row key
+ |       - column: column name
+ |       - attributes: Get attributes
+ |  
+ |  getColumnDescriptors(self, tableName)
+ |      List all the column families assoicated with a table.
+ |      
+ |      @return list of column family descriptors
+ |      
+ |      Parameters:
+ |       - tableName: table name
+ |  
+ |  getRegionInfo(self, row)
+ |      Get the regininfo for the specified row. It scans
+ |      the metatable to find region's start and end keys.
+ |      
+ |      @return value for specified row/column
+ |      
+ |      Parameters:
+ |       - row: row key
+ |  
+ |  getRow(self, tableName, row, attributes)
+ |      Get all the data for the specified table and row at the latest
+ |      timestamp. Returns an empty list if the row does not exist.
+ |      
+ |      @return TRowResult containing the row and map of columns to TCells
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: row key
+ |       - attributes: Get attributes
+ |  
+ |  getRowOrBefore(self, tableName, row, family)
+ |      Get the row just before the specified one.
+ |      
+ |      @return value for specified row/column
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: row key
+ |       - family: column name
+ |  
+ |  getRowTs(self, tableName, row, timestamp, attributes)
+ |      Get all the data for the specified table and row at the specified
+ |      timestamp. Returns an empty list if the row does not exist.
+ |      
+ |      @return TRowResult containing the row and map of columns to TCells
+ |      
+ |      Parameters:
+ |       - tableName: name of the table
+ |       - row: row key
+ |       - timestamp: timestamp
+ |       - attributes: Get attributes
+ |  
+ |  getRowWithColumns(self, tableName, row, columns, attributes)
+ |      Get the specified columns for the specified table and row at the latest
+ |      timestamp. Returns an empty list if the row does not exist.
+ |      
+ |      @return TRowResult containing the row and map of columns to TCells
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: row key
+ |       - columns: List of columns to return, null for all columns
+ |       - attributes: Get attributes
+ |  
+ |  getRowWithColumnsTs(self, tableName, row, columns, timestamp, attributes)
+ |      Get the specified columns for the specified table and row at the specified
+ |      timestamp. Returns an empty list if the row does not exist.
+ |      
+ |      @return TRowResult containing the row and map of columns to TCells
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: row key
+ |       - columns: List of columns to return, null for all columns
+ |       - timestamp
+ |       - attributes: Get attributes
+ |  
+ |  getRows(self, tableName, rows, attributes)
+ |      Get all the data for the specified table and rows at the latest
+ |      timestamp. Returns an empty list if no rows exist.
+ |      
+ |      @return TRowResult containing the rows and map of columns to TCells
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - rows: row keys
+ |       - attributes: Get attributes
+ |  
+ |  getRowsTs(self, tableName, rows, timestamp, attributes)
+ |      Get all the data for the specified table and rows at the specified
+ |      timestamp. Returns an empty list if no rows exist.
+ |      
+ |      @return TRowResult containing the rows and map of columns to TCells
+ |      
+ |      Parameters:
+ |       - tableName: name of the table
+ |       - rows: row keys
+ |       - timestamp: timestamp
+ |       - attributes: Get attributes
+ |  
+ |  getRowsWithColumns(self, tableName, rows, columns, attributes)
+ |      Get the specified columns for the specified table and rows at the latest
+ |      timestamp. Returns an empty list if no rows exist.
+ |      
+ |      @return TRowResult containing the rows and map of columns to TCells
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - rows: row keys
+ |       - columns: List of columns to return, null for all columns
+ |       - attributes: Get attributes
+ |  
+ |  getRowsWithColumnsTs(self, tableName, rows, columns, timestamp, attributes)
+ |      Get the specified columns for the specified table and rows at the specified
+ |      timestamp. Returns an empty list if no rows exist.
+ |      
+ |      @return TRowResult containing the rows and map of columns to TCells
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - rows: row keys
+ |       - columns: List of columns to return, null for all columns
+ |       - timestamp
+ |       - attributes: Get attributes
+ |  
+ |  getTableNames(self)
+ |      List all the userspace tables.
+ |      
+ |      @return returns a list of names
+ |  
+ |  getTableRegions(self, tableName)
+ |      List the regions associated with a table.
+ |      
+ |      @return list of region descriptors
+ |      
+ |      Parameters:
+ |       - tableName: table name
+ |  
+ |  getVer(self, tableName, row, column, numVersions, attributes)
+ |      Get the specified number of versions for the specified table,
+ |      row, and column.
+ |      
+ |      @return list of cells for specified row/column
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: row key
+ |       - column: column name
+ |       - numVersions: number of versions to retrieve
+ |       - attributes: Get attributes
+ |  
+ |  getVerTs(self, tableName, row, column, timestamp, numVersions, attributes)
+ |      Get the specified number of versions for the specified table,
+ |      row, and column.  Only versions less than or equal to the specified
+ |      timestamp will be returned.
+ |      
+ |      @return list of cells for specified row/column
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: row key
+ |       - column: column name
+ |       - timestamp: timestamp
+ |       - numVersions: number of versions to retrieve
+ |       - attributes: Get attributes
+ |  
+ |  increment(self, increment)
+ |      Increment a cell by the ammount.
+ |      Increments can be applied async if hbase.regionserver.thrift.coalesceIncrement is set to true.
+ |      False is the default.  Turn to true if you need the extra performance and can accept some
+ |      data loss if a thrift server dies with increments still in the queue.
+ |      
+ |      Parameters:
+ |       - increment: The single increment to apply
+ |  
+ |  incrementRows(self, increments)
+ |      Parameters:
+ |       - increments: The list of increments
+ |  
+ |  isTableEnabled(self, tableName)
+ |      @return true if table is on-line
+ |      
+ |      Parameters:
+ |       - tableName: name of the table to check
+ |  
+ |  majorCompact(self, tableNameOrRegionName)
+ |      Parameters:
+ |       - tableNameOrRegionName
+ |  
+ |  mutateRow(self, tableName, row, mutations, attributes)
+ |      Apply a series of mutations (updates/deletes) to a row in a
+ |      single transaction.  If an exception is thrown, then the
+ |      transaction is aborted.  Default current timestamp is used, and
+ |      all entries will have an identical timestamp.
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: row key
+ |       - mutations: list of mutation commands
+ |       - attributes: Mutation attributes
+ |  
+ |  mutateRowTs(self, tableName, row, mutations, timestamp, attributes)
+ |      Apply a series of mutations (updates/deletes) to a row in a
+ |      single transaction.  If an exception is thrown, then the
+ |      transaction is aborted.  The specified timestamp is used, and
+ |      all entries will have an identical timestamp.
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - row: row key
+ |       - mutations: list of mutation commands
+ |       - timestamp: timestamp
+ |       - attributes: Mutation attributes
+ |  
+ |  mutateRows(self, tableName, rowBatches, attributes)
+ |      Apply a series of batches (each a series of mutations on a single row)
+ |      in a single transaction.  If an exception is thrown, then the
+ |      transaction is aborted.  Default current timestamp is used, and
+ |      all entries will have an identical timestamp.
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - rowBatches: list of row batches
+ |       - attributes: Mutation attributes
+ |  
+ |  mutateRowsTs(self, tableName, rowBatches, timestamp, attributes)
+ |      Apply a series of batches (each a series of mutations on a single row)
+ |      in a single transaction.  If an exception is thrown, then the
+ |      transaction is aborted.  The specified timestamp is used, and
+ |      all entries will have an identical timestamp.
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - rowBatches: list of row batches
+ |       - timestamp: timestamp
+ |       - attributes: Mutation attributes
+ |  
+ |  recv_atomicIncrement(self)
+ |  
+ |  recv_compact(self)
+ |  
+ |  recv_createTable(self)
+ |  
+ |  recv_deleteAll(self)
+ |  
+ |  recv_deleteAllRow(self)
+ |  
+ |  recv_deleteAllRowTs(self)
+ |  
+ |  recv_deleteAllTs(self)
+ |  
+ |  recv_deleteTable(self)
+ |  
+ |  recv_disableTable(self)
+ |  
+ |  recv_enableTable(self)
+ |  
+ |  recv_get(self)
+ |  
+ |  recv_getColumnDescriptors(self)
+ |  
+ |  recv_getRegionInfo(self)
+ |  
+ |  recv_getRow(self)
+ |  
+ |  recv_getRowOrBefore(self)
+ |  
+ |  recv_getRowTs(self)
+ |  
+ |  recv_getRowWithColumns(self)
+ |  
+ |  recv_getRowWithColumnsTs(self)
+ |  
+ |  recv_getRows(self)
+ |  
+ |  recv_getRowsTs(self)
+ |  
+ |  recv_getRowsWithColumns(self)
+ |  
+ |  recv_getRowsWithColumnsTs(self)
+ |  
+ |  recv_getTableNames(self)
+ |  
+ |  recv_getTableRegions(self)
+ |  
+ |  recv_getVer(self)
+ |  
+ |  recv_getVerTs(self)
+ |  
+ |  recv_increment(self)
+ |  
+ |  recv_incrementRows(self)
+ |  
+ |  recv_isTableEnabled(self)
+ |  
+ |  recv_majorCompact(self)
+ |  
+ |  recv_mutateRow(self)
+ |  
+ |  recv_mutateRowTs(self)
+ |  
+ |  recv_mutateRows(self)
+ |  
+ |  recv_mutateRowsTs(self)
+ |  
+ |  recv_scannerClose(self)
+ |  
+ |  recv_scannerGet(self)
+ |  
+ |  recv_scannerGetList(self)
+ |  
+ |  recv_scannerOpen(self)
+ |  
+ |  recv_scannerOpenTs(self)
+ |  
+ |  recv_scannerOpenWithPrefix(self)
+ |  
+ |  recv_scannerOpenWithScan(self)
+ |  
+ |  recv_scannerOpenWithStop(self)
+ |  
+ |  recv_scannerOpenWithStopTs(self)
+ |  
+ |  scannerClose(self, id)
+ |      Closes the server-state associated with an open scanner.
+ |      
+ |      @throws IllegalArgument if ScannerID is invalid
+ |      
+ |      Parameters:
+ |       - id: id of a scanner returned by scannerOpen
+ |  
+ |  scannerGet(self, id)
+ |      Returns the scanner's current row value and advances to the next
+ |      row in the table.  When there are no more rows in the table, or a key
+ |      greater-than-or-equal-to the scanner's specified stopRow is reached,
+ |      an empty list is returned.
+ |      
+ |      @return a TRowResult containing the current row and a map of the columns to TCells.
+ |      
+ |      @throws IllegalArgument if ScannerID is invalid
+ |      
+ |      @throws NotFound when the scanner reaches the end
+ |      
+ |      Parameters:
+ |       - id: id of a scanner returned by scannerOpen
+ |  
+ |  scannerGetList(self, id, nbRows)
+ |      Returns, starting at the scanner's current row value nbRows worth of
+ |      rows and advances to the next row in the table.  When there are no more
+ |      rows in the table, or a key greater-than-or-equal-to the scanner's
+ |      specified stopRow is reached,  an empty list is returned.
+ |      
+ |      @return a TRowResult containing the current row and a map of the columns to TCells.
+ |      
+ |      @throws IllegalArgument if ScannerID is invalid
+ |      
+ |      @throws NotFound when the scanner reaches the end
+ |      
+ |      Parameters:
+ |       - id: id of a scanner returned by scannerOpen
+ |       - nbRows: number of results to return
+ |  
+ |  scannerOpen(self, tableName, startRow, columns, attributes)
+ |      Get a scanner on the current table starting at the specified row and
+ |      ending at the last row in the table.  Return the specified columns.
+ |      
+ |      @return scanner id to be used with other scanner procedures
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - startRow: Starting row in table to scan.
+ |      Send "" (empty string) to start at the first row.
+ |       - columns: columns to scan. If column name is a column family, all
+ |      columns of the specified column family are returned. It's also possible
+ |      to pass a regex in the column qualifier.
+ |       - attributes: Scan attributes
+ |  
+ |  scannerOpenTs(self, tableName, startRow, columns, timestamp, attributes)
+ |      Get a scanner on the current table starting at the specified row and
+ |      ending at the last row in the table.  Return the specified columns.
+ |      Only values with the specified timestamp are returned.
+ |      
+ |      @return scanner id to be used with other scanner procedures
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - startRow: Starting row in table to scan.
+ |      Send "" (empty string) to start at the first row.
+ |       - columns: columns to scan. If column name is a column family, all
+ |      columns of the specified column family are returned. It's also possible
+ |      to pass a regex in the column qualifier.
+ |       - timestamp: timestamp
+ |       - attributes: Scan attributes
+ |  
+ |  scannerOpenWithPrefix(self, tableName, startAndPrefix, columns, attributes)
+ |      Open a scanner for a given prefix.  That is all rows will have the specified
+ |      prefix. No other rows will be returned.
+ |      
+ |      @return scanner id to use with other scanner calls
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - startAndPrefix: the prefix (and thus start row) of the keys you want
+ |       - columns: the columns you want returned
+ |       - attributes: Scan attributes
+ |  
+ |  scannerOpenWithScan(self, tableName, scan, attributes)
+ |      Get a scanner on the current table, using the Scan instance
+ |      for the scan parameters.
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - scan: Scan instance
+ |       - attributes: Scan attributes
+ |  
+ |  scannerOpenWithStop(self, tableName, startRow, stopRow, columns, attributes)
+ |      Get a scanner on the current table starting and stopping at the
+ |      specified rows.  ending at the last row in the table.  Return the
+ |      specified columns.
+ |      
+ |      @return scanner id to be used with other scanner procedures
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - startRow: Starting row in table to scan.
+ |      Send "" (empty string) to start at the first row.
+ |       - stopRow: row to stop scanning on. This row is *not* included in the
+ |      scanner's results
+ |       - columns: columns to scan. If column name is a column family, all
+ |      columns of the specified column family are returned. It's also possible
+ |      to pass a regex in the column qualifier.
+ |       - attributes: Scan attributes
+ |  
+ |  scannerOpenWithStopTs(self, tableName, startRow, stopRow, columns, timestamp, attributes)
+ |      Get a scanner on the current table starting and stopping at the
+ |      specified rows.  ending at the last row in the table.  Return the
+ |      specified columns.  Only values with the specified timestamp are
+ |      returned.
+ |      
+ |      @return scanner id to be used with other scanner procedures
+ |      
+ |      Parameters:
+ |       - tableName: name of table
+ |       - startRow: Starting row in table to scan.
+ |      Send "" (empty string) to start at the first row.
+ |       - stopRow: row to stop scanning on. This row is *not* included in the
+ |      scanner's results
+ |       - columns: columns to scan. If column name is a column family, all
+ |      columns of the specified column family are returned. It's also possible
+ |      to pass a regex in the column qualifier.
+ |       - timestamp: timestamp
+ |       - attributes: Scan attributes
+ |  
+ |  send_atomicIncrement(self, tableName, row, column, value)
+ |  
+ |  send_compact(self, tableNameOrRegionName)
+ |  
+ |  send_createTable(self, tableName, columnFamilies)
+ |  
+ |  send_deleteAll(self, tableName, row, column, attributes)
+ |  
+ |  send_deleteAllRow(self, tableName, row, attributes)
+ |  
+ |  send_deleteAllRowTs(self, tableName, row, timestamp, attributes)
+ |  
+ |  send_deleteAllTs(self, tableName, row, column, timestamp, attributes)
+ |  
+ |  send_deleteTable(self, tableName)
+ |  
+ |  send_disableTable(self, tableName)
+ |  
+ |  send_enableTable(self, tableName)
+ |  
+ |  send_get(self, tableName, row, column, attributes)
+ |  
+ |  send_getColumnDescriptors(self, tableName)
+ |  
+ |  send_getRegionInfo(self, row)
+ |  
+ |  send_getRow(self, tableName, row, attributes)
+ |  
+ |  send_getRowOrBefore(self, tableName, row, family)
+ |  
+ |  send_getRowTs(self, tableName, row, timestamp, attributes)
+ |  
+ |  send_getRowWithColumns(self, tableName, row, columns, attributes)
+ |  
+ |  send_getRowWithColumnsTs(self, tableName, row, columns, timestamp, attributes)
+ |  
+ |  send_getRows(self, tableName, rows, attributes)
+ |  
+ |  send_getRowsTs(self, tableName, rows, timestamp, attributes)
+ |  
+ |  send_getRowsWithColumns(self, tableName, rows, columns, attributes)
+ |  
+ |  send_getRowsWithColumnsTs(self, tableName, rows, columns, timestamp, attributes)
+ |  
+ |  send_getTableNames(self)
+ |  
+ |  send_getTableRegions(self, tableName)
+ |  
+ |  send_getVer(self, tableName, row, column, numVersions, attributes)
+ |  
+ |  send_getVerTs(self, tableName, row, column, timestamp, numVersions, attributes)
+ |  
+ |  send_increment(self, increment)
+ |  
+ |  send_incrementRows(self, increments)
+ |  
+ |  send_isTableEnabled(self, tableName)
+ |  
+ |  send_majorCompact(self, tableNameOrRegionName)
+ |  
+ |  send_mutateRow(self, tableName, row, mutations, attributes)
+ |  
+ |  send_mutateRowTs(self, tableName, row, mutations, timestamp, attributes)
+ |  
+ |  send_mutateRows(self, tableName, rowBatches, attributes)
+ |  
+ |  send_mutateRowsTs(self, tableName, rowBatches, timestamp, attributes)
+ |  
+ |  send_scannerClose(self, id)
+ |  
+ |  send_scannerGet(self, id)
+ |  
+ |  send_scannerGetList(self, id, nbRows)
+ |  
+ |  send_scannerOpen(self, tableName, startRow, columns, attributes)
+ |  
+ |  send_scannerOpenTs(self, tableName, startRow, columns, timestamp, attributes)
+ |  
+ |  send_scannerOpenWithPrefix(self, tableName, startAndPrefix, columns, attributes)
+ |  
+ |  send_scannerOpenWithScan(self, tableName, scan, attributes)
+ |  
+ |  send_scannerOpenWithStop(self, tableName, startRow, stopRow, columns, attributes)
+ |  
+ |  send_scannerOpenWithStopTs(self, tableName, startRow, stopRow, columns, timestamp, attributes)
+
+None
