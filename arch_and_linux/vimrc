@@ -380,6 +380,5 @@ endfunction
 
 "set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Col:\ %c
 set statusline=\%{HasPaste()}%F%m%r%h\ %w\ ./:%r%{getcwd()}%h\ L:%l\ C:%c
-set guifont=DejaVu\ Sans\ Mono\ 9
-set guifontwide=WenQuanYi\ Zen\ Hei\ 10
-set linespace=-1
+
+"set guifont=DejaVu\ Sans\ Mono\ 9
