@@ -1,0 +1,5 @@
+- flask principal
+ https://github.com/jhezjkp/flask-principal/blob/master/demo/simpleDemo.py
+ https://github.com/saltycrane/flask-principal-example/blob/master/main.py
+ https://github.com/mattupstate/flask-principal/blob/master/test_principal.py
+ 
