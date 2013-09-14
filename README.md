@@ -49,3 +49,6 @@ Use to save some usful or nice code snippet but not convinent save on gist;
 
 ####[stackoverflow](https://github.com/atupal/snippet/tree/master/stackoverflow)####
 > python multiprocessing program
+
+####[paper_splice](https://github.com/atupal/snippet/tree/master/paper_splice)
+> 数模国赛B题
