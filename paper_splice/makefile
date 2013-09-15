@@ -12,5 +12,8 @@ main:base.cpp
 1_main:1_base.cpp
 	g++ -g $< -o $@ $(opencv_lib)
 
+fe:feature.cpp
+	g++ -g $< -o $@ $(opencv_lib)
+
 clean:
 	rm *.o main
