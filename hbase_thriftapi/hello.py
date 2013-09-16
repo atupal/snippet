@@ -28,8 +28,16 @@ class HbaseClient(object):
   def exec_(self, name, *args, **kwargs):
     return eval('self.client.%(name)s(*%(args)s, **%(kwargs)s)' % ({'name': name, 'args': args, 'kwargs': kwargs}) )
 
-if __name__ == "__main__":
-  hclient = HbaseClient()
-  print hclient.createTable('test_atupal_2', ['atupal'])
-  #print hclient.exec_('getTableRegions', 'foo')
+  def deleteTable(self, tableName):
+    self.client.disableTable(tableName)
+    return self.client.deleteTable(tableName)
 
+
+if __name__ == "__main__":
+  hclient = HbaseClient('0.0.0.0')
+  #print hclient.createTable('test_atupal_2', ['atupal'])
+  #print hclient.exec_('getTableRegions', 'foo')
+  hclient.createTable('foo_atupal', ['atupal'])
+  print hclient.getTableNames()
+  #hclient.deleteTable('foo_atupal')
+  #print hclient.getTableNames()
