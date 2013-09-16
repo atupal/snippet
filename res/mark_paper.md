@@ -1,3 +1,4 @@
+<pre>
 计算机科学经典论文
 
  
@@ -25,3 +26,4 @@ A Mathematical Theory of Communication Claude Shannon 。Bell实验室当年辉�
 · Teach Yourself Programming in Ten Years 2001 Peter Norvig大牛之所以为大牛，原因之一就是目光深远。这篇文章批评那些《24秒学会C＋＋》之类教材的无稽，讨论了学习编程，从菜鸟变成鲲鹏的方法。中文版已经传得满世界都是，赶快找来看吧。
 
  · Steps Toward Artificial Intelligence Marvin Minsky 。AI的奠基论文。
+</pre>
