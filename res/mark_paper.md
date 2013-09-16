@@ -1,4 +1,4 @@
-<pre>
+<pre style="white-space: pre-line;">
 计算机科学经典论文
 
  
