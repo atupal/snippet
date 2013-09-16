@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Thread 模块实现了Java的threading模块的一个子集"""
 
 import sys as _sys
@@ -221,172 +223,173 @@ def Condition(*args, **kwargs):
   is created and used as the underlying lock
 
   """
+  return _Condition(*args, **kwargs)
 
-  return _Condition(_Verbose):
-    """Condition variables allow one or more threads to wait until they are
-    notified by anther thead.
-    """
+class _Condition(_Verbose):
+  """Condition variables allow one or more threads to wait until they are
+  notified by anther thead.
+  """
 
-    def __init__(self, lock=None, verbose=None):
-      _Verbose.__init__(self, verbose)
-      if lock is None:
-        lock = RLock()
-      self.__lock = lock
-      # Export the lock's acquire() and relwase() methods
-      self.acquire = lock.acquire
-      self.release = lock.release
-      # If the lock defines _release_save() and/or _acquire_restore(),
-      # these override the default implementations (which just call
-      # release() and acquire() on the lock). Ditto for _is_owned()
-      try:
-        self._release_save = lock._release_save
-      except AttributeError:
-        pass
-      try:
-        self._acquire_restore = lock._acquire_restore
-      except AttributeError:
-        pass
-      self.__waiters = []
+  def __init__(self, lock=None, verbose=None):
+    _Verbose.__init__(self, verbose)
+    if lock is None:
+      lock = RLock()
+    self.__lock = lock
+    # Export the lock's acquire() and relwase() methods
+    self.acquire = lock.acquire
+    self.release = lock.release
+    # If the lock defines _release_save() and/or _acquire_restore(),
+    # these override the default implementations (which just call
+    # release() and acquire() on the lock). Ditto for _is_owned()
+    try:
+      self._release_save = lock._release_save
+    except AttributeError:
+      pass
+    try:
+      self._acquire_restore = lock._acquire_restore
+    except AttributeError:
+      pass
+    self.__waiters = []
 
-    def __enter__(self):
-      return self.__lock.__enter__()
+  def __enter__(self):
+    return self.__lock.__enter__()
 
-    def __exit__(self, *args):
-      return self.__lock.__exit__(*args)
+  def __exit__(self, *args):
+    return self.__lock.__exit__(*args)
 
-    def __repr__(self):
-      return "<Condition(%s, %d)>" % (self.__lock, len(self.__waiters))
+  def __repr__(self):
+    return "<Condition(%s, %d)>" % (self.__lock, len(self.__waiters))
 
-    def _release_save(self):
+  def _release_save(self):
+    self.__lock.release()
+
+  def _acquire_restore(self, x):
+    self.__lock.acquire()
+
+  def _is_owned(self):
+    # Return True if lock is owned by current_thread.
+    # This methos is called only if __lock doesn't have _is_owned().
+    if self.__lock.acquire(0):
       self.__lock.release()
+      return False
+    else:
+      return True
 
-    def _acquire_restore(self, x):
-      self.__lock.acquire()
+  def wait(self, timeout=None):
+    """Wait until notified or until a timeout occurs.
 
-    def _is_owned(self):
-      # Return True if lock is owned by current_thread.
-      # This methos is called only if __lock doesn't have _is_owned().
-      if self.__lock.acquire(0):
-        self.__lock.release()
-        return False
-      else:
-        return True
+    If the calling thread has not acquired the lock when this method is
+    called, a RuntimeError is raised.
 
-    def wait(self, timeout=None):
-      """Wait until notified or until a timeout occurs.
+    This method release the underlying lock, and then blocks until it is
+    awakended by a notify() or notifyAll() call for the same condition
+    variable in another thread, or until the optional timeout occurs, Once
+    awakened or timed out, it re-acquired the lock and returns.
 
-      If the calling thread has not acquired the lock when this method is
-      called, a RuntimeError is raised.
+    When the timeout argument is present and not None, it should be a 
+    floating point number specifying a timeout for the opration in seconds
+    (of fractions thereof)
 
-      This method release the underlying lock, and then blocks until it is
-      awakended by a notify() or notifyAll() call for the same condition
-      variable in another thread, or until the optional timeout occurs, Once
-      awakened or timed out, it re-acquired the lock and returns.
+    When the underlying lock is an RLock, it is not released using its
+    release() method, since this may not actualyy unlock the lock when it
+    was acquired multyple times recusively, Instead, an internal interface
+    of the RLock class is used, which really unlocks it even when is has 
+    been recusively acquired several times, Another internal interface is
+    then used to restor the recursion level when the lock is reacuired.
 
-      When the timeout argument is present and not None, it should be a 
-      floating point number specifying a timeout for the opration in seconds
-      (of fractions thereof)
+    A produce-comsume example:
+    # Consume one item
+    cv.acquire()
+    while not an_item_is_available():
+      cv.wait()
+    get_an_available_item()
+    cv.release()
 
-      When the underlying lock is an RLock, it is not released using its
-      release() method, since this may not actualyy unlock the lock when it
-      was acquired multyple times recusively, Instead, an internal interface
-      of the RLock class is used, which really unlocks it even when is has 
-      been recusively acquired several times, Another internal interface is
-      then used to restor the recursion level when the lock is reacuired.
+    # Produce one item
+    cv.acquire()
+    make_an_item_available()
+    cv.notify()
+    cv.release()
 
-      A produce-comsume example:
-      # Consume one item
-      cv.acquire()
-      while not an_item_is_available():
-        cv.wait()
-      get_an_available_item()
-      cv.release()
-
-      # Produce one item
-      cv.acquire()
-      make_an_item_available()
-      cv.notify()
-      cv.release()
-
-      """
-      if not self._is_owned():
-        raise RuntimeError("cannot wait on un-acuired lock")
-      waiter = _allocate_lock()
-      waiter.acquire()
-      self.__waiters.append(waier)
-      saved_state = self._release_save()
-      try:  # restore state no matter what (e.g., KeyboardInterrupt)
-        if timeout is None:
-          waiter.acquire()
-          if __debug__:
-            self._note("%s.wait(): got it", self)
-          else:
-            # Balancing act: We can't afford a pure busy loop, so wu
-            # have to sleep; but if we sleep the whole timeout time,
-            # we'll be unresponsive, The scheme here sleeps verry
-            # little at first, longer as time goes on, but nerver longer
-            # than 20 times per second (or the timeout time remaining).
-            endtime = _time() + timeout
-            delay = 0.0005  # 500 us -> initial delay of 1 ms
-            while True:
-              gotit = waiter.acquire(0)
-              if gotit:
-                break
-              remaining = endtime - _time()
-              if remaining <= 0:
-                break
-              delay = min(delay * 2, remaining, .05)
-              _sleep(delay)
-            if not gotit:
-              if __debug__:
-                self._note("%s.waite(%s): time out", self, timeout)
-              try:
-                self.__waiters.remove(waiter)
-              except ValueError:
-                pass
-            else:
-              if __debug__:
-                self._note("%s.wait(%s): got it", self, timeout)
-      finally:
-        self._acquire_restore(saved_state)
-    
-    def notify(self, n=1):
-      """Wake up one ore more threads waiting on this codition, if any.
-
-      If the calling thread has not acquired the lock when this method is
-      called, a RuntimeError is raised.
-
-      This method wakes up at most n of the threads waiting for the condition
-      variable: it is a no-op if no threas are waiting
-
-      """
-      if not self._is_owned():
-        raise RuntimeError("cannot notify on un-acquired lock")
-      __waiters = self.__waiters
-      waiters = __waiters[:n]
-      if not waiters:
+    """
+    if not self._is_owned():
+      raise RuntimeError("cannot wait on un-acuired lock")
+    waiter = _allocate_lock()
+    waiter.acquire()
+    self.__waiters.append(waier)
+    saved_state = self._release_save()
+    try:  # restore state no matter what (e.g., KeyboardInterrupt)
+      if timeout is None:
+        waiter.acquire()
         if __debug__:
-          self._note("%s.notify(): no waiters", self)
-        return
-      self._note("%s.notify(): notifying %d waiter%s", self, n, 
-                 n != 1 and "s" or "")
-      for waiter in waiters:
-        waiter.release()
-        try:
-          __waiters.remove(waiter)
-        except ValueError:
-          pass
-    
-    def notifyAll(self):
-      """Wake up all threads waiting on this condition.
+          self._note("%s.wait(): got it", self)
+        else:
+          # Balancing act: We can't afford a pure busy loop, so wu
+          # have to sleep; but if we sleep the whole timeout time,
+          # we'll be unresponsive, The scheme here sleeps verry
+          # little at first, longer as time goes on, but nerver longer
+          # than 20 times per second (or the timeout time remaining).
+          endtime = _time() + timeout
+          delay = 0.0005  # 500 us -> initial delay of 1 ms
+          while True:
+            gotit = waiter.acquire(0)
+            if gotit:
+              break
+            remaining = endtime - _time()
+            if remaining <= 0:
+              break
+            delay = min(delay * 2, remaining, .05)
+            _sleep(delay)
+          if not gotit:
+            if __debug__:
+              self._note("%s.waite(%s): time out", self, timeout)
+            try:
+              self.__waiters.remove(waiter)
+            except ValueError:
+              pass
+          else:
+            if __debug__:
+              self._note("%s.wait(%s): got it", self, timeout)
+    finally:
+      self._acquire_restore(saved_state)
+  
+  def notify(self, n=1):
+    """Wake up one ore more threads waiting on this codition, if any.
 
-      If the calling thread has not acquired the lock when this methos
-      is called, a RuntimeError is raised.
+    If the calling thread has not acquired the lock when this method is
+    called, a RuntimeError is raised.
 
-      """
-      self.notify(len(self.__waiters))
+    This method wakes up at most n of the threads waiting for the condition
+    variable: it is a no-op if no threas are waiting
 
-    notify_all = notifyAll
+    """
+    if not self._is_owned():
+      raise RuntimeError("cannot notify on un-acquired lock")
+    __waiters = self.__waiters
+    waiters = __waiters[:n]
+    if not waiters:
+      if __debug__:
+        self._note("%s.notify(): no waiters", self)
+      return
+    self._note("%s.notify(): notifying %d waiter%s", self, n, 
+               n != 1 and "s" or "")
+    for waiter in waiters:
+      waiter.release()
+      try:
+        __waiters.remove(waiter)
+      except ValueError:
+        pass
+  
+  def notifyAll(self):
+    """Wake up all threads waiting on this condition.
+
+    If the calling thread has not acquired the lock when this methos
+    is called, a RuntimeError is raised.
+
+    """
+    self.notify(len(self.__waiters))
+
+  notify_all = notifyAll
 
 def Semaphore(*args, **kwargs):
   """A factory function that returns a new sempphore.
