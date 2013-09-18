@@ -9,7 +9,8 @@ import matplotlib
 from pylab import *
 import time
 
-urls = ['http://10.2.201.70:32201/dfshealth.jsp', 'http://10.2.201.70:32201/dfshealth.jsp']
+urls = ['http://10.2.201.65:32201/dfshealth.jsp', 'http://10.2.201.66:32201/dfshealth.jsp']
+urls_jmx = ['http://10.2.201.65:32201/jmx', 'http://10.2.201.66:32201/jmx']
 
 def get():
   for url in urls:
@@ -34,12 +35,41 @@ def get_mem(content):
   print ret[0]
   return ret[0]
 
+import json
+def get_jmx():
+  for url in urls_jmx:
+    ret = {}
+    try:
+      ret = json.loads(requests.get(url).content)
+    except Exception as e:
+      logging.error(str(e))
+    for bean in ret.get('beans'):
+      if bean.get('name') == 'Hadoop:service=NameNode,name=FSNamesystem' and bean.get('tag.HAState') == 'active':
+        return ret.get('beans')
+  logging.error('cat not access the urls!')
+  return {}
+
+def get_info_jmx(content):
+  ret = {
+      'mem': '',
+      'cpu_time': '',
+      }
+  for bean in content:
+    if bean.get('name') == 'java.lang:type=Memory':
+      ret['mem'] = int( bean.get('HeapMemoryUsage').get('used') ) / 1024 / 1024
+    elif bean.get('name') == 'java.lang:type=OperatingSystem':
+      ret['cpu_time'] = bean.get('ProcessCpuTime')
+
+  return ret
+
 def _plot():
   clf()
-  t = arange(0, 30, 1)
-  s = [0] * 30
+  t = arange(0, 400, 1)
+  s = [0] * 400
   for i in t:
-    s[i] = get_mem(get())
+    #s[i] = get_mem(get())
+    s[i] = get_info_jmx(get_jmx()).get('cpu_time')
+    print s[i]
     time.sleep(1)
 
   plot(t, s)
@@ -67,6 +97,9 @@ class Test(unittest.TestCase):
 
   def test_plot(self):
     _plot()
+
+  def _test_get_jmx(self):
+    print get_jmx()
 
 
 if __name__ == '__main__':
