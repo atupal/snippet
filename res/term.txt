@@ -1,3 +1,4 @@
 crc (Cyclic redundancy check) 循环冗余校验
 IDL (Interface Description Language) 接口定义语言
 MVVM (Model View ViewModel) 
+Sticky bit: for use with pure executable files.
