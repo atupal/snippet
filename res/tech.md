@@ -9,6 +9,8 @@ python-rq: [RQ(Redis Queue), a simple Python library for queueingjobs and proces
 ganglia+nagios,datadog等，监控脚本
 <br>
 python watchdog 监控文件系统
+<br>
+light table: [一个编辑器](http://www.lighttable.com/)
 
 
 ### web ###
