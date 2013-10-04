@@ -1,3 +1,5 @@
+[referer](http://mingxinglai.com/cn/2012/09/tmux/)
+
 >妈蛋，老是忘记这些快捷键，记录下来！
 
 tmux 使用C/S模型构建，主要包括以下单元模块
