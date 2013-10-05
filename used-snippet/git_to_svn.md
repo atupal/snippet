@@ -51,7 +51,9 @@ Addendum: If you mess up git svn init
 
 If you accidentally run git svn init with the wrong url, and you weren't smart enough to take a backup of your work (don't ask ...), you can't just run the same command again. You can however undo the changes by issuing:
 
+```
 rm -rf .git/svn
+```
 edit .git/config
 And remove the section [svn-remote "svn"] section.
 
