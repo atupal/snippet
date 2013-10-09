@@ -13,6 +13,7 @@ python watchdog 监控文件系统
 light table: [一个编辑器](http://www.lighttable.com/)
 <br>
 zmq: [intelligent transport layer for your distributed apps](http://zeromq.org/intro:read-the-manual)
+Sphinx: [ a tool that makes it easy to create intelligent and beautiful documentation](http://sphinx-doc.org/index.html)
 
 
 ### web ###
