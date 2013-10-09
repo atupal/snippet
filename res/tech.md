@@ -20,3 +20,7 @@ Sphinx: [ a tool that makes it easy to create intelligent and beautiful document
 ### web ###
 
 varnish: [a web application accelerator.](https://www.varnish-cache.org)
+
+
+### python ###
+Fabric: [a Python (2.5 or higher) library and command-line tool for streamlining the use of SSH for application deployment or systems administration tasks.](http://docs.fabfile.org/)
