@@ -47,7 +47,7 @@ let g:SuperTabDefaultCompletionType="<C-X><C-O>"
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 "设置vim放置备份文件的地方
 set backupdir=~/.vim/backup,/tmp
-set cursorcolumn  " 高亮光标列
+"set cursorcolumn  " 高亮光标列
 set cursorline    " 高亮光标行
 "hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 "hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
@@ -381,4 +381,7 @@ endfunction
 "set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Col:\ %c
 set statusline=\%{HasPaste()}%F%m%r%h\ %w\ ./:%r%{getcwd()}%h\ L:%l\ C:%c
 
-"set guifont=DejaVu\ Sans\ Mono\ 9
+"设置段落的行宽
+set textwidth=80
+"使行宽的设置对中文有效
+set fo+=m
