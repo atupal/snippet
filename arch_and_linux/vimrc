@@ -298,6 +298,9 @@ map tl :Tlist<CR><c-l>
 map wm :WMToggle<CR>
  
 imap <c-u> <BACKSPACE>
+
+map <c-n> :tabNext<CR>
+map <c-p> :tabprevious<CR>
  
 "CTRL+D 减少缩进 
 "
@@ -382,6 +385,6 @@ endfunction
 set statusline=\%{HasPaste()}%F%m%r%h\ %w\ ./:%r%{getcwd()}%h\ L:%l\ C:%c
 
 "设置段落的行宽
-set textwidth=80
+set textwidth=76
 "使行宽的设置对中文有效
 set fo+=m
