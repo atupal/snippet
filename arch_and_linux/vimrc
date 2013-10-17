@@ -385,6 +385,6 @@ endfunction
 set statusline=\%{HasPaste()}%F%m%r%h\ %w\ ./:%r%{getcwd()}%h\ L:%l\ C:%c
 
 "设置段落的行宽
-set textwidth=76
+"set textwidth=76
 "使行宽的设置对中文有效
 set fo+=m
