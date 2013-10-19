@@ -278,9 +278,10 @@ imap <c-L> <ESC>A
 imap <c-l> <ESC>la
  
 " Ctrl + E            一步加载语法模板和作者、时间信息
-map <c-e> <ESC>:LoadTemplate<CR><ESC>:AuthorInfoDetect<CR><ESC>Gi
-imap <c-e> <ESC>:LoadTemplate<CR><ESC>:AuthorInfoDetect<CR><ESC>Gi
-vmap <c-e> <ESC>:LoadTemplate<CR><ESC>:AuthorInfoDetect<CR><ESC>Gi
+" conflict with the hot key of vim
+"map <c-e> <ESC>:LoadTemplate<CR><ESC>:AuthorInfoDetect<CR><ESC>Gi
+"imap <c-e> <ESC>:LoadTemplate<CR><ESC>:AuthorInfoDetect<CR><ESC>Gi
+"vmap <c-e> <ESC>:LoadTemplate<CR><ESC>:AuthorInfoDetect<CR><ESC>Gi
  
 " jj                  保存文件并留在插入模式 [插入模式]
 imap jj <ESC>:w<CR>li
@@ -385,6 +386,6 @@ endfunction
 set statusline=\%{HasPaste()}%F%m%r%h\ %w\ ./:%r%{getcwd()}%h\ L:%l\ C:%c
 
 "设置段落的行宽
-"set textwidth=76
+set textwidth=76
 "使行宽的设置对中文有效
 set fo+=m
