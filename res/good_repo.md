@@ -1,2 +1,4 @@
 - [httppie](https://github.com/jkbr/httpie): 用python写的类似curl的工具 for human
 - [arrow](https://github.com/crsmithdev/arrow): 更好的python日期库
+- [algorithm](https://github.com/CyberZHG/ZCookie/tree/master/algorithm): 一些oj上的代码
+- [funcy](http://hackflow.com/blog/2013/10/13/functional-python-made-easy/): Functional Python Made Easy
