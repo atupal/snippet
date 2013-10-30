@@ -1,8 +1,8 @@
-  #include <stdio.h>
-    #include <stdlib.h>
-    #include <unistd.h>
-    #include <stdio.h>
-    #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
 
             int cstring_cmp(const void *a, const void *b)
             {
@@ -12,7 +12,6 @@
                 /* strcmp functions works exactly as expected from
                 comparison function */
             }
-Thanks in advance for your response, sorry for my English
 
             int main (int argc, char *argv [])
 
