@@ -3,3 +3,5 @@ IDL (Interface Description Language) 接口定义语言
 MVVM (Model View ViewModel) 
 Sticky bit: for use with pure executable files.
 REPL: read-eval-print loop
+Concurrency: 并发
+Parallelism: 并行
