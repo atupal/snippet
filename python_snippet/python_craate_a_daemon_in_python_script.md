@@ -1,7 +1,7 @@
 [How do you create a daemon in Python?](http://stackoverflow.com/questions/473620/how-do-you-create-a-daemon-in-python)
 
 
-```
+```python
 #!/usr/bin/env python2
 # not supported in python3
 import time
