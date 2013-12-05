@@ -4,5 +4,5 @@
 ### Usage ###
 ```
 chmod +x ts.py
-./ts.py
+./run.py
 ```
