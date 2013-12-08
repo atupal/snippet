@@ -8,3 +8,5 @@ read code:
 - gitorious.org
 - sourceforge.net
 - freecode.com
+
+[project euler是一个具有挑战性的不仅仅需要具备数学能力的“数学/计算机编程”问题集合。](http://projecteuler.net/)
