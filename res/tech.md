@@ -24,3 +24,7 @@ varnish: [a web application accelerator.](https://www.varnish-cache.org)
 
 ### python ###
 Fabric: [a Python (2.5 or higher) library and command-line tool for streamlining the use of SSH for application deployment or systems administration tasks.](http://docs.fabfile.org/)
+
+
+### knowledge ###
+Elo rating system: ELO等级分制度是指由匈牙利裔美国物理学家Elo创建的一个衡量各类对弈活动水平的评价方法，是当今对弈水平评估的公认的权威方法。被广泛用于国际象棋、围棋、足球、篮球等运动。线上游戏英雄联盟、魔兽世界内的竞技对战系统也采用此分级制度。
