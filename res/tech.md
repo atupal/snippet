@@ -28,3 +28,7 @@ Fabric: [a Python (2.5 or higher) library and command-line tool for streamlining
 
 ### knowledge ###
 Elo rating system: ELO等级分制度是指由匈牙利裔美国物理学家Elo创建的一个衡量各类对弈活动水平的评价方法，是当今对弈水平评估的公认的权威方法。被广泛用于国际象棋、围棋、足球、篮球等运动。线上游戏英雄联盟、魔兽世界内的竞技对战系统也采用此分级制度。
+
+### other ###
+
+BPF: 柏克莱封包过滤器（Berkeley Packet Filter，缩写 BPF），是类Unix系统上数据链路层的一种原始接口，提供原始链路层封包的收发，除此之外，如果网卡驱动支持洪泛模式，那么它可以让网卡处于此种模式，这样可以收到网络上的所有包，不管他们的目的地是不是所在主机。
