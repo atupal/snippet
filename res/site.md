@@ -19,3 +19,7 @@ read code:
 - code golf: http://codegolf.com
 - topcoder.com: http://community.topcoder.com
 - codeforces: http://codeforces.com
+
+
+一些 用来装逼的 网站：
+- http://www.webtwt.com/new/hackertyper/
