@@ -23,3 +23,8 @@ read code:
 
 一些 用来装逼的 网站：
 - http://www.webtwt.com/new/hackertyper/
+
+
+一些你不得不知道的python 项目：
+-  [pythonhackers](http://pythonhackers.com/os/)
+-  [Some python module you should know](http://devcharm.com/pages/11-python-modules-you-should-know)
