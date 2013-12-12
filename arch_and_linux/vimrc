@@ -392,3 +392,4 @@ set statusline=\%{HasPaste()}%F%m%r%h\ %w\ ./:%r%{getcwd()}%h\ L:%l\ C:%c
 "set textwidth=76
 "使行宽的设置对中文有效
 set fo+=m
+set pastetoggle=<F9>
