@@ -14,6 +14,8 @@ click on a tag label applies that tag to the focused window.
 click on a tag label adds/removes that tag to/from the focused window.
 
 
+<br>
+
 #### Mod1-Shift-Return
 Start xterm.
 #### Mod1-Return
@@ -52,3 +54,14 @@ View all windows with any tag.
 Add/remove all windows with nth tag to/from the view.
 #### Mod1-Shift-q
 Quit dwm.
+
+
+
+<br>
+
+#### Mod1-Button1
+Move current window while dragging. Tiled windows will be toggled to the floating state.
+#### Mod1-Button2
+Zooms/cycles current window to/from master area. If it is floating (but not fixed) it will be toggled to the tiled state instead.
+#### Mod1-Button3
+Resize current window while dragging. Tiled windows will be toggled to the floating state.
