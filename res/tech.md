@@ -1,23 +1,15 @@
 ### no cat ###
 
 mechanize: 爬虫
-<br>
-celery: [Distributed Task Queue](http://www.celeryproject.org/)
-<br>
-python-rq: [RQ(Redis Queue), a simple Python library for queueingjobs and processing them in the background with worker](http://python-rq.org/)
-<br>
-ganglia+nagios,datadog等，监控脚本
-<br>
-python watchdog 监控文件系统
-<br>
-light table: [一个编辑器](http://www.lighttable.com/)
-<br>
-zmq: [intelligent transport layer for your distributed apps](http://zeromq.org/intro:read-the-manual)
-<br>
-Sphinx: [ a tool that makes it easy to create intelligent and beautiful documentation](http://sphinx-doc.org/index.html)
-<br>
-Spynner: Spynner is a stateful programmatic web browser module for Python with Javascript/AJAX support based upon the QtWebKit framework.
-[msgpack](http://msgpack.org/)
+- celery: [Distributed Task Queue](http://www.celeryproject.org/)
+- python-rq: [RQ(Redis Queue), a simple Python library for queueingjobs and processing them in the background with worker](http://python-rq.org/)
+- ganglia+nagios,datadog等，监控脚本
+- python watchdog 监控文件系统
+- light table: [一个编辑器](http://www.lighttable.com/)
+- zmq: [intelligent transport layer for your distributed apps](http://zeromq.org/intro:read-the-manual)
+- Sphinx: [ a tool that makes it easy to create intelligent and beautiful documentation](http://sphinx-doc.org/index.html)
+- Spynner: Spynner is a stateful programmatic web browser module for Python with Javascript/AJAX support based upon the QtWebKit framework.
+- [msgpack](http://msgpack.org/)
 
 ### web ###
 
