@@ -17,7 +17,7 @@ zmq: [intelligent transport layer for your distributed apps](http://zeromq.org/i
 Sphinx: [ a tool that makes it easy to create intelligent and beautiful documentation](http://sphinx-doc.org/index.html)
 <br>
 Spynner: Spynner is a stateful programmatic web browser module for Python with Javascript/AJAX support based upon the QtWebKit framework.
-
+[msgpack](http://msgpack.org/)
 
 ### web ###
 
