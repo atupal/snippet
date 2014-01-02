@@ -113,3 +113,8 @@ alias h="cd ~/fucklongpath/hue"
 #export https_proxy=192.168.122.1:3128
 export DESKTOP_LOG_DIR=/tmp
 export PATH=$PATH:/home/atupal/src/github/git-hg/bin
+
+# add space before all lines from clip
+indent() {
+  xclip -o | awk '{ print(" "$0) }' | xclip -sel clip
+}
