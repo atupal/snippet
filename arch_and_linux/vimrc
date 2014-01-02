@@ -334,6 +334,8 @@ func! CompileCode()
         exec "!ruby %<.rb"
     elseif &filetype == "javascript"
         exec "!node %<.js"
+    elseif &filetype == "sh"
+        exec "!sh %<.sh"
     endif
 endfunc
  
