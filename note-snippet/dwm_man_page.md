@@ -65,3 +65,14 @@ Move current window while dragging. Tiled windows will be toggled to the floatin
 Zooms/cycles current window to/from master area. If it is floating (but not fixed) it will be toggled to the tiled state instead.
 #### Mod1-Button3
 Resize current window while dragging. Tiled windows will be toggled to the floating state.
+
+
+
+### DWM and dual head setups ###
+https://bbs.archlinux.org/viewtopic.php?id=97795
+<br>
+
+To switch between monitors, you hit Mod + < or Mod + >
+
+<br>
+DWM hackers:https://bbs.archlinux.org/viewtopic.php?id=92895
