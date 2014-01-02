@@ -45,7 +45,7 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=$PATH:/home/atupal/soft/apache-maven-3.0.5/bin:/home/atupal/usr/:/home/atupal/bin:/usr/lib/jvm/java/jdk1.6.0_35/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/vendor_perl:/usr/bin/core_perl:.:/home/atupal/soft/hbase-0.94.9/bin:/home/atupal/src/work/xiaomi/cloud/phabricator/arcanist/bin:/home/atupal/src/go/bin:/home/atupal/src/tools/android/apktool1.5.2:/home/atupal/src/tools/android/apktool-install-linux-r05-ibot
+export PATH=$PATH:/home/atupal/soft/apache-maven-3.0.5/bin:/home/atupal/usr/:/home/atupal/bin:/usr/lib/jvm/java/jdk1.6.0_35/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/vendor_perl:/usr/bin/core_perl:.:/home/atupal/soft/hbase-0.94.9/bin:/home/atupal/src/work/xiaomi/cloud/phabricator/arcanist/bin:/home/atupal/src/go/bin:/home/atupal/src/tools/android/apktool1.5.2:/home/atupal/src/tools/android/apktool-install-linux-r05-ibot:/home/atupal/.gem/ruby/2.0.0/bin
 
 # PS1
 # Clean, simple, compatible and meaningful.
@@ -91,6 +91,25 @@ PROMPT="\
 %{$fg[green]%}$(box_name) \
 %{$fg[white]%}in \
 %{$terminfo[bold]$fg[yellow]%}${current_dir}%{$reset_color%}\
-${git_info} \
+${git_infoo} \
 %{$fg[white]%}[%*]
-%{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
+%{$terminfo[bold]$fg[red]%}$ %{$reset_color%}%{$fg[green]%}"
+
+#xinput set-button-map "USB Optical Mouse" 3 2 1 4 5 6 7 8 9 10 11 12 13
+#xmodmap -e "pointer = 3 2 1"
+xmodmap -e "pointer = 3 2 1 4 5 6 7 8 9 10 11 12 13"
+export LC_ALL=en_US.UTF-8
+alias cls=clear
+alias c=clear
+alias ydc='echo \"`xclip -o`\" | ydcv'
+export PYTHONDONTWRITEBYTECODE=x
+
+export HADOOP_HOME=/home/atupal/work/xiaomi/cloud/infra/minos/client/hadoop
+export HADOOP_CONF_DIR=/home/atupal/work/xiaomi/cloud/infra/minos/client/hadoop/etc/hadoop
+export JAVA_HOME=/usr/lib/jvm/java/jdk1.6.0_35
+export EDITOR=vim
+alias h="cd ~/fucklongpath/hue"
+#export http_proxy=192.168.122.1:3128
+#export https_proxy=192.168.122.1:3128
+export DESKTOP_LOG_DIR=/tmp
+export PATH=$PATH:/home/atupal/src/github/git-hg/bin
