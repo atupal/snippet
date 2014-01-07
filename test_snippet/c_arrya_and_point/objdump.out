@@ -1,0 +1,77 @@
+
+ts.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <main>:
+#include <stdlib.h>
+
+
+int main() {
+   0:	55                   	push   rbp
+   1:	48 89 e5             	mov    rbp,rsp
+   4:	53                   	push   rbx
+   5:	48 83 ec 38          	sub    rsp,0x38
+   9:	48 89 e0             	mov    rax,rsp
+   c:	48 89 c3             	mov    rbx,rax
+  int n;
+
+  int fuuuuuuuuuuuck[n];
+   f:	8b 45 ec             	mov    eax,DWORD PTR [rbp-0x14]
+  12:	4c 63 c0             	movsxd r8,eax
+  15:	49 83 e8 01          	sub    r8,0x1
+  19:	4c 89 45 e0          	mov    QWORD PTR [rbp-0x20],r8
+  1d:	4c 63 c0             	movsxd r8,eax
+  20:	4c 89 c6             	mov    rsi,r8
+  23:	bf 00 00 00 00       	mov    edi,0x0
+  28:	48 63 f0             	movsxd rsi,eax
+  2b:	48 89 f2             	mov    rdx,rsi
+  2e:	b9 00 00 00 00       	mov    ecx,0x0
+  33:	48 98                	cdqe   
+  35:	48 c1 e0 02          	shl    rax,0x2
+  39:	48 8d 50 03          	lea    rdx,[rax+0x3]
+  3d:	b8 10 00 00 00       	mov    eax,0x10
+  42:	48 83 e8 01          	sub    rax,0x1
+  46:	48 01 d0             	add    rax,rdx
+  49:	b9 10 00 00 00       	mov    ecx,0x10
+  4e:	ba 00 00 00 00       	mov    edx,0x0
+  53:	48 f7 f1             	div    rcx
+  56:	48 6b c0 10          	imul   rax,rax,0x10
+  5a:	48 29 c4             	sub    rsp,rax
+  5d:	48 89 e0             	mov    rax,rsp
+  60:	48 83 c0 03          	add    rax,0x3
+  64:	48 c1 e8 02          	shr    rax,0x2
+  68:	48 c1 e0 02          	shl    rax,0x2
+  6c:	48 89 45 d8          	mov    QWORD PTR [rbp-0x28],rax
+  int *heheheheheheheh;
+  heheheheheheheh = (int *) malloc (888);  // 为了方便观测设置为 888 (4,8的倍数) 了，没用 sizeof.
+  70:	bf 78 03 00 00       	mov    edi,0x378
+  75:	e8 00 00 00 00       	call   7a <main+0x7a>
+  7a:	48 89 45 d0          	mov    QWORD PTR [rbp-0x30],rax
+
+  int * const nima = (int *) malloc (444);  // 同上
+  7e:	bf bc 01 00 00       	mov    edi,0x1bc
+  83:	e8 00 00 00 00       	call   88 <main+0x88>
+  88:	48 89 45 c8          	mov    QWORD PTR [rbp-0x38],rax
+  nima[1] = 1314;
+  8c:	48 8b 45 c8          	mov    rax,QWORD PTR [rbp-0x38]
+  90:	48 83 c0 04          	add    rax,0x4
+  94:	c7 00 22 05 00 00    	mov    DWORD PTR [rax],0x522
+
+
+  fuuuuuuuuuuuck[1] = 13;
+  9a:	48 8b 45 d8          	mov    rax,QWORD PTR [rbp-0x28]
+  9e:	c7 40 04 0d 00 00 00 	mov    DWORD PTR [rax+0x4],0xd
+  heheheheheheheh[1] = 14;
+  a5:	48 8b 45 d0          	mov    rax,QWORD PTR [rbp-0x30]
+  a9:	48 83 c0 04          	add    rax,0x4
+  ad:	c7 00 0e 00 00 00    	mov    DWORD PTR [rax],0xe
+
+  return 0;
+  b3:	b8 00 00 00 00       	mov    eax,0x0
+  b8:	48 89 dc             	mov    rsp,rbx
+}
+  bb:	48 8b 5d f8          	mov    rbx,QWORD PTR [rbp-0x8]
+  bf:	c9                   	leave  
+  c0:	c3                   	ret    
