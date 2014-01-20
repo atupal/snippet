@@ -97,7 +97,7 @@ ${git_infoo} \
 
 #xinput set-button-map "USB Optical Mouse" 3 2 1 4 5 6 7 8 9 10 11 12 13
 #xmodmap -e "pointer = 3 2 1"
-xmodmap -e "pointer = 3 2 1 4 5 6 7 8 9 10 11 12 13"
+#xmodmap -e "pointer = 3 2 1 4 5 6 7 8 9 10 11 12 13"
 export LC_ALL=en_US.UTF-8
 alias cls=clear
 alias c=clear
@@ -118,3 +118,6 @@ export PATH=$PATH:/home/atupal/src/github/git-hg/bin
 indent() {
   xclip -o | awk '{ print(" "$0) }' | xclip -sel clip
 }
+
+export DISPLAY=:0.0
+#xmodmap -e "pointer = 3 2 1"
