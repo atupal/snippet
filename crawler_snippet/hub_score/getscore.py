@@ -29,13 +29,14 @@ file_all=student_personal_score_all.raq
 srcType=file
 separator=%09
 saveAsName=none
-cachedId=A_5410
+cachedId=A_1392
 
 [bool]
 get_all=false
 
 [other]
-seed=97895
+#seed=97895
+seed=101358
 use_proxy=true
 '''
 
@@ -71,7 +72,7 @@ def download(ID, C_ID, TIME):
   else:
     file_ = conf.get('param', 'file_grade')
 
-  url = '%s?action=%s&file=%s&srcType=%s&separator=%s&reportParamsId=%s&saveAsName=%s&cachedId=A_5%d&t_i_m_e=%d' % (
+  url = '%s?action=%s&file=%s&srcType=%s&separator=%s&reportParamsId=%s&saveAsName=%s&cachedId=A_%d&t_i_m_e=%d' % (
       conf.get('base', 'url'),
       conf.get('param', 'action'),
       file_,
@@ -94,7 +95,7 @@ def download(ID, C_ID, TIME):
   #  print 'watting 1 min'
   #  time.sleep(60)
 
-  url = 'http://bksjw.hust.edu.cn:80/reportServlet?action=18&file=student_personal_score_grade.raq&srcType=file&separator=%09&reportParamsId=103997&saveAsName=%7Cu534E%7Cu4E2D%7Cu79D1%7Cu6280%7Cu5927%7Cu5B66%7Cu62A5%7Cu8868&cachedId=A_14870&t_i_m_e=1374721017793'
+  #url = 'http://bksjw.hust.edu.cn:80/reportServlet?action=18&file=student_personal_score_grade.raq&srcType=file&separator=%09&reportParamsId=103997&saveAsName=%7Cu534E%7Cu4E2D%7Cu79D1%7Cu6280%7Cu5927%7Cu5B66%7Cu62A5%7Cu8868&cachedId=A_14870&t_i_m_e=1374721017793'
 
 
   opener = urllib2.build_opener( urllib2.ProxyHandler({'http': random.choice(proxies)}) )
@@ -112,11 +113,12 @@ def download(ID, C_ID, TIME):
     ret = re.findall(pat, resp.content)
     if len(ret) > 0 and str(ret[0]) not in id_set and str(ret[0]) not in score_set:
       print '\033[31mget\n %s' % (ret[0])
-      print '\033[32m %s' % resp.content
+      print '\033[32m %s' % resp.content.decode('gbk')
       score_set[ ret[0] ] = resp.content.decode('gbk')
     else:
       if ret:
         print '\033[33m already get:%s' % (ret[0]),
+        score_set[ ret[0] ] = resp.content.decode('gbk')
 
 
 def update_id():
