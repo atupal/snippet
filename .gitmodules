@@ -1,0 +1,3 @@
+[submodule "crawler_snippet/getscore_hub"]
+	path = crawler_snippet/getscore_hub
+	url = git@github.com:atupal/getscore_hub.git
