@@ -100,11 +100,9 @@ IntAndTable_ opExp(A_exp left, A_binop oper, A_exp right, Table_ t) {
 int main() {
   A_stm s = prog();
   Table_ t = interpStm(s, NULL);
-  /*
   while (t) {
     printf("%s:%d -> ", t->id, t->value);
     t = t->tail;
   }
-  */
   return 0;
 }
