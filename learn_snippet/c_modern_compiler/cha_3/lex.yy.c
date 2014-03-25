@@ -17,7 +17,7 @@ int yyleng; extern unsigned char yytext[];
 int yymorfg;
 extern unsigned char *yysptr, yysbuf[];
 int yytchar;
-FILE *yyin = {stdin}, *yyout = {stdout};
+FILE *yyin = &stdin, *yyout = &stdout;
 extern int yylineno;
 struct yysvf { 
 	struct yywork *yystoff;
@@ -28,8 +28,8 @@ extern struct yysvf yysvec[], *yybgin;
 /* Copyright (c) 1997 Andrew W. Appel.  Licensed software: see LICENSE file */
 #include <string.h>
 #include "util.h"
-#include "symbol.h"
-#include "absyn.h"
+//#include "symbol.h"
+//#include "absyn.h"
 #include "y.tab.h"
 #include "errormsg.h"
 
