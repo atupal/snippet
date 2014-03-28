@@ -20,3 +20,7 @@ A_exp parse(string fname)
    return absyn_root;
  else return NULL;
 }
+
+int main() {
+  return 0;
+}
