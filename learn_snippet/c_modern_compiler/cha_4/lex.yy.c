@@ -11,7 +11,7 @@ int yyleng; extern unsigned char yytext[];
 int yymorfg;
 extern unsigned char *yysptr, yysbuf[];
 int yytchar;
-FILE *yyin = {stdin}, *yyout = {stdout};
+FILE *yyin = &stdin, *yyout = &stdout;
 extern int yylineno;
 struct yysvf { 
 	struct yywork *yystoff;
@@ -21,6 +21,7 @@ struct yysvf *yyestate;
 extern struct yysvf yysvec[], *yybgin;
 #include <string.h>
 #include "util.h"
+#include "absyn.h"
 #include "y.tab.h"
 #include "errormsg.h"
 
