@@ -78,8 +78,9 @@ function precmd() {
   #if [[ $RET != 0 ]]; then
   #  echo " $RET\n";
   #fi;
-  if [[ $? != 0 ]]; then
-    echo " $?";
+  i=$?
+  if [[ $i != 0 ]]; then
+    echo "  errno: $i";
   fi;
 }
 
@@ -121,3 +122,4 @@ indent() {
 
 export DISPLAY=:0.0
 #xmodmap -e "pointer = 3 2 1"
+#synclient touchpadoff=1
