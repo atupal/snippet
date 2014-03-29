@@ -1,0 +1,324 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>华中科技大学公共信息服务平台</title>
+		<meta http-equiv="keywords" content="华中科技大学,HUB,HUB系统">
+	</head>
+	
+	<frameset rows="55,*,20" frameborder="0" border="0" framespacing="0" resize="yes" >
+   
+   <frame id="topFrame" title='条幅框架' src="frames/top.jsp" name="topFrame" noresize scrolling="no"  marginwidth="0" marginheight="0" >
+ 
+   <frameset cols="220,*"  resize="yes" >
+      <frame id="main_side" title='导航框架'  src="frames/body_left.jsp" name="main_side"  style="border-right: 2px solid #d7d7d7;" resize="yes" marginwidth="10">
+        
+      <frame id="mainFrame" title='内容框架' src="frames/body.jsp" name="mainFrame" style="border-left: 2px solid #d7d7d7;" resize="yes" marginwidth="0" marginheight="0">
+ 
+   </frameset>
+ 	
+   <frame id="bottomFrame" title='底部框架' src="frames/bottom.html" name="bottomFrame" noresize scrolling="no"  marginwidth="0" marginheight="0" >
+</frameset>
+ 
+<noframes>
+必须使用支持 华中科技大学统一信息平台 的浏览器。
+</noframes> 
+	
+</html>
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>HUB MENU</title>
+		<script type="text/javascript" src="/scripts/jquery.js"></script>
+		<link rel="stylesheet" type="text/css"
+			href="/scripts/jstree/tree_component.css" />
+		<script type="text/javascript" src="/scripts/jstree/_lib.js"></script>
+		<script type="text/javascript" src="/scripts/jstree/tree_component.js"></script>
+	<script type="text/javascript">
+$("document").ready(function(){
+	$(function() {
+        var boxWidth = 100;
+        var boxHeight = 100;
+        var imgWidth = $("#img1").width();
+        var imgHeight = $("#img1").height();
+        //比较imgBox长宽比img长宽比
+        if ((boxWidth / boxHeight) >= (imgWidth / imgHeight)) {
+            //重新设置imgwidthheight
+            $("#img1").width((boxHeight * imgWidth) / imgHeight);
+            $("#img1").height(boxHeight);
+            //让图片居显示
+            var margin = (boxWidth - $("#img1").width()) / 2;
+            $("#img1").css("margin-left", margin);
+        }
+        else {
+            //重新设置imgwidthheight
+            $("#img1").width(boxWidth);
+            $("#img1").height((boxWidth * imgHeight) / imgWidth);
+            //让图片居显示
+            var margin = (boxHeight - $("#img1").height()) / 2;
+            $("#img1").css("margin-top", margin);
+        }
+    });
+})
+</script>
+		<style type="text/css">
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "宋体";
+	font-size: 12px;
+	font-weight: bold;
+}
+</style>
+
+		<style type="text/css">
+<!--
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+body {
+	font-family: arial, 宋体, serif;
+	font-size: 12px;
+}
+
+#nav {
+	width: 200px;
+	line-height: 24px;
+	list-style-type: none;
+	text-align: left;
+	/*定义整个ul菜单的行高和背景色*/
+}
+
+/*==================一级目录===================*/
+#nav a {
+	width: 200px;
+	display: block;
+	padding-left: 10px;
+	/*Width(一定要)，否则下面的Li会变形*/
+}
+
+#nav li {
+	background: #CCC; /*一级目录的背景色*/
+	border-bottom: #FFF 1px solid; /*下面的一条白边*/
+	float: left;
+	/*float：left,本不应该设置，但由于在Firefox不能正常显示 继承Nav的width,限制宽度，li自动向下延伸*/
+}
+
+#nav li a:hover {
+	background: #CC0000; /*一级目录onMouseOver显示的背景色*/
+}
+
+#nav a:link {
+	color: #666;
+	text-decoration: none;
+}
+
+#nav a:visited {
+	color: #666;
+	text-decoration: none;
+}
+
+#nav a:hover {
+	color: #FFF;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+/*==================二级目录===================*/
+#nav li ul {
+	list-style: none;
+	text-align: left;
+}
+
+#nav li ul li {
+	background: #EBEBEB; /*二级目录的背景色*/
+}
+
+#nav li ul a {
+	padding-left: 10px;
+	width: 190px;
+	/* padding-left二级目录中文字向右移动，但Width必须重新设置=(总宽度-padding-left)*/
+}
+
+/*下面是二级目录的链接样式*/
+#nav li ul a:link {
+	color: #666;
+	text-decoration: none;
+}
+
+#nav li ul a:visited {
+	color: #666;
+	text-decoration: none;
+}
+
+#nav li ul a:hover {
+	color: #F3F3F3;
+	text-decoration: none;
+	font-weight: normal;
+	background: #CC0000;
+	/* 二级onmouseover的字体颜色、背景色*/
+}
+
+/*==============================*/
+#nav li:hover ul {
+	left: auto;
+}
+
+#nav li.sfhover ul {
+	left: auto;
+}
+
+#content {
+	clear: left;
+}
+
+#nav ul.collapsed {
+	display: none;
+}
+
+-->
+#PARENT {
+	width: 300px;
+	padding-left: 10px;
+}
+</style>
+	</head>
+	<body>
+		<div id="body_left"
+			style="padding-left: 8px; background-image: url(/images/side_bg.jpg); background-repeat: repeat-x;">
+			<div id="welcome"
+				style="width: 100%; height: 80px; font-weight: normal; line-height: 1.5em">
+				<div style='text-align: center;padding:8px 0;'>欢迎 余康乐 登录</div>
+
+					<div>院系： 数学与统计学院</div>
+<div>专业： 信息与计算科学</div>
+<div>班级： 信息与计算科学201102班</div>
+<div>学号： U201110090</div>
+
+
+				<form action="/logout.action" name="form1" target="_top">
+					<div style="text-align: right; margin-right: 5px;">
+						<a onclick="zhuxiao()" target="_top"><img
+								src="/images/zhuxiao.jpg" border=0 align="right" /> </a>
+					</div>
+					<input type="hidden" name="zxid" id="zxid"
+						value="8308cbfc-bedd-4e3c-ade2-d0f3590b4daa" />
+				</form>
+			</div>
+			<!-- <div style="clear: both; margin-top: 120px; _margin-top: 5px"> -->
+				
+			<div style="clear: both; margin-top: 55px">
+				公共信息服务平台
+			</div>
+			
+			
+			
+			<div id="divForTree"></div>
+			
+
+		</div>
+		<script type="text/javascript">
+	function zhuxiao(){
+		document.form1.submit();
+		}
+  		$(document).ready(function(){
+  			$.ajaxSetup({cache:false});
+  			$("#divForTree").tree({
+  				data  : {        
+  					type  : "json",         
+  					url   : "/showmenu.action",        
+  					async : true,        
+  					async_data : function (NODE) { return { sjcdbh : $(NODE).attr("id") || '0'
+  					                                       } 
+  					                              }
+  				         },
+  				rules : {
+  				        },
+  				     ui:{
+  					theme_name : "hub",
+  					context:{visible : function (NODE, TREE_OBJ) {
+	                    return false;
+	                                           }
+	                        }
+  				        },
+  				callback : {
+			        onselect:function(NODE) {
+			        	var url = $(NODE).attr("href");
+			        	var id = $(NODE).attr("id");
+			        	if( url.indexOf('#') < 0 ){
+			        		if(url.indexOf('tzcs=kffwyzc')>-1){//判断客服系统跳转
+				        		window.open(url);//打开新窗口
+			        		}else if(id!='000'){
+			        		window.parent.frames[2].location.href = url;
+			        		}else{
+			        		window.parent.location.href = url;
+			        		}
+			        	                          }
+			        	$.tree_reference('divForTree').toggle_branch($(NODE));
+			                },
+			        error:function(){
+			        	alert("加载菜单出错，请重新登陆试试。");
+			                }
+  				   }
+  			});
+  		});
+  		
+  		
+  		
+  		//系统菜单
+  		$(document).ready(
+  		function(){
+  			$.ajaxSetup({cache:false});
+  			$("#systemForTree").tree({
+  			          //树形菜单
+  				data  : {        
+  					type  : "json",         
+  					url   : "/showsystemmenu.action",        
+  					async : true,        
+  					async_data : function (NODE) { 
+  					             return { 
+  					             sjcdbh : $(NODE).attr("sysid") || '0',
+  					             appbzid : $(NODE).attr("sysappbzid") || '000'
+  					                      } 
+  					                              }
+  				         },
+  				         //设置样式
+  				     ui:{
+  					theme_name : "hub",
+  					context:{visible : function (NODE, TREE_OBJ) {
+	                    return false;
+	                                           }
+	                        }
+  				        },
+  				        //点击链接显示BODY内容
+  				callback : {
+			        onselect:function(NODE) {
+			        	var url = $(NODE).attr("syshref");
+			        	var appbzid = $(NODE).attr("sysappbzid");
+			        	if( url.indexOf('#')< 0){
+			        		window.parent.frames[2].location.href = url;
+			        	                          }
+			        	$.tree_reference('systemForTree').toggle_branch($(NODE));
+			                                 },
+			        error:function(){
+			        	alert("加载菜单出错，请重新登陆试试。");
+			                        }
+  				             }
+  			});
+  		});
+  	</script>
+
+	</body>
+</html>
+<<class 'requests.cookies.RequestsCookieJar'>[<Cookie JSESSIONID=000055twiDQbggnTi11AyMuu17r:167ip244l for hub.hust.edu.cn/>, <Cookie hub_service=qNMg5no2KAcPoG5A8BBedLYu3iki3agT11YcavgD3r06THeMRDYdOi7noJM2ZZojqgy9M77vBqBf4g== for hub.hust.edu.cn/>, <Cookie usertype=xs for hub.hust.edu.cn/>]>
