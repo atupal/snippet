@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form role="form" method="post">
+  <div class="form-group">
+    <label>题号</label>
+    <select class="form-control" name="question_id">
+      {% for i in range(30) %}
+      <option value="{{i+1}}" {{'selected="selected"' if (question_id and question_id==i+1) else ''}}>{{i+1}}</option>
+      {% endfor %}
+    </select>
+    <br>
+    <textarea class="form-control" name="content" placeholder="Your Answer" style="height: 255px"></textarea>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+  {% if content %}
+    <br>
+    <label>最后提交的答案</label>
+    <pre class="form-control">{{ content }}</pre>
+  {% endif %}
+</form>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form role="form" method="post" id="reg">
+  <div class="form-group">
+    <label>ID(仅能使用字母，数字，下划线)</label>
+    <input type="ID" class="form-control" placeholder="id" name="id">
+    {% if error==1 %}
+    <p class="bg-danger">id 格式不正确！</p>
+    {% endif %}
+  </div>
+  <div class="form-group">
+    <label>name</label>
+    <input type="" class="form-control" placeholder="name" name="name">
+    {% if error==2 %}
+    <p class="bg-danger">名字包含特殊字符！</p>
+    {% endif %}
+  </div>
+  <div class="form-group">
+    <label>Password(4~100位)</label>
+    <input type="password" class="form-control" placeholder="Password" name="password" id="pwd1">
+    {% if error==3 %}
+    <p class="bg-danger">密码长度不符！</p>
+    {% endif %}
+    <label>re-Password</label>
+    <input type="password" class="form-control" placeholder="re-Password" name="repassword" id="pwd2">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+  {% if error==4 %}
+  <p class="bg-danger">该ID或者名字已经被注册！</p>
+  {% endif %}
+</form>
+<script>
+$('#reg').submit(function() {
+    if ($("#pwd1")[0].value != $("#pwd2")[0].value) {
+      alert('两次密码不一致');
+      return false;
+      } else {
+      return true;
+      }
+    });
+</script>
+{% endblock %}

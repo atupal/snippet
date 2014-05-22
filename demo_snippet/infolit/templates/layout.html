@@ -1,0 +1,52 @@
+<html lang="en">
+ <head>
+ <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+ <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+ <link rel="stylesheet" href="/static/css/dataTables.bootstrap.css">
+
+ <!--script src="/static/js/jquery-2.1.1.min.js"></script-->
+ <script src="/static/js/jquery-1.10.2.min.js"></script>
+ <script src="/static/js/bootstrap.min.js"></script>
+ <script src="/static/js/jquery.dataTables.js"></script>
+ <script src="/static/js/dataTables.bootstrap.js"></script>
+ </head>
+ <body>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Infolit</a>
+        </div>
+    
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            {% if 'uid' in session %}
+              <li class=""><a href="/">Submit Anwser</a></li>
+              <li class=""><a href="/manage">Manage</a></li>
+            {% else %}
+              <li class=""><a href="/login">Login</a></li>
+              <li class=""><a href="/register">Register</a></li>
+            {% endif %}
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            {% if 'uid' in session %}
+              <li class=""><a>Welcom {{ session.get('username').decode('utf-8') }}</a></li>
+              <li class=""><a href="/logout">Logout</a></li>
+            {% endif %}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    {% block body %}
+    {% endblock %}
+  </body>
+</html>
