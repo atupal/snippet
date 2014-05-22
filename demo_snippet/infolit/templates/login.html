@@ -1,0 +1,19 @@
+
+{% extends "layout.html" %}
+
+{% block body %}
+<form role="form" method="post">
+  <div class="form-group">
+    <label>ID</label>
+    <input type="ID" class="form-control" placeholder="id" name="id">
+  </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" class="form-control" placeholder="Password" name="password">
+    {% if error == 1 %}
+    <p class="bg-danger">用户ID或密码不正确!</p>
+    {% endif %}
+  </div>
+  <button type="submit" class="btn btn-default">login</button>
+</form>
+{% endblock %}
