@@ -389,9 +389,18 @@ endfunction
 
 "set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Col:\ %c
 set statusline=\%{HasPaste()}%F%m%r%h\ %w\ ./:%r%{getcwd()}%h\ L:%l\ C:%c
+set statusline+=\ %P "percent through file
 
 "设置段落的行宽
 "set textwidth=76
 "使行宽的设置对中文有效
 set fo+=m
 set pastetoggle=<F9>
+
+
+highlight Cursor guifg=white guibg=black
+highlight iCursor guifg=white guibg=steelblue
+set guicursor=n-v-c:block-Cursor
+set guicursor+=i:ver100-iCursor
+set guicursor+=n-v-c:blinkon0
+set guicursor+=i:blinkwait10

@@ -45,7 +45,7 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=$PATH:/home/atupal/soft/apache-maven-3.0.5/bin:/home/atupal/usr/:/home/atupal/bin:/usr/lib/jvm/java/jdk1.6.0_35/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/vendor_perl:/usr/bin/core_perl:.:/home/atupal/soft/hbase-0.94.9/bin:/home/atupal/src/work/xiaomi/cloud/phabricator/arcanist/bin:/home/atupal/src/go/bin:/home/atupal/src/tools/android/apktool1.5.2:/home/atupal/src/tools/android/apktool-install-linux-r05-ibot:/home/atupal/.gem/ruby/2.0.0/bin
+export PATH=$PATH:/home/atupal/soft/apache-maven-3.0.5/bin:/home/atupal/usr/:/home/atupal/bin:/usr/lib/jvm/java/jdk1.6.0_35/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/vendor_perl:/usr/bin/core_perl:.:/home/atupal/soft/hbase-0.94.9/bin:/home/atupal/src/work/xiaomi/cloud/phabricator/arcanist/bin:/home/atupal/src/go/bin:/home/atupal/src/tools/android/apktool1.5.2:/home/atupal/src/tools/android/apktool-install-linux-r05-ibot:/home/atupal/.gem/ruby/2.1.0/bin
 
 # PS1
 # Clean, simple, compatible and meaningful.
@@ -100,7 +100,7 @@ ${git_infoo} \
 #xmodmap -e "pointer = 3 2 1"
 #xmodmap -e "pointer = 3 2 1 4 5 6 7 8 9 10 11 12 13"
 export LC_ALL=en_US.UTF-8
-alias cls=clear
+#alias cls=clear
 alias c=clear
 alias ydc='echo \"`xclip -o`\" | ydcv'
 export PYTHONDONTWRITEBYTECODE=x
@@ -122,4 +122,11 @@ indent() {
 
 export DISPLAY=:0.0
 #xmodmap -e "pointer = 3 2 1"
-#synclient touchpadoff=1
+xmodmap -e "pointer = 3 2 1 4 5 6 7 8 9 10 11 12 13"
+synclient touchpadoff=1
+export GOPATH="/home/atupal/src/go"
+xmodmap ~/.Xmodmap
+
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
