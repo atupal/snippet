@@ -102,7 +102,7 @@ ${git_infoo} \
 export LC_ALL=en_US.UTF-8
 #alias cls=clear
 alias c=clear
-alias ydc='echo \"`xclip -o`\" | ydcv'
+alias ydc='xclip -o | ydcv'
 export PYTHONDONTWRITEBYTECODE=x
 
 export HADOOP_HOME=/home/atupal/work/xiaomi/cloud/infra/minos/client/hadoop
@@ -130,3 +130,13 @@ xmodmap ~/.Xmodmap
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS="@im=fcitx"
+
+alias redwm='cd ~/dwm; updpkgsums; makepkg -efi --noconfirm; killall dwm'
+cls
+
+clear() {cls}
+zle -N clear
+bindkey  clear
+
+
+# grml.org/zsh-pony
