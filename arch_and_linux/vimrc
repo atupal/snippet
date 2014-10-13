@@ -359,6 +359,27 @@ func! RunCode()
         exec "! go build %<.go ; time ./%<"
     endif
 endfunc
+
+"运行可执行文件，并从 input 读取输入
+func! RunCodeFromInput()
+    exec "w"
+    if &filetype == "c" || &filetype == "cpp" || &filetype == "haskell"
+        "exec "! time ./%<"
+        exec "!g++ -g -Wall -std=c++11 %<.cpp -o %< && echo '\033[31minput:\033[0m' && cat input && echo && echo '\033[31moutput:\033[0m' && ./%< <input"
+    elseif &filetype == "java"
+        exec "!java %<"
+    elseif &filetype == "lua"
+        exec "!lua %<.lua"
+    elseif &filetype == "perl"
+        exec "!perl %<.pl"
+    elseif &filetype == "python"
+        exec "!python2 %<.py"
+    elseif &filetype == "ruby"
+        exec "!ruby %<.rb"
+    elseif &filetype == "go"
+        exec "! go build %<.go ; time ./%<"
+    endif
+endfunc
  
 " Ctrl + C 一键保存、编译
 map <c-c> :call CompileCode()<CR>
@@ -369,6 +390,11 @@ vmap <c-c> <ESC>:call CompileCode()<CR>
 map <c-x> :call RunCode()<CR>
 imap <c-x> <ESC>:call RunCode()<CR>
 vmap <c-x> <ESC>:call RunCode()<CR>
+
+" Ctrl + I 一键保存、运行
+" map <c-i> :call RunCodeFromInput()<CR>
+"imap <c-i> <ESC>:call RunCodeFromInput()<CR>
+"vmap <c-i> <ESC>:call RunCodeFromInput()<CR>
 
 set mouse=v
 
