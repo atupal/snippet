@@ -138,5 +138,6 @@ clear() {cls}
 zle -N clear
 bindkey  clear
 
+export PYTHONSTARTUP="$HOME/.pythonrc"
 
 # grml.org/zsh-pony
