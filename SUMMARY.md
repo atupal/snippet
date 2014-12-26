@@ -1,4 +1,4 @@
 # Summary
 
-* pythonsnippet
+* python_snippet
 
