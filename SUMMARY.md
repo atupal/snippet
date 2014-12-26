@@ -1,4 +1,4 @@
 # Summary
 
-* atupal's snippet
+* pythonsnippet
 
