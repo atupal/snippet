@@ -3,6 +3,10 @@
 ''''which python2 >/dev/null && exec python2 "$0" "$@" # '''
 ''''which python  >/dev/null && exec python  "$0" "$@" # '''
 
+import json
+
+from pprint import pprint as p
+
 
 def parse(source, debug=0):
 
@@ -127,6 +131,11 @@ def parse(source, debug=0):
                     media[-1] += '\t'
                 elif source[pos+1] == '"':
                     media[-1] += '"'
+                elif source[pos+1] == 'u':
+                    unicode_unit = source[pos:pos+6]
+                    # if PY2: unicode_unit.decode('unicode-escape')
+                    media[-1] += chr(int(unicode_unit[2:], 16))
+                    pos += 4
                 else:
                     media[-1] += source[pos]
                 pos += 1
@@ -164,8 +173,6 @@ def main():
     '''
     #json_string = '[1.3242353453, "2", 3]'
     #json_string = '[1,2,"3"]'
-    import json
-    from pprint import pprint as p
     p( parse(json_string) )
 
     return
@@ -181,6 +188,15 @@ def main():
     print (time.time() - st)
 
 
+def test_json_file():
+    with open('/tmp/wiki.json') as fd:
+        cnt = 0
+        for line in fd:
+            cnt += 1
+            if cnt > 100:break
+            p (parse(line))
+
 if __name__ == '__main__':
-    main()
+    test_json_file()
+    #main()
 
