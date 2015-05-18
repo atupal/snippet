@@ -63,7 +63,7 @@ class NFA(object):
         self.tail = []
         return self
 
-    def match(self, source):
+    def match(self, source, findall=False):
 
         next_states = set()
 
@@ -81,17 +81,44 @@ class NFA(object):
             for s in state.next(char):
                 add_state(s)
 
-        for char in source:
+        def is_match(current_states):
+            for state in current_states:
+                if state.empty():
+                    return SUCCEED
+
+            return FAIL
+
+        for pos in xrange(len(source)):
+            char = source[pos]
             for state in current_states:
                 step_next_state(state, char)
             current_states = next_states
             next_states = set()
 
-        for state in current_states:
-            if state.empty():
-                return SUCCEED
 
-        return FAIL
+            if findall:
+                if is_match(current_states) == SUCCEED:
+                    return SUCCEED, pos
+                if not current_states:
+                    return FAIL, pos
+
+        if findall:
+            return FAIL, pos
+
+        return is_match(current_states)
+
+
+    def findall(self, source):
+        ret = []
+        pos = 0
+        while pos < len(source):
+            sub = source[pos:]
+            c, newpos = self.match(sub, findall=1)
+            if c == SUCCEED:
+                ret.append(source[pos:pos+newpos+1])
+            pos += newpos+1
+
+        return ret
 
 
 def compile_postfix(postfix_arr):
@@ -212,6 +239,10 @@ def match(pattern, source):
     regex = compile(pattern)
     return regex.match(source)
 
+def findall(pattern, source):
+    regex = compile(pattern)
+    return regex.findall(source)
+
 def test():
 
     tests = [
@@ -258,4 +289,5 @@ if __name__ == '__main__':
     main()
     test()
     #debug = 1
-    #print (match('ab+bc', 'abc'))
+    #print (match('ab+bc', 'abbccccccccccccccccccccccccccccc'))
+    #print (findall('ab+bc', 'abbbcdefghiabbcdabbbbbbbbc'))
