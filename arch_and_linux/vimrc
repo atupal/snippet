@@ -75,13 +75,6 @@ set cursorline    " 高亮光标行
 "
 "
 "
-"
-" -----------------   Author: Ruchee
-" -----------------    Email: my@ruchee.com
-" -----------------  WebSite: http://www.ruchee.com
-" -----------------     Date: 2012-05-01
- 
- 
 " Ctrl + H                   --光标移当前行行首
 " Ctrl + J                   --光标移下一行行首
 " Ctrl + K                   --光标移上一行行尾
