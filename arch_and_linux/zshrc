@@ -101,15 +101,15 @@ ${git_infoo} \
 #xmodmap -e "pointer = 3 2 1 4 5 6 7 8 9 10 11 12 13"
 export LC_ALL=en_US.UTF-8
 #alias cls=clear
-alias c=clear
+alias c=cls
 alias ydc='xclip -o | ydcv'
 export PYTHONDONTWRITEBYTECODE=x
 
 export HADOOP_HOME=/home/atupal/work/xiaomi/cloud/infra/minos/client/hadoop
 export HADOOP_CONF_DIR=/home/atupal/work/xiaomi/cloud/infra/minos/client/hadoop/etc/hadoop
-export JAVA_HOME=/usr/lib/jvm/java/jdk1.6.0_35
+#export JAVA_HOME=/usr/lib/jvm/java/jdk1.6.0_35
 export EDITOR=vim
-alias h="cd ~/fucklongpath/hue"
+#alias h="cd ~/fucklongpath/hue"
 #export http_proxy=192.168.122.1:3128
 #export https_proxy=192.168.122.1:3128
 export DESKTOP_LOG_DIR=/tmp
@@ -120,12 +120,13 @@ indent() {
   xclip -o | awk '{ print(" "$0) }' | xclip -sel clip
 }
 
-export DISPLAY=:0.0
+#export DISPLAY=:0.0
 #xmodmap -e "pointer = 3 2 1"
-xmodmap -e "pointer = 3 2 1 4 5 6 7 8 9 10 11 12 13"
-synclient touchpadoff=1
+# move to .xinitrc
+#xmodmap -e "pointer = 3 2 1 4 5 6 7 8 9 10 11 12 13"
+#synclient touchpadoff=1
+#xmodmap ~/.Xmodmap
 export GOPATH="/home/atupal/src/go"
-xmodmap ~/.Xmodmap
 
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
@@ -134,10 +135,26 @@ export XMODIFIERS="@im=fcitx"
 alias redwm='cd ~/dwm; updpkgsums; makepkg -efi --noconfirm; killall dwm'
 cls
 
-clear() {cls}
-zle -N clear
-bindkey  clear
+clear_() {cls}
+zle -N clear_
+bindkey  clear_
 
 export PYTHONSTARTUP="$HOME/.pythonrc"
 
+wmname LG3D
+export PATH=$PATH:/matlab/bin
+alias grep='grep --color'
+
 # grml.org/zsh-pony
+
+move_to_trash () {
+  mv "$@" ~/trash
+}
+
+alias rm='move_to_trash'
+alias qemu='qemu-system-i386'
+alias active_pypy='source /home/atupal/src/pypy/pypy-env/bin/activate'
+alias du='du -h'
+alias dunr='du -h --max=0'
+
+export PATH=~/.cabal/bin:$PATH
