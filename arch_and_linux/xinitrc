@@ -70,15 +70,27 @@ fi
 ###done &
 
 # Statusbar loop
+
+
 while true; do
-   xsetroot -name "atupal: $( date +"%F %R" )"
+   xsetroot -name "atupal: $( date +"%a %F %R" )"
    sleep 1m    # Update time every minute
 done &
 
-#feh  --bg-scale ~/Pictures/login_n.png
+xmodmap -e "pointer = 3 2 1 4 5 6 7 8 9 10 11 12 13"
+synclient touchpadoff=1
+xmodmap ~/.Xmodmap
+
+# feh  --bg-scale ~/Pictures/login_n.png
 feh --bg-fill ~/Pictures/login_n.png
 
 fcitx -r
-fcitx-qimpanel
+# fcitx-qimpanel
+sogou-qimpanel
 compton -b
-exec startdwm
+
+#exec startdwm
+
+# xmonad
+xsetroot -cursor_name left_ptr
+exec startxmonad
