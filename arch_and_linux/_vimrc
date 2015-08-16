@@ -1,0 +1,37 @@
+set ts=2
+set tabstop=2
+set expandtab
+set autoindent
+set shiftwidth=2
+
+" Ctrl + H            将光标移到当前行的行首
+imap <c-H> <ESC>I
+imap <c-h> <ESC>i
+ 
+" Ctrl + J            将光标移到下一行的行首
+imap <c-j> <ESC>jA
+ 
+" Ctrl + K            将光标移到上一行的末尾
+imap <c-k> <ESC>kA
+ 
+" Ctrl + L            将光标移到当前行的行尾
+imap <c-L> <ESC>A
+imap <c-l> <ESC>la
+ 
+" jj                  保存文件并留在插入模式 [插入模式]
+imap jj <ESC>:w<CR>li
+ 
+" kk                  返回Normal模式 [插入模式]
+imap kk <ESC>l
+ 
+" nt                  打开NERDTree [非插入模式]
+map nt :NERDTree<CR>
+ 
+" tl                  打开Taglist [非插入模式]
+map tl :Tlist<CR><c-l>
+
+;imap <c-u> <BACKSPACE>
+
+imap <c-u> <BS>
+
+imap <c-c> <c-F5>
