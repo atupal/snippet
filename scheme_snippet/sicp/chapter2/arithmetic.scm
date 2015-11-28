@@ -1,4 +1,3 @@
-;
 
 (define (install-schmeme-number-package)
   (define (tag x) (attach-tag 'scheme-number x))
@@ -13,4 +12,7 @@
   (put 'make 'scheme-number (lambda (x) (tag x)))
   'done)
 
-(display 'test)
+(define (make-scheme-number n)
+  ((get 'make 'scheme-number) n))
+
+(display (make-scheme-number 1))
