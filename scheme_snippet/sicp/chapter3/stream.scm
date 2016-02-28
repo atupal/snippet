@@ -75,6 +75,13 @@
   (stream-for-each display-line s))
 (define (display-line x) (newline) (display x))
 
+(define (display-stream10 s)
+  (display-stream (stream-slice s 10)))
+(define (display-stream20 s)
+  (display-stream (stream-slice s 20)))
+(define (display-stream30 s)
+  (display-stream (stream-slice s 30)))
+
 (define (stream-enumerate-interval low high)
   (if (> low high)
     the-empty-stream
@@ -304,3 +311,61 @@
                  (euler-transform (stream-cdr s)))))
 
 ;(display-stream (stream-slice (euler-transform pi-stream) 10))
+
+
+
+
+; Infinite streams of pairs
+
+(define (interleave s1 s2)
+  (if (stream-null? s1)
+    s2
+    (cons-stream (stream-car s1)
+                 (interleave s2 (stream-cdr s1)))))
+
+
+(define (pairs s t)
+  (cons-stream
+    (list (stream-car s) (stream-car t))
+    (interleave
+      (stream-map (lambda (x) (list (stream-car s) x))
+                  (stream-cdr t))
+      (pairs (stream-cdr s) (stream-cdr t)))))
+
+(define naturenumbers
+  (cons-stream 0 (add-streams ones naturenumbers)))
+
+;(display-stream (stream-slice (pairs naturenumbers naturenumbers) 30))
+
+; end of Infinite streams of pairs
+
+
+; Exercise 3.67
+(define (rect_pair s t)
+  (cons-stream
+    (list (stream-car s) (stream-car t))
+    (interleave
+      (interleave
+        (stream-map (lambda (x) (list (stream-car s) x))
+                    (stream-cdr t))
+        (stream-map (lambda (x) (list x (stream-car s)))
+                    (stream-cdr t)))
+      (rect_pair (stream-cdr s) (stream-cdr t)))))
+
+;(display-stream (stream-slice (rect_pair naturenumbers naturenumbers) 30))
+
+
+
+; ex 3.68: Louis Reasouner thinks that building a stream of pair from three parts is unnecessarily complicated.
+; Instead of separating the pair(S0, T0) from the rest of the pairs in the first row, he proposes to work with
+; the whole first row, as follows:
+(define (pairs s t)
+  (interleave
+    (stream-map (lambda (x) (list (stream-car s) x))
+                t)
+    (pairs (stream-cdr s) (stream-cdr t))))
+; Does this work? Consider what happens if we evaluate (pairs integers integers) using Louis's definition of pairs. 
+
+; answer: This will lead to infinate recursion
+
+
