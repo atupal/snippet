@@ -534,3 +534,17 @@
         avpt
         (stream-car input-stream)))))
 ; end Exercise 3.75
+
+; Exercise 3.76
+
+(define (smooth s)
+  (cons-stream (stream-car s)
+               (stream-map (lambda (x1 x2)
+                             (/ (+ x1
+                                   x2)
+                                2))
+                           s
+                           (stream-cdr s))))
+
+; end exercise 3.76
+
