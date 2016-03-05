@@ -381,5 +381,97 @@
       (triples (stream-cdr s) (stream-cdr t) (stream-cdr u))))
   )
 
-(display-stream30 (triples integers integers integers))
+;(display-stream30 (triples integers integers integers))
 
+(define (pythagorean-tripes)
+  (define (square x) (* x x))
+  (stream-filter (lambda (x)
+                   (= (+ (square (car x)) (square (cadr x))) (square (caddr x))))
+                 (triples integers integers integers)))
+
+;(display-line "pythagorean-tripes:")
+
+;(display-stream (stream-slice (pythagorean-tripes) 3))
+
+; end exercise 3.69
+
+
+; exercise 3.70
+
+; merge that combines two streams into one ordered result stream acooding with the weighting function:
+(define (merge_weighted s1 s2 weighting)
+  (cond ((stream-null? s1) s2)
+        ((stream-null? s2) s1)
+        (else
+          (let ((s1car (stream-car s1))
+                (s2car (stream-car s2))
+                (s1weight (weighting (stream-car s1)))
+                (s2weight (weighting (stream-car s2))))
+            (cond ((< s1weight s2weight)
+                   (cons-stream
+                     s1car
+                     (merge_weighted (stream-cdr s1) s2 weighting)))
+                  ((> s1weight s2weight)
+                   (cons-stream
+                     s2car
+                     (merge_weighted s1 (stream-cdr s2) weighting)))
+                  (else
+                    (cons-stream
+                      s1car
+                      (merge_weighted
+                        (stream-cdr s1)
+                        s2
+                        weighting))))))))
+
+(define (weighted-pair s t weighting)
+  (cons-stream
+    (list (stream-car s) (stream-car t))
+    (merge_weighted
+      (stream-map (lambda (x) (list (stream-car s) x))
+                  (stream-cdr t))
+      (weighted-pair (stream-cdr s) (stream-cdr t) weighting)
+      weighting)))
+
+;(display-stream30 (weighted-pair integers integers (lambda (x) (+ (car x) (cadr x)))))
+
+(define _235stream
+  (let ((weight (lambda (x)
+                  (let ((i (car x))
+                        (j (cadr x)))
+                    (+ (* 2 i) (* 3 j) (* 5 i j)))))
+        (divide235 (lambda (x)
+                     (or (= 0 (modulo x 2)) (= 0 (modulo x 3)) (= 0 (modulo x 5))))))
+    (stream-filter (lambda (x)
+                     (not (or (divide235 (car x)) (divide235 (cadr x)))))
+                   (weighted-pair integers integers weight))))
+;(display-stream30 _235stream)
+
+; end exercise 3.70
+
+; Exercise 3.71
+(define cubes
+  (weighted-pair integers integers (lambda (x)
+                                     (let ((i (car x))
+                                           (j (cadr x)))
+                                       (+ (* i i i) (* j j j))))))
+
+(define (stream-zip s t)
+  (cons-stream (cons (stream-car s) (stream-car t))
+               (stream-zip (stream-cdr s) (stream-cdr t))))
+(define (ramanujan-numbers)
+  (define weight (lambda (x)
+                   (let ((i (car x))
+                         (j (cadr x)))
+                     (+ (* i i i ) (* j j j)))))
+  (define s (stream-filter
+              (lambda (x)
+                (= (weight (car x)) (weight (cdr x))))
+              (stream-zip cubes (stream-cdr cubes))))
+  (stream-map (lambda (x)
+                  (let ((i (caar x))
+                        (j (cadar x)))
+                    (+ (* i i i) (* j j j)))) s))
+
+;(display-stream30 (ramanujan-numbers))
+
+; end Exercise 3.71
