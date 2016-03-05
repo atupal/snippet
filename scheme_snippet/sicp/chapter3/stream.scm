@@ -475,3 +475,62 @@
 ;(display-stream30 (ramanujan-numbers))
 
 ; end Exercise 3.71
+
+; Streams as signals
+(define (integral integrand initia-value dt)
+  (define int
+    (cons-stream initia-value
+                 (add-streams (scale-stream integrand dt)
+                              int)))
+  int)
+
+;(display-stream30 (integral integers 0 1))
+
+; Exercise 3.73
+(define (RC R C dt)
+  (define (proc i v0)
+    (add-streams
+      (scale-stream i R)
+      (scale-stream
+        (integral i v0 dt)
+        (/ 1 C))))
+  proc)
+
+(define RC1 (RC 5 1 0.5))
+
+;(display-stream30 (RC1 ones 0))
+; End exercise 3.73
+
+; Exercise 3.74
+
+(define (make-zero-crossings input-stream last-value)
+  (cons-stream
+    (sign-chage-detector
+      (stream-car input-stream)
+      last-value)
+    (make-zero-crossings
+      (stream-cdr input-stream)
+      (stream-car input-stream))))
+
+;(define zero-crossings
+  ;(make-zero-crossings sense-data 0))
+
+;(define zero-crossings
+  ;(stream-map sign-change-detector
+              ;sense-data
+              ;(cons-stream 0 sense-data)))
+
+; end Exercise 3.74
+
+; Exercise 3.75
+(define (make-zero-crossings input-stream last-avpt last-value)
+  (let ((avpt (/ (+ (stream-car input-stream)
+                    last-value)
+                 2)))
+    (cons-stream
+      (sign-change-detector avpt last-avpt)
+      (make-zero-crossings
+        (stream-cdr input-stream)
+        avpt
+        (stream-car input-stream)))))
+; end Exercise 3.75
