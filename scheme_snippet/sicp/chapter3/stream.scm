@@ -359,13 +359,30 @@
 ; ex 3.68: Louis Reasouner thinks that building a stream of pair from three parts is unnecessarily complicated.
 ; Instead of separating the pair(S0, T0) from the rest of the pairs in the first row, he proposes to work with
 ; the whole first row, as follows:
-(define (pairs s t)
+(define (pairs-ex3.68 s t)
   (interleave
     (stream-map (lambda (x) (list (stream-car s) x))
                 t)
-    (pairs (stream-cdr s) (stream-cdr t))))
+    (pairs-ex3.68 (stream-cdr s) (stream-cdr t))))
 ; Does this work? Consider what happens if we evaluate (pairs integers integers) using Louis's definition of pairs. 
 
-; answer: This will lead to infinate recursion
+;(display-stream30 (pairs-ex3.68 integers integers))
+; answer: This will lead to infinite recursion
 
+
+; Exercise 3.69
+
+(define (triples s t u)
+  (cons-stream
+    (list (stream-car s) (stream-car t) (stream-car u))
+    (interleave
+      (interleave
+        (stream-map (lambda (x) (list (stream-car s) (stream-car t) x))
+                    (stream-cdr u))
+        (stream-map (lambda (x) (list (stream-car s) (stream-car (stream-cdr t)) x))
+                    (stream-cdr u)))
+      (triples (stream-cdr s) (stream-cdr t) (stream-cdr u))))
+  )
+
+(display-stream30 (triples integers integers integers))
 
