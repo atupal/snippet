@@ -376,11 +376,8 @@
   (cons-stream
     (list (stream-car s) (stream-car t) (stream-car u))
     (interleave
-      (interleave
-        (stream-map (lambda (x) (list (stream-car s) (stream-car t) x))
-                    (stream-cdr u))
-        (stream-map (lambda (x) (list (stream-car s) (stream-car (stream-cdr t)) x))
-                    (stream-cdr u)))
+      (stream-map (lambda (x) (list (stream-car s) (car x) (car (cdr x))))
+                  (stream-cdr (pairs t u)))
       (triples (stream-cdr s) (stream-cdr t) (stream-cdr u))))
   )
 
