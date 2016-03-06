@@ -455,6 +455,7 @@
                                            (j (cadr x)))
                                        (+ (* i i i) (* j j j))))))
 
+; Actually we don't need use the stream-zip as we can use the genral stream-map procedure
 (define (stream-zip s t)
   (cons-stream (cons (stream-car s) (stream-car t))
                (stream-zip (stream-cdr s) (stream-cdr t))))
@@ -477,9 +478,9 @@
 ; end Exercise 3.71
 
 ; Streams as signals
-(define (integral integrand initia-value dt)
+(define (integral integrand initial-value dt)
   (define int
-    (cons-stream initia-value
+    (cons-stream initial-value
                  (add-streams (scale-stream integrand dt)
                               int)))
   int)
@@ -569,5 +570,95 @@
                    ;0.001)
             ;1000))
 
+; Exercise 3.77
+(define (integral integrand initial-value dt)
+  (cons-stream
+    initial-value
+    (if (stream-null? integrand)
+      the-empty-stream
+      (integral (stream-cdr integrand)
+                (+ (* dt (stream-car integrand))
+                   initial-value)
+                dt))))
 
 
+(define (integral delayed-integrand initial-value dt)
+  (cons-stream
+    initial-value
+    (if (stream-null? (force delayed-integrand))
+      the-empty-stream
+      (integral (delay (stream-cdr (force delayed-integrand)))
+                (+ (* dt (stream-car (force delayed-integrand)))
+                   initial-value)
+                dt))))
+
+(define (solve f y0 dt)
+  (define y (integral (delay dy) y0 dt))
+  (define dy (stream-map f y))
+  y)
+
+;(display-line (stream-ref (solve (lambda (y) y)
+                                 ;1
+                                 ;0.001)
+                          ;1000))
+; End Exercise 3.77
+
+
+; Exercise 3.78
+(define (solve-2nd a b dt y0 dy0)
+  (define y (integral (delay dy) y0 dt))
+  (define dy (integral (delay ddy) dy0 dt))
+  (define ddy (add-streams (scale-stream dy a)
+                           (scale-stream y b)))
+  y)
+
+; when a = 0, b = 1 then the solution of this homogeneous second-order linear differential equation is the exp(e, x)
+;(display-line (stream-ref (solve-2nd 0 1 0.001 1 1) 1000))
+; End Exercise 3.78
+
+; Exercise 3.79
+(define (solve-2nd-general f dt y0 dy0)
+  (define y (integral (delay dy) y0 dt))
+  (define dy (integral (delay ddy) dy0 dt))
+  (define ddy (stream-map f dy y))
+  y)
+
+;(display-line (stream-ref (solve-2nd-general (lambda (x y) y)
+;                                             0.001
+;                                             1
+;                                             1)
+;                          1000))
+; End exercise 3.79
+
+; Exercise 3.80
+
+
+; bellow is http://community.schemewiki.org/?sicp-ex-3.80
+(define (RLC R L C dt)
+         (define (rcl vc0 il0)
+                 (define vc (integral (delay dvc) vc0  dt))
+                 (define il (integral (delay dil) il0 dt))
+                 (define dvc (scale-stream il (- (/ 1 C))))
+                 (define dil (add-streams (scale-stream vc (/ 1 L))
+                                                                 (scale-stream il (- (/ R L)))))
+                 (define (merge-stream s1 s2)
+                         (cons-stream (cons (stream-car s1) (stream-car s2))
+                                                  (merge-stream (stream-cdr s1) (stream-cdr s2))))
+                 (merge-stream vc il))
+         rcl)
+
+; bellow is mine
+(define (RLC R L C dt)
+  (define (proc vc0 il0)
+    (define vc (scale-stream (integral (delay il) (* (- C) vc0) dt) (/ -1 C)))
+    (define il (integral (delay dil) il0 dt))
+    (define dil (add-streams (scale-stream il (/ (- R) L))
+                             (scale-stream vc (/ 1 L))))
+    ;(stream-zip vc il))
+    (stream-map cons vc il))
+  proc)
+
+(define RLCcircut (RLC 1 1 0.2 0.1))
+
+(display-stream30 (RLCcircut 10 0))
+; End Exercise 3.80
