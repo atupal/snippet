@@ -67,5 +67,28 @@
 
 
 ; Start exercise 4.1
+; use nest let to force scheme eval by order
+(define (list-of-value-left-to-right exps env)
+  (if (no-operands? exps)
+    '()
+    (let ((left (eval (first-operand exps) env)))
+      (let ((right (list-of-value-left-to-right (rest-operands exps) env)))
+        (cons left right)))))
+
+(define (list-of-value-right-to-left exps env)
+  (if (no-operands? exps)
+    '()
+    (let* ((right (list-of-value-right-to-left (rest-operands exps) env)))
+      ((left (eval (first-exp exps) env)))
+      (cons left right))))
+
+; or use just let function
+
+(define (list-of-value-left-to-right exps env)
+  (if (no-operands? exps)
+    '()
+    (let ((left (eval (first-operand exps) env)))
+      (cons left (list-of-value-left-to-right (rest-operands exps) env)))))
 
 ; End exercise 4.1
+
