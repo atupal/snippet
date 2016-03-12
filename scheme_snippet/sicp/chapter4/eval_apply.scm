@@ -451,6 +451,10 @@
 (define the-global-environment (setup-environment))
 (driver-loop)
 
+; Start Exercise 4.14
+; Becase the map use the system apply
+; End Exercise 4.14
+
 ;;
 ;; end 4.1.4  Running the Evaluator as a Program
 ;;
