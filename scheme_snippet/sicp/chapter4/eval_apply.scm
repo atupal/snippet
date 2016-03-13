@@ -315,7 +315,7 @@
 ;;
 ;; Start 4.1.3 Evaluator Data Structures
 ;;
-(define (true? x) (not (eq? x true)))
+(define (true? x) (not (eq? x false)))
 (define (false? x) (eq? x false))
 
 (define (make-procedure parameters body env)
