@@ -402,6 +402,7 @@
   (list (list 'car car)
         (list 'cdr cdr)
         (list 'cons cons)
+        (list '+ +)
         (list 'null? null?)))
 (define (primitive-procedure-names)
   (map car primitive-procedures))
@@ -415,7 +416,8 @@
                               (primitive-procedure-objecs)
                               the-empty-environment)))
     (define-variable! 'true true initial-env)
-    (define-variable! 'false false initial-env)))
+    (define-variable! 'false false initial-env)
+    initial-env))
 (define the-global-environment (setup-environment))
 
 (define (primitive-procedure? proc)
@@ -432,7 +434,8 @@
   (prompt-for-input input-prompt)
   (let ((input (read)))
     (let ((output (eval input the-global-environment)))
-      (announce-output output-prompt)))
+      (announce-output output-prompt)
+      (user-print output)))
   (driver-loop))
 
 (define (prompt-for-input string)
@@ -440,7 +443,7 @@
 (define (announce-output string)
   (newline) (display string) (newline))
 
-(define (uesr-print object)
+(define (user-print object)
   (if (compound-procedure? object)
     (display (list 'compound-procedure
                    (procedure-parameters object)
@@ -452,9 +455,10 @@
 (driver-loop)
 
 ; Start Exercise 4.14
-; Becase the map use the system apply
+; Becase the map use the system functon but not out implemented apply
 ; End Exercise 4.14
 
 ;;
 ;; end 4.1.4  Running the Evaluator as a Program
 ;;
+
