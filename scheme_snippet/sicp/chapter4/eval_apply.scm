@@ -383,10 +383,97 @@
     (scan (frame-variables frame) (frame-values frame))))
 
 ; Start Exercise 4.11
+(define (make-frame-ex4.11 variable values)
+  (map cons variable values))
+
+(define (frame-variables-ex4.11 frame) (map car frame))
+(define (frame-values-ex4.11 frame) (map cadr frame))
+(define (add-binding-to-frame-ex4.11! var val frame)
+  (set-car! frame (cons (cons var val) (car frame))))
+
+(define (extend-environment-ex4.11 vars vals base-env)
+  (if (= (length vars) (length vals))
+    (cons (make-frame-ex4.11 vars vals) base-env)
+    (if (< (length vars) (length vals))
+      (error "Too manay arguments supplied" vars vals)
+      (error "Too few arguments supplied" vars vals))))
+
+(define (lookup-variable-value-ex4.11 var env)
+  (define (env-loop env)
+    (define (scan bindings)
+      (cond ((null? bindings)
+             (env-loop (enclosing-enviroment env)))
+            ((eq? var (caar bindings))
+             (caadr bindings))
+            (else (scan (cdr bindings)))))
+    (if (eq? env the-empty-environment)
+      (error "Unbound variable" var)
+      (let ((frame (first-frame env)))
+        (scan frame))))
+  (env-loop env))
+
+(define (set-variable-value-ex4.11! var val env)
+  (define (env-loop env)
+    (define (scan bindings)
+      (cond ((null? bindings)
+             (env-loop (enclosing-enviroment env)))
+            ((eq? var (caar bindings))
+             (set-cdr! (cadr bindings) val))
+            (else (scan (cdr bindings)))))
+    (if (eq? env the-empty-environment)
+      (error "Unbound variable: SET!" var)
+      (let ((frame (first-frame env)))
+        (scan frame))))
+  (env-loop env))
+
+(define (define-variable-ex4.11! var val env)
+  (let ((frame (first-frame env)))
+    (define (scan bindings)
+      (cond ((null? bindings)
+             (add-binding-to-frame-ex4.11! var val frame))
+            ((eq? var (caar bindings))
+             (set-car! (car bindings) val))
+            (else (scan (cdr bindings)))))
+    (scan frame)))
 ; End Exercise 4.11
+
 ; Start Exercise 4.12
+
+(define (scan-varval-pairs vars vals var)
+  (cond ((null? vars)
+         '())
+        ((eq? var (car vars)) vals)
+        (else (scan-varval-pairs (cdr vars) (cdr vals) var))))
+
+(define (scan-env env var)
+  (if (eq? env the-empty-environment)
+    (error "Unbound variable" var)
+    (let* ((frame (first-frame env))
+           (val (scan-varval-pairs (frame-variables frame)
+                                   (frame-values frame) var)))
+      (if (null? val)
+        (scan-env (enclosing-enviroment env) var)
+        val))))
+
+(define (lookup-variable-value-ex4.12 var env)
+  (let ((vals (scan-env env var)))
+    (car vals)))
+
+(define (set-variable-value-ex4.12! var val env)
+  (let ((vals (scan-env env var)))
+    (set-car! vals val)))
+
+(define (define-variable-ex4.12! var val env)
+  (let* ((frame (first-frame env))
+         (vals (scan-varval-pairs (frame-variables frame)
+                                 (frame-values frame) var)))
+    (if (null? vals)
+        (add-binding-to-frame! var val frame)
+        (set-car! vals val))))
 ; End Exercise 4.12
+
 ; Start Exercise 4.13
+; Easy...
 ; End Exercise 4.13
 
 ;;
@@ -452,7 +539,7 @@
     (display object)))
 
 (define the-global-environment (setup-environment))
-(driver-loop)
+;(driver-loop)
 
 ; Start Exercise 4.14
 ; Becase the map use the system functon but not out implemented apply
@@ -462,3 +549,31 @@
 ;; end 4.1.4  Running the Evaluator as a Program
 ;;
 
+
+;;;
+;;; Start 4.1.5 Data as Programs
+;;;
+
+; Start Exercise 4.15
+; if the evaluating halting, then the "try" is halts, then the program should (run-forever). this is a paradox
+; if the evaluating running forever, then th e"try" is not halted, then the program should ('halted), this is also a paradox
+; End Exercise 4.15
+
+;;;
+;;; End 4.1.5 Data as Programs
+;;;
+
+;;
+;; Start 4.1.6 Internal Definitions
+;;
+(define (f x)
+  (define (even n) (if (= n 0) true (odd (- n 1))))
+  (define (odd n) (if (= n 0) false (even (- n 1))))
+  (display "test")
+  (even x))
+
+;(display-line (f 11))
+
+;;
+;; End 4.1.6 Internal Definitions
+;;
