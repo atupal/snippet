@@ -279,14 +279,14 @@
 (define (eval-ex4.3 exp env)
   (cond ((self-evaluating? exp) exp)
         ((variable? exp) (lookup-variable-value exp env))
+        (((not (null? (get 'op (car exp)))))
+         (let ((proc (get 'op (car exp))))
+           (apply-system-generic proc exp env)))
         ((application? exp)
          (apply (eval-ex4.3 (operator exp) env)
                 (list-of-values (operands exp) env)))
         (else
-          (let ((proc (get 'op (car exp))))
-            (if proc
-              (apply-system-generic proc exp env)
-              (error "Unknow expressoin type: EVAL" exp))))))
+          (error "Unknow expressoin type: EVAL" exp))))
 ; End exercise 4.3
 
 ;(display-line (let* ((x 3) (y (+ x 2)) (z (+ x y 5)))
