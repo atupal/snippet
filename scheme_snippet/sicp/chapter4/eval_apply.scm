@@ -266,10 +266,11 @@
 (define get (operation-table 'lookup-proc))
 (define put (operation-table 'insert-proc!))
 
-(put 'op 'quote text-of-quotation)
+(put 'op 'quote (lambda (exp env) (text-of-quotation exp)))
 (put 'op 'set! eval-assignment)
 (put 'op 'define eval-definition)
 (put 'op 'if eval-if)
+
 (put 'op 'lambda (lambda (exp env) (make-procedure (lambda-parameters exp)
                                                    (lambda-body exp)
                                                    env)))
@@ -279,14 +280,17 @@
 (define (eval-ex4.3 exp env)
   (cond ((self-evaluating? exp) exp)
         ((variable? exp) (lookup-variable-value exp env))
-        (((not (null? (get 'op (car exp)))))
+        ((get 'op (car exp))
          (let ((proc (get 'op (car exp))))
-           (apply-system-generic proc exp env)))
+           (apply-in-underlying-scheme proc (list exp env))))
         ((application? exp)
          (apply (eval-ex4.3 (operator exp) env)
                 (list-of-values (operands exp) env)))
         (else
           (error "Unknow expressoin type: EVAL" exp))))
+
+(define eval eval-ex4.3)
+
 ; End exercise 4.3
 
 ;(display-line (let* ((x 3) (y (+ x 2)) (z (+ x y 5)))
@@ -575,5 +579,5 @@
 ;(display-line (f 11))
 
 ;;
-;; End 4.1.6 Internal Definitions
+;; End 4.1.6 Internal Definitionsj
 ;;
