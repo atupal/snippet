@@ -342,7 +342,9 @@
                  clauses))
           (make-if (cond-predicate first)
                    (if (cond-special-clause? first)
-                     (cons (cond-special-clause-action first) (list (cond-predicate first)))
+                     ; (cons a alist) will return a new list which appended a to the head of alist
+                     ;(cons (cond-special-clause-action first) (list (cond-predicate first)))
+                     (list (cond-special-clause-action first) (cond-predicate first))
                      (sequence->exp (cond-actions first)))
                    (expand-clauses-4.5 rest))))))
 (define expand-clauses expand-clauses-4.5)
@@ -350,9 +352,28 @@
 ; End exercie 4.5
 
 ; Start exercie 4.6
+(define (let-definitions exp) (cadr exp))
+(define (let-body exp) (caddr exp))
+(define (expand-let-variables vars)
+  (if (null? vars)
+    '()
+    (cons (caar vars) (expand-let-variables (cdr vars)))))
+(define (expand-let-values vars)
+  (if (null? vars)
+    '()
+    (cons (cadar vars) (expand-let-values (cdr vars)))))
+(define (let->combination exp)
+  (cons (make-lambda (expand-let-variables (let-definitions exp)) (list (let-body exp)))
+        (expand-let-values (let-definitions exp))))
+
+(define (eval-let exp env)
+  (eval (let->combination exp) env))
+(put 'op 'let eval-let)
 ; End exercie 4.6
+
 ; Start exercie 4.7
 ; End exercie 4.7
+
 ; Start exercie 4.8
 ; End exercie 4.8
 ; Start exercie 4.9
