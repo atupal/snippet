@@ -18,3 +18,8 @@
 (let ((a (cons 3 4)) (b 2))
   (+ (car a) b))
 ; end exercise 4.6
+
+; start exercise 4.7
+(let* ((x 3) (y (+ x 2)) (z (+ x y 5)))
+  (* x z))
+; end exercise 4.7

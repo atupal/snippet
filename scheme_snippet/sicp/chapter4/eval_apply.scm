@@ -372,6 +372,16 @@
 ; End exercie 4.6
 
 ; Start exercie 4.7
+(define (let*-expands-definitions definitions body)
+  (if (null? definitions)
+    body
+    (list 'let (list (car definitions))
+          (let*-expands-definitions (cdr definitions) body))))
+(define (let*->nested-lets exp)
+  (let*-expands-definitions (let-definitions exp) (let-body exp)))
+(define (eval-let* exp env)
+  (eval (let*->nested-lets exp) env))
+(put 'op 'let* eval-let*)
 ; End exercie 4.7
 
 ; Start exercie 4.8
@@ -564,7 +574,11 @@
         (list 'cdr cdr)
         (list 'cons cons)
         (list '+ +)
+        (list '- -)
+        (list '* *)
+        (list '/ /)
         (list '= =)
+        (list 'eq? eq?)
         (list 'assoc assoc)
         (list 'null? null?)))
 (define (primitive-procedure-names)
