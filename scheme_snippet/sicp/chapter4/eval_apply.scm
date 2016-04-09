@@ -326,8 +326,29 @@
 ; TODO: eval (or =(1 2))
 
 ; End exercie 4.4
+
 ; Start exercie 4.5
+(define (cond-special-clause? exp) (eq? '=> (cadr exp)))
+(define (cond-special-clause-action exp) (caddr exp))
+(define (expand-clauses-4.5 clauses)
+  (if (null? clauses)
+    'false
+    (let ((first (car clauses))
+          (rest (cdr clauses)))
+      (if (cond-else-clause? first)
+        (if (null? rest)
+          (sequence->exp (cond-actions first))
+          (error "ELSE clause isn't last: COOND->IF"
+                 clauses))
+          (make-if (cond-predicate first)
+                   (if (cond-special-clause? first)
+                     (cons (cond-special-clause-action first) (list (cond-predicate first)))
+                     (sequence->exp (cond-actions first)))
+                   (expand-clauses-4.5 rest))))))
+(define expand-clauses expand-clauses-4.5)
+
 ; End exercie 4.5
+
 ; Start exercie 4.6
 ; End exercie 4.6
 ; Start exercie 4.7
@@ -523,6 +544,7 @@
         (list 'cons cons)
         (list '+ +)
         (list '= =)
+        (list 'assoc assoc)
         (list 'null? null?)))
 (define (primitive-procedure-names)
   (map car primitive-procedures))
@@ -553,6 +575,9 @@
 (define (driver-loop)
   (prompt-for-input input-prompt)
   (let ((input (read)))
+    (if (eof-object? input)
+      (exit)
+      '())
     (let ((output (eval input the-global-environment)))
       (announce-output output-prompt)
       (user-print output)))

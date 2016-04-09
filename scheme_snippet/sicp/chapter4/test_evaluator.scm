@@ -6,3 +6,8 @@
 
 
 (append '(a b c) '(d e f))
+
+
+(define (cadr x) (car (cdr x)))
+(cond ((assoc 'b '((a 1) (b 2))) => cadr)
+      (else false))
