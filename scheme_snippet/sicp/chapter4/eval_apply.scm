@@ -275,7 +275,7 @@
                                                    (lambda-body exp)
                                                    env)))
 (put 'op 'begin (lambda (exp env) (eval-sequence (begin-actions exp) env)))
-(put 'op 'cond (lambda (exp env) (eval-ex4.3 (operator exp) env)))
+(put 'op 'cond (lambda (exp env) (eval-ex4.3 (cond->if exp) env)))
 
 (define (eval-ex4.3 exp env)
   (cond ((self-evaluating? exp) exp)
@@ -297,6 +297,34 @@
   ;(* x z)))
 
 ; Start exercie 4.4
+
+(define (andor-first-condition exp) (car exp))
+(define (andor-rest-conditions exp) (cdr exp))
+(define (andor-conditions exp) (cdr exp))
+
+(define (expand-and-conditions exp)
+  (if (null? exp)
+    'true
+    (make-if (andor-first-condition exp)
+             (expand-and-conditions (andor-rest-conditions exp))
+             'false)))
+(define (and->if exp) (expand-and-conditions (andor-conditions exp)))
+(define (eval-and exp env)
+  (eval-ex4.3 (and->if exp) env))
+
+(define (expand-or-conditions exp)
+  (if (null? exp)
+    'false
+    (make-if (andor-first-condition exp)
+             'true
+             (expand-or-conditions (andor-rest-conditions exp)))))
+(define (or->if exp) (expand-or-conditions (andor-conditions exp)))
+(define (eval-or exp env) (eval (or->if exp) env))
+
+(put 'op 'and eval-and)
+(put 'op 'or eval-or)
+; TODO: eval (or =(1 2))
+
 ; End exercie 4.4
 ; Start exercie 4.5
 ; End exercie 4.5
@@ -494,6 +522,7 @@
         (list 'cdr cdr)
         (list 'cons cons)
         (list '+ +)
+        (list '= =)
         (list 'null? null?)))
 (define (primitive-procedure-names)
   (map car primitive-procedures))
@@ -543,7 +572,7 @@
     (display object)))
 
 (define the-global-environment (setup-environment))
-;(driver-loop)
+(driver-loop)
 
 ; Start Exercise 4.14
 ; Becase the map use the system functon but not out implemented apply
@@ -579,5 +608,5 @@
 ;(display-line (f 11))
 
 ;;
-;; End 4.1.6 Internal Definitionsj
+;; End 4.1.6 Internal Definitions
 ;;
