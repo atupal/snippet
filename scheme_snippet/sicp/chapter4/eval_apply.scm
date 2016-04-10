@@ -348,7 +348,6 @@
                      (sequence->exp (cond-actions first)))
                    (expand-clauses-4.5 rest))))))
 (define expand-clauses expand-clauses-4.5)
-
 ; End exercie 4.5
 
 ; Start exercie 4.6
@@ -367,7 +366,6 @@
         (expand-let-values (let-definitions exp))))
 
 (define (eval-let exp env)
-  (display-line (let->combination exp))
   (eval (let->combination exp) env))
 (put 'op 'let eval-let)
 ; End exercie 4.6
@@ -408,9 +406,33 @@
 ; End exercie 4.8
 
 ; Start exercie 4.9
+
+; We couldn't install this procedure to the primitive procedures as
+; this procedure may used procedure
+(define (for start end proc)
+  (define (iter index end)
+    (if (= index end)
+      'for-end
+      (begin (proc index)
+             (iter (+ index 1) end))))
+  (iter start end))
+
+(define (for-start exp) (cadr exp))
+(define (for-end exp) (caddr exp))
+(define (for-proc exp) (cadddr exp))
+(define (for->procedure-calls exp)
+  (sequence->exp (list (list 'define '(iter index end) (make-if '(= index end) ''end (sequence->exp (list (list (for-proc exp) 'index)
+                                                                                                          '(iter (+ index 1) end)))))
+                       (list 'iter (for-start exp) (for-end exp)))))
+
+(define (eval-for exp env)
+  (eval (for->procedure-calls exp) env))
+(put 'op 'for eval-for)
 ; End exercie 4.9
+
 ; Start exercie 4.10
 ; End exercie 4.10
+
 
 ;;
 ;; End 4.1.2 Representing Expressions
