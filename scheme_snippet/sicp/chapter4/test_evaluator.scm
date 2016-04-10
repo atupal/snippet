@@ -35,3 +35,7 @@
 
 (fib 10)
 ; end exercise 4.8
+
+; start exercise 4.9
+(for 0 10 display)
+; endt exercise 4.9
