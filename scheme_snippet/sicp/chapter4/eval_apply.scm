@@ -367,6 +367,7 @@
         (expand-let-values (let-definitions exp))))
 
 (define (eval-let exp env)
+  (display-line (let->combination exp))
   (eval (let->combination exp) env))
 (put 'op 'let eval-let)
 ; End exercie 4.6
@@ -385,7 +386,27 @@
 ; End exercie 4.7
 
 ; Start exercie 4.8
+(define (let-named? exp)
+  (not (pair? (cadr exp))))
+(define (let-make-inner-procedure name vars body)
+  (list 'define
+        (cons
+          name
+          (expand-let-variables vars))
+        body))
+(define (let-named-name exp) (cadr exp))
+(define (let-named-definitions exp) (caddr exp))
+(define (let-named-body exp) (cadddr exp))
+(define (let->combination-ex4.8 exp)
+  (if (let-named? exp)
+    (list (make-lambda '() (list (let-make-inner-procedure (let-named-name exp) (let-named-definitions exp) (let-named-body exp))
+                                 (cons (cadr exp) (expand-let-values (caddr exp)))))
+          )
+    (cons (make-lambda (expand-let-variables (let-definitions exp)) (list (let-body exp)))
+          (expand-let-values (let-definitions exp)))))
+(define let->combination let->combination-ex4.8)
 ; End exercie 4.8
+
 ; Start exercie 4.9
 ; End exercie 4.9
 ; Start exercie 4.10
@@ -580,6 +601,7 @@
         (list '= =)
         (list 'eq? eq?)
         (list 'assoc assoc)
+        (list 'display display)
         (list 'null? null?)))
 (define (primitive-procedure-names)
   (map car primitive-procedures))
