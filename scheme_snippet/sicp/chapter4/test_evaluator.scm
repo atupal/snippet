@@ -1,4 +1,3 @@
-
 (define (append x y)
   (if (null? x)
     y
@@ -39,3 +38,10 @@
 ; start exercise 4.9
 (for 0 10 display)
 ; endt exercise 4.9
+
+(define (f x)
+  (define (even? n) (if (= n 0) true  (odd?  (- n 1))))
+  (define (odd? n)  (if (= n 0) false (even? (- n 1))))
+  (even? x))
+
+(f 12)
