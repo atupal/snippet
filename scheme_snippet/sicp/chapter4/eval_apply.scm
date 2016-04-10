@@ -10,6 +10,7 @@
 (define false #f)
 
 (define apply-in-underlying-scheme apply)
+(define eval-in-underlying-scheme eval)
 
 ;;
 ;; Start 4.1.1 The Core of the evaluator
@@ -74,13 +75,13 @@
   (set-variable-value! (assignment-variable exp)
                        (eval (assignment-value exp) env)
                        env)
-  'ok)
+  'ok-eval-assignment)
 
 (define (eval-definition exp env)
   (define-variable! (definition-variable exp)
                     (eval (definition-value exp) env)
                     env)
-  'ok)
+  'ok-eval-definition)
 
 
 ; Start exercise 4.1
@@ -255,7 +256,7 @@
           (set-cdr! local-table
                     (cons (list key-1 (cons key-2 value))
                           (cdr local-table)))))
-      'ok)
+      'ok-insert-table)
     (define (dispatch m)
       (cond ((eq? m 'lookup-proc) lookup)
             ((eq? m 'insert-proc!) insert!)
@@ -385,7 +386,8 @@
 
 ; Start exercie 4.8
 (define (let-named? exp)
-  (not (pair? (cadr exp))))
+  ;(not (pair? (cadr exp))))
+  (symbol? (cadr exp)))
 (define (let-make-inner-procedure name vars body)
   (list 'define
         (cons
@@ -431,6 +433,10 @@
 ; End exercie 4.9
 
 ; Start exercie 4.10
+; thw above exercise are examples. we not modfied eval/apply but added new grammer. We could also for example change the 
+; procedure name in the last when call a procedure.
+; or support list comprehension
+; or support multi assignement such as: x, y = 1, 2
 ; End exercie 4.10
 
 
@@ -658,6 +664,8 @@
       (exit)
       '())
     (let ((output (eval input the-global-environment)))
+      ; as I often read from file, so print the input content from file. TODO: should print pretty
+      (display-line input)
       (announce-output output-prompt)
       (user-print output)))
   (driver-loop))
@@ -676,7 +684,7 @@
     (display object)))
 
 (define the-global-environment (setup-environment))
-(driver-loop)
+;(driver-loop)
 
 ; Start Exercise 4.14
 ; Becase the map use the system functon but not out implemented apply
@@ -690,6 +698,13 @@
 ;;;
 ;;; Start 4.1.5 Data as Programs
 ;;;
+
+(define (factorial n)
+  (if (= n 1) 1 (* (factorial (- n 1) ) n)))
+
+
+;(eval-in-underlying-scheme '(* 5 5) user-initial-environment)
+;(eval-in-underlying-scheme (cons '* (list 5 5)) user-initial-environment)
 
 ; Start Exercise 4.15
 ; if the evaluating halting, then the "try" is halts, then the program should (run-forever). this is a paradox
@@ -706,11 +721,113 @@
 (define (f x)
   (define (even n) (if (= n 0) true (odd (- n 1))))
   (define (odd n) (if (= n 0) false (even (- n 1))))
-  (display "test")
   (even x))
 
 ;(display-line (f 11))
 
+
+; Start Exercise 4.16
+;a
+(define (lookup-variable-value-4.16a var env)
+  (define (env-loop env)
+    (define (scan vars vals)
+      (cond ((null? vars)
+             (env-loop (enclosing-enviroment env)))
+            ((eq? var (car vars)) (car vals))
+            (else (scan (cdr vars) (cdr vals)))))
+    (if (eq? env the-empty-environment)
+      (error "Unbound variable" var)
+      (let ((frame (first-frame env)))
+        (scan (frame-variables frame)
+              (frame-values frame)))))
+  (let ((value (env-loop env)))
+    (if (eq? value '*unassigned*)
+      (error "Unassigned varable")
+      value)))
+(define lookup-variable-value lookup-variable-value-4.16a)
+;b
+(define (split-body-out-defines body)
+  (if (null? body)
+    (let ((defines '())
+          (others  '()))
+      (cons defines others))
+    (let ((exp (car body))
+          (rest (split-body-out-defines (cdr body))))
+      (if (definition? exp)
+        (cons (cons exp (car rest)) (cdr rest))
+        (cons (car rest) (cons exp (cdr rest)))))))
+(define (make-let varvals body)
+  (list 'let varvals body))
+(define (defines->let-defines-body defines)
+  (if (null? defines)
+    (let ((let-defines '())
+          (let-body    '()))
+      (cons let-defines let-body))
+    (let* ((rest-let-defines-body (defines->let-defines-body (cdr defines)))
+           (rest-defines (car rest-let-defines-body))
+           (rest-body    (cdr rest-let-defines-body))
+           (name  (definition-variable (car defines)))
+           (value (definition-value    (car defines)))
+           (current-define (list name ''*unassigned*))
+           (current-body   (list 'set! name value)))
+      (cons (cons current-define rest-defines)
+            (cons current-body   rest-body)))))
+(define (scan-out-defines procedure-body)
+  (let* ((splited-body (split-body-out-defines procedure-body))
+         (defines (car splited-body))
+         (others  (cdr splited-body))
+         (let-defines-body (defines->let-defines-body defines)))
+    (list (append (list 'let
+                        (car let-defines-body))
+                  (append (cdr let-defines-body)
+                          others)))))
+;c
+(define (contain-defines exps)
+  (if (null? exps)
+    false
+    (or (if (definition? (car exps))
+          true
+          false)
+        (contain-defines (cdr exps)))))
+(define (make-procedure-ex4.16 parameters body env)
+  (if (contain-defines body)
+    (list 'procedure parameters (scan-out-defines body) env)
+    (list 'procedure parameters body env)))
+(define make-procedure make-procedure-ex4.16)
+
+; end Exercise 4.16
+
+; Start Exercise 4.17
+; end Exercise 4.17
+; Start Exercise 4.18
+; end Exercise 4.18
+; Start Exercise 4.19
+; end Exercise 4.19
+; Start Exercise 4.20
+; end Exercise 4.20
+; Start Exercise 4.21
+; end Exercise 4.21
+
 ;;
 ;; End 4.1.6 Internal Definitions
 ;;
+
+
+;;
+;; Start 4.1.7 Separating Syntactic Analysis from Execution
+;;
+
+
+; Start Exercise 4.22
+; end Exercise 4.22
+; Start Exercise 4.23
+; end Exercise 4.23
+; Start Exercise 4.24
+; end Exercise 4.24
+
+;;
+;; end 4.1.7 Separating Syntactic Analysis from Execution
+;;
+
+
+(driver-loop)
