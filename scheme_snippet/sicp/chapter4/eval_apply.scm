@@ -353,7 +353,7 @@
 
 ; Start exercie 4.6
 (define (let-definitions exp) (cadr exp))
-(define (let-body exp) (caddr exp))
+(define (let-body exp) (cddr exp))
 (define (expand-let-variables vars)
   (if (null? vars)
     '()
@@ -363,7 +363,7 @@
     '()
     (cons (cadar vars) (expand-let-values (cdr vars)))))
 (define (let->combination exp)
-  (cons (make-lambda (expand-let-variables (let-definitions exp)) (list (let-body exp)))
+  (cons (make-lambda (expand-let-variables (let-definitions exp)) (let-body exp))
         (expand-let-values (let-definitions exp))))
 
 (define (eval-let exp env)
@@ -375,10 +375,10 @@
 (define (let*-expands-definitions definitions body)
   (if (null? definitions)
     body
-    (list 'let (list (car definitions))
-          (let*-expands-definitions (cdr definitions) body))))
+    (list (append (list 'let (list (car definitions)))
+                  (let*-expands-definitions (cdr definitions) body)))))
 (define (let*->nested-lets exp)
-  (let*-expands-definitions (let-definitions exp) (let-body exp)))
+  (car (let*-expands-definitions (let-definitions exp) (let-body exp))))
 (define (eval-let* exp env)
   (eval (let*->nested-lets exp) env))
 (put 'op 'let* eval-let*)
@@ -389,20 +389,20 @@
   ;(not (pair? (cadr exp))))
   (symbol? (cadr exp)))
 (define (let-make-inner-procedure name vars body)
-  (list 'define
-        (cons
-          name
-          (expand-let-variables vars))
-        body))
+  (append (list 'define
+                (cons
+                  name
+                  (expand-let-variables vars)))
+          body))
 (define (let-named-name exp) (cadr exp))
 (define (let-named-definitions exp) (caddr exp))
-(define (let-named-body exp) (cadddr exp))
+(define (let-named-body exp) (cdddr exp))
 (define (let->combination-ex4.8 exp)
   (if (let-named? exp)
     (list (make-lambda '() (list (let-make-inner-procedure (let-named-name exp) (let-named-definitions exp) (let-named-body exp))
-                                 (cons (cadr exp) (expand-let-values (caddr exp)))))
+                                 (cons (let-named-name exp) (expand-let-values (caddr exp)))))
           )
-    (cons (make-lambda (expand-let-variables (let-definitions exp)) (list (let-body exp)))
+    (cons (make-lambda (expand-let-variables (let-definitions exp)) (let-body exp))
           (expand-let-values (let-definitions exp)))))
 (define let->combination let->combination-ex4.8)
 ; End exercie 4.8
@@ -742,7 +742,7 @@
               (frame-values frame)))))
   (let ((value (env-loop env)))
     (if (eq? value '*unassigned*)
-      (error "Unassigned varable")
+      (error "Unassigned varable: *unassigned*")
       value)))
 (define lookup-variable-value lookup-variable-value-4.16a)
 ;b
