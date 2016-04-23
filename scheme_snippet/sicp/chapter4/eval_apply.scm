@@ -757,8 +757,6 @@
       (if (definition? exp)
         (cons (cons exp (car rest)) (cdr rest))
         (cons (car rest) (cons exp (cdr rest)))))))
-(define (make-let varvals body)
-  (list 'let varvals body))
 (define (defines->let-defines-body defines)
   (if (null? defines)
     (let ((let-defines '())
@@ -814,7 +812,46 @@
 ; end Exercise 4.19
 
 ; Start Exercise 4.20
+(define (let-define-pair-var pair)
+  (car pair))
+(define (let-define-pair-val pair)
+  (cadr pair))
+(define (let-varval-definition-define pair)
+  (list (let-define-pair-var pair) ''*unassigned*))
+(define (let-varval-definition-assignment pair)
+  (list 'set!
+        (let-define-pair-var pair)
+        (let-define-pair-val pair)))
+(define (letrec-definitions let-varval-definitions)
+  (map let-varval-definition-define let-varval-definitions))
+(define (letrec-assignments let-varval-definitions)
+  (map let-varval-definition-assignment let-varval-definitions))
+(define (make-let defines body)
+  (append (list 'let
+                defines)
+          body))
+(define (letrec->let exp)
+  (define definitions (let-definitions exp))
+  (let ((defines (letrec-definitions definitions))
+        (assignments (letrec-assignments definitions)))
+    (make-let defines (append assignments (let-body exp)))))
+
+(define expr '(letrec ((<var1> <exp1>)
+                      (<var2> <exp2>)
+                      (<var3> <exp3>))
+               <sta1>
+               <sta2>
+               <sta3>))
+;(pretty-print expr)
+;(pretty-print (letrec-definitions (let-definitions expr)))
+;(pretty-print (letrec-assignments (let-definitions expr)))
+;(pretty-print (letrec->let expr))
+(define (eval-letrec exp env)
+  (pretty-print (letrec->let exp))
+  (eval (letrec->let exp) env))
+(put 'op 'letrec eval-letrec)
 ; end Exercise 4.20
+
 ; Start Exercise 4.21
 ; end Exercise 4.21
 

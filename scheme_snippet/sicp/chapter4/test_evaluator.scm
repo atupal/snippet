@@ -45,3 +45,10 @@
   (even? x))
 
 (f 12)
+
+; start exercise 4.20
+(letrec
+  ((fact (lambda (n)
+           (if (= n 1) 1 (* n (fact (- n 1)))))))
+  (fact 10))
+; end exercise 4.20
