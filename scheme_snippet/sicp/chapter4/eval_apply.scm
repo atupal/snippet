@@ -1,3 +1,4 @@
+(use-modules (ice-9 pretty-print))
 ;;
 ;; Util funcitons
 ;;
@@ -804,7 +805,10 @@
 ; end Exercise 4.17
 
 ; Start Exercise 4.18
+; 1. This procedure will not work if internal definitions are scanned out as shown in this exercise. Because when execute the set! the y and dy is not initialed
+; 2. same if they are scanned out as shown in the text
 ; end Exercise 4.18
+
 ; Start Exercise 4.19
 ; end Exercise 4.19
 ; Start Exercise 4.20
