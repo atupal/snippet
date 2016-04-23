@@ -794,11 +794,15 @@
     (list 'procedure parameters (scan-out-defines body) env)
     (list 'procedure parameters body env)))
 (define make-procedure make-procedure-ex4.16)
-
+; Install scan-out-defines in the make-procedure is better, the call number is less
 ; end Exercise 4.16
 
 ; Start Exercise 4.17
+; 1. Because create a let expression, the let expression has a frame
+; 2. What we do is just assigne the defined variables to *unassigned*, it will never make a difference in the behavior of a correct program
+; 3. We can put the "definition" in the last of the statements
 ; end Exercise 4.17
+
 ; Start Exercise 4.18
 ; end Exercise 4.18
 ; Start Exercise 4.19
