@@ -665,8 +665,8 @@
       (exit)
       '())
     (let ((output (eval input the-global-environment)))
-      ; as I often read from file, so print the input content from file. TODO: should print pretty
-      (display-line input)
+      ; as I often read from file, so print the input content from file.
+      (pretty-print input)
       (announce-output output-prompt)
       (user-print output)))
   (driver-loop))
@@ -810,7 +810,9 @@
 ; end Exercise 4.18
 
 ; Start Exercise 4.19
+; lazy evaluation
 ; end Exercise 4.19
+
 ; Start Exercise 4.20
 ; end Exercise 4.20
 ; Start Exercise 4.21
