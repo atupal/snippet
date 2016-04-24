@@ -663,10 +663,9 @@
   (let ((input (read)))
     (if (eof-object? input)
       (exit)
-      '())
+      (pretty-print input))
     (let ((output (eval input the-global-environment)))
       ; as I often read from file, so print the input content from file.
-      (pretty-print input)
       (announce-output output-prompt)
       (user-print output)))
   (driver-loop))
