@@ -853,6 +853,25 @@
 ; end Exercise 4.20
 
 ; Start Exercise 4.21
+;(display-line
+;  ((lambda (n)
+;     ((lambda (fact) (fact fact n))
+;      (lambda (ft k) (if (= k 1) 1 (* k (ft ft (- k 1)))))))
+;   10))
+
+; b
+; the trick is the parameter of the inner lambda expression is it self! So when it want to call it self recursivly, just need pass the 
+; same parameter(it self) to the its self's next call. And when we inital call: we pass the inner lambda as parameter to it self
+(define (f x)
+  ((lambda (even? odd?) (even? even? odd? x))
+   (lambda (ev? od? n)
+     (if (= n 0) true (od? ev? od? (- n 1))))
+   (lambda (ev? od? n)
+     (if (= n 0) false (ev? ev? od? (- n 1))))))
+;(display-line (f 10))
+;(display-line (f 11))
+;(display-line (f 12))
+;(display-line (f 13))
 ; end Exercise 4.21
 
 ;;
