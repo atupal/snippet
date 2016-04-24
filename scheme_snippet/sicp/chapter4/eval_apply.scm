@@ -998,7 +998,11 @@
 ; the results shoulb be same, but the version of text is more efficient.
 ; Alyssa's version is run the "cond", recusively" in the runtime, the version of text unrolls the procedure
 ; end Exercise 4.23
+
 ; Start Exercise 4.24
+; when perform a loop of 30000
+; original eval: 6s
+; analyze + eval: 3.5s
 ; end Exercise 4.24
 
 ;;
