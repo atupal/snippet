@@ -900,6 +900,7 @@
         ((assignment? exp) (analyze-assignment exp))
         ((definition? exp) (analyze-definition exp))
         ((if? exp) (analyze-if exp))
+        ((let? exp) (analyze (let->combination exp)))
         ((lambda? exp) (analyze-lambda exp))
         ((begin? exp) (analyze-sequence (begin-actions exp)))
         ((cond? exp) (analyze (cond->if exp)))
@@ -968,6 +969,7 @@
                  proc))))
 
 ; Start Exercise 4.22
+(define (let? exp) (tagged-list? exp 'let))
 ; end Exercise 4.22
 ; Start Exercise 4.23
 ; end Exercise 4.23
