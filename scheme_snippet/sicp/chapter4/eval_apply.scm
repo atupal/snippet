@@ -792,7 +792,7 @@
   (if (contain-defines body)
     (list 'procedure parameters (scan-out-defines body) env)
     (list 'procedure parameters body env)))
-(define make-procedure make-procedure-ex4.16)
+;(define make-procedure make-procedure-ex4.16)
 ; Install scan-out-defines in the make-procedure is better, the call number is less
 ; end Exercise 4.16
 
@@ -901,6 +901,9 @@
         ((definition? exp) (analyze-definition exp))
         ((if? exp) (analyze-if exp))
         ((let? exp) (analyze (let->combination exp)))
+        ((let*? exp) (analyze (let*->nested-lets exp)))
+        ((letrec? exp) (analyze (letrec->let exp)))
+        ((for? exp) (analyze (for->procedure-calls exp)))
         ((lambda? exp) (analyze-lambda exp))
         ((begin? exp) (analyze-sequence (begin-actions exp)))
         ((cond? exp) (analyze (cond->if exp)))
@@ -960,10 +963,11 @@
   (cond ((primitive-procedure? proc)
          (apply-primitive-procedure proc args))
         ((compound-procedure? proc)
-         (extend-environment
-           (procedure-parameters proc)
-           args
-           (procedure-environment proc)))
+         ((procedure-body proc)
+          (extend-environment
+            (procedure-parameters proc)
+            args
+            (procedure-environment proc))))
         (else
           (error "Unknown procedure type: EXECUTE-APPLICATION"
                  proc))))
@@ -971,7 +975,13 @@
 ; Start Exercise 4.22
 (define (let? exp) (tagged-list? exp 'let))
 ; end Exercise 4.22
+
 ; Start Exercise 4.23
+(define (let*? exp) (tagged-list? exp 'let*))
+(define (letrec? exp) (tagged-list? exp 'letrec))
+(define (for? exp) (tagged-list? exp 'for))
+; to make the new eval, the make-procedure-ex4.16 is commentted as now it cannot get the body text of lambda expression
+(define eval eval-4.1.7)
 ; end Exercise 4.23
 ; Start Exercise 4.24
 ; end Exercise 4.24
