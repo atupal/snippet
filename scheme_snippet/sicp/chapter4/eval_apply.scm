@@ -975,12 +975,28 @@
 (define (let? exp) (tagged-list? exp 'let))
 ; end Exercise 4.22
 
-; Start Exercise 4.23
 (define (let*? exp) (tagged-list? exp 'let*))
 (define (letrec? exp) (tagged-list? exp 'letrec))
 (define (for? exp) (tagged-list? exp 'for))
 ; to make the new eval, the make-procedure-ex4.16 is commentted as now it cannot get the body text of lambda expression
 (define eval eval-4.1.7)
+
+; Start Exercise 4.23
+(define (analyze-sequence-4.23 exps)
+  (define (execute-sequence procs env)
+    (cond ((null? (cdr procs))
+           ((car procs) env))
+          (else
+            ((car procs) env)
+             (execute-sequence (cdr procs) env))))
+  (let ((procs (map analyze exps)))
+    (if (null? procs)
+      (error "Empty sequence: ANALYZE")
+      (lambda (env)
+        (execute-sequence procs env)))))
+;(define analyze-sequence analyze-sequence-4.23)
+; the results shoulb be same, but the version of text is more efficient.
+; Alyssa's version is run the "cond", recusively" in the runtime, the version of text unrolls the procedure
 ; end Exercise 4.23
 ; Start Exercise 4.24
 ; end Exercise 4.24
