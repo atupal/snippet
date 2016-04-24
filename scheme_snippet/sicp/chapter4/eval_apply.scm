@@ -903,6 +903,7 @@
         ((let*? exp) (analyze (let*->nested-lets exp)))
         ((letrec? exp) (analyze (letrec->let exp)))
         ((for? exp) (analyze (for->procedure-calls exp)))
+        ((unless? exp) (analyze (unless->if exp)))
         ((lambda? exp) (analyze-lambda exp))
         ((begin? exp) (analyze-sequence (begin-actions exp)))
         ((cond? exp) (analyze (cond->if exp)))
@@ -1029,6 +1030,16 @@
 ; end Exercise 4.25
 
 ; start Exercise 4.26
+(define (unless? exp) (tagged-list? exp 'unless))
+(define (unless-condition exp) (cadr exp))
+(define (unless-usual-value exp) (caddr exp))
+(define (unless-exceptional-value exp) (cadddr exp))
+(define (unless->if exp)
+  (make-if (unless-condition exp)
+           (unless-exceptional-value exp)
+           (unless-usual-value exp)))
+; when we want to pass unless to onother procedure such as map,
+; then if unless is a procedure we can do it easily but can't if it is a special form
 ; end Exercise 4.26
 
 ;;
