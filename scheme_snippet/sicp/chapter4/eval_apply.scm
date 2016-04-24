@@ -853,11 +853,20 @@
 ; end Exercise 4.20
 
 ; Start Exercise 4.21
+; a
 ;(display-line
 ;  ((lambda (n)
 ;     ((lambda (fact) (fact fact n))
 ;      (lambda (ft k) (if (= k 1) 1 (* k (ft ft (- k 1)))))))
 ;   10))
+(define (fib n)
+  ((lambda (fib-iter) (fib-iter fib-iter 0 1 n))
+   (lambda (ft a b count)
+     (if (= count 0)
+       a
+       (ft ft b (+ a b) (- count 1))))))
+
+;(display-line (fib 10))
 
 ; b
 ; the trick is the parameter of the inner lambda expression is it self! So when it want to call it self recursivly, just need pass the 
