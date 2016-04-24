@@ -1010,4 +1010,63 @@
 ;;
 
 
+;;
+;; start 4.2 Variations on a Scheme - Lazy Evaluation
+;;
+
+;;
+;; start 4.2.1 Normal Ordr and Applicative Order
+;;
+
+; start Exercise 4.25
+; end Exercise 4.25
+; start Exercise 4.26
+; end Exercise 4.26
+
+;;
+;; end 4.2.1 Normal Ordr and Applicative Order
+;;
+
+
+;;
+;; start 4.2.2 An Interpreter with Lazy Ecaluation
+;;
+
+; start Exercise 4.27
+; end Exercise 4.27
+; start Exercise 4.28
+; end Exercise 4.28
+; start Exercise 4.29
+; end Exercise 4.29
+; start Exercise 4.30
+; end Exercise 4.30
+; start Exercise 4.31
+; end Exercise 4.31
+
+;;
+;; end 4.2.2 An Interpreter with Lazy Ecaluation
+;;
+
+;;
+;; start 4.2.3 Streams as Lazy Lists
+;;
+
+; start Exercise 4.32
+; end Exercise 4.32
+; start Exercise 4.33
+; end Exercise 4.33
+; start Exercise 4.34
+; end Exercise 4.34
+
+;;
+;; end 4.2.3 Streams as Lazy Lists
+;;
+
+
+;;
+;; start 4.2 Variations on a Scheme - Lazy Evaluation
+;;
+
+
+
 (driver-loop)
