@@ -1019,7 +1019,15 @@
 ;;
 
 ; start Exercise 4.25
+(define (unless condition usual-value exceptional-value)
+  (if condition exceptional-value usual-value))
+(define (factorial n)
+  (unless (= n 1)
+    (* n (factorial (- n 1)))
+    1))
+; will go into forever loop, will work in normal order
 ; end Exercise 4.25
+
 ; start Exercise 4.26
 ; end Exercise 4.26
 
