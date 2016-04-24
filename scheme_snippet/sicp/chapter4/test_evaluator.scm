@@ -59,3 +59,14 @@
     (lambda (ft k) (if (= k 1) 1 (* k (ft ft (- k 1)))))))
  10)
 ; end exercise 4.21
+
+; start exercise 4.25
+(unless (= 0 0)
+  (/ 0 0)
+  (begin (display "exception: returning 0") 0))
+(define (factorial n)
+  (unless (= n 1)
+    (* n (factorial (- n 1)))
+    1))
+(factorial 10)
+; end exercise 4.25
