@@ -1040,6 +1040,9 @@
            (unless-usual-value exp)))
 ; when we want to pass unless to onother procedure such as map,
 ; then if unless is a procedure we can do it easily but can't if it is a special form
+
+(define (eval-unless exp env)
+  (eval (unless->if exp) env))
 ; end Exercise 4.26
 
 ;;
@@ -1048,8 +1051,115 @@
 
 
 ;;
-;; start 4.2.2 An Interpreter with Lazy Ecaluation
+;; start 4.2.2 An Interpreter with Lazy Evaluation
 ;;
+(define (eval-4.2.2-lazy-evaluation exp env)
+  (cond ((self-evaluating? exp) exp)
+        ((variable? exp) (lookup-variable-value exp env))
+        ((quoted? exp) (text-of-quotation exp))
+        ((assignment? exp) (eval-assignment exp env))
+        ((definition? exp) (eval-definition exp env))
+        ((if? exp) (eval-if exp env))
+        ((let? exp) (eval-let exp env))
+        ((let*? exp) (eval-let* exp env))
+        ((letrec? exp) (eval-letrec exp env))
+        ((for? exp) (eval-for exp env))
+        ((unless? exp) (eval-unless exp env))
+        ((lambda? exp) (make-procedure (lambda-parameters exp)
+                                       (lambda-body exp)
+                                       env))
+        ((begin? exp)
+         (eval-sequence (begin-actions exp) env))
+        ((cond? exp) (eval (cond->if exp) env))
+        [(application? exp)
+          (apply (actual-value (operator exp) env)
+                 (operands exp)
+                 env)]                                            ; changed
+        (else
+          (error "Unknow expression type: EVAL" exp))))
+
+(define (actual-value exp env)
+  (force-it (eval exp env)))
+
+(define (apply-4.22-lazy-evaluation procedure arguments env)
+  (cond [(primitive-procedure? procedure)
+         (apply-primitive-procedure
+           procedure
+           (list-of-arg-values arguments env))]                   ; changed
+        ((compound-procedure? procedure)
+         (eval-sequence
+           (procedure-body procedure)
+           (extend-environment
+             (procedure-parameters procedure)
+             (list-of-delayed-args arguments env)
+             (procedure-environment procedure))))                 ; changed
+        (else (error "Unknow procedure type: APPLY"
+                     procedure))))
+
+(define (list-of-arg-values exps env)
+  (if (no-operands? exps)
+    '()
+    (cons (actual-value (first-operand exps)
+                        env)
+          (list-of-arg-values (rest-operands exps)
+                              env))))
+(define (list-of-delayed-args exps env)
+  (if (no-operands? exps)
+    '()
+    (cons (delay-it (first-operand exps)
+                    env)
+          (list-of-delayed-args (rest-operands exps)
+                                env))))
+
+(define (eval-if exp env)
+  (if (true? (actual-value (if-predicate exp) env))
+    (eval (if-consequent exp) env)
+    (eval (if-alternative exp) env)))
+
+(define (driver-loop)
+  (prompt-for-input input-prompt)
+  (let ((input (read)))
+    (if (eof-object? input)
+      (exit)
+      (pretty-print input))
+    (let ((output (actual-value input the-global-environment)))
+      ; as I often read from file, so print the input content from file.
+      (announce-output output-prompt)
+      (user-print output)))
+  (driver-loop))
+
+
+(define (force-it obj)
+  (if (thunk? obj)
+    (actual-value (thunk-exp obj) (thunk-env obj))
+    obj))
+(define (delay-it exp env)
+  (list 'thunk exp env))
+(define (thunk? obj)
+  (tagged-list? obj 'thunk))
+(define (thunk-exp thunk) (cadr thunk))
+(define (thunk-env thunk) (caddr thunk))
+
+; Memoized the thunk
+(define (evaluated-thunk? obj)
+  (tagged-list? obj 'evaluated-thunk))
+(define (thunk-value evaluated-thunk)
+  (cadr evaluated-thunk))
+(define (force-it obj)
+  (cond ((thunk? obj)
+         (let ((result (actual-value (thunk-exp obj)
+                                     (thunk-env obj))))
+           (set-car! obj 'evaluated-thunk)
+           (set-car! (cdr obj)
+                     result)       ; replace exp with its value
+           (set-cdr! (cdr obj)
+                     '())
+           result))
+        ((evaluated-thunk? obj) (thunk-value obj))
+        (else obj)))       ; forget unneeded env
+
+(define eval eval-4.2.2-lazy-evaluation)
+(define apply apply-4.22-lazy-evaluation)
 
 ; start Exercise 4.27
 ; end Exercise 4.27
