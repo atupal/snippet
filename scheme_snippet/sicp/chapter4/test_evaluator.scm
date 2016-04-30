@@ -91,3 +91,41 @@ w
 count
 
 ; end exercise 4.27
+
+
+; start exercise 4.29
+(define count 0)
+
+(define (square x) (* x x))
+
+(square (id 10))
+
+count
+; end exercise 4.29
+
+; start exercise 4.30
+(define (for-each proc items)
+  (if (null? items)
+    'done
+    (begin (proc (car items))
+           (for-each proc (cdr items)))))
+
+
+(for-each (lambda (x) (newline) (display x))
+          (list 57 321 88))
+
+(define (p1 x)
+  (set! x (cons x '(2)))
+  x)
+
+
+(define (p2 x)
+  (define (p e)
+    e
+    x)
+  (p (set! x (cons x '(2)))))
+
+(p1 1)
+
+(p2 1)
+; end exercise 4.30
