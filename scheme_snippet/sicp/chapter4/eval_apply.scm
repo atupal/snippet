@@ -1162,7 +1162,22 @@
 (define apply apply-4.22-lazy-evaluation)
 
 ; start Exercise 4.27
+(define count 0)
+(define (id x) (set! count (+ count 1)) x)
+
+(define w (id (id 10)))
+
+count
+; <response> is 1 because the parameter of first id call "(id 10)" is delayed, then the count only inc 1
+
+w
+; <responise> is 10, and the delayed parameter was forced to eval, now count inc 1
+
+count
+; <respoinse> is 2
+
 ; end Exercise 4.27
+
 ; start Exercise 4.28
 ; end Exercise 4.28
 ; start Exercise 4.29

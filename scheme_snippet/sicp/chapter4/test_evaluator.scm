@@ -74,3 +74,20 @@
 ; 4.2.2 lazy evaluation
 (define (try a b) (if (= a 0) 1 b))
 (try 0 (/ 1 0))
+
+
+; start exercise 4.27
+(define count 0)
+
+(define (id x)
+  (set! count (+ count 1)) x)
+
+(define w (id (id 10)))
+
+count
+
+w
+
+count
+
+; end exercise 4.27
