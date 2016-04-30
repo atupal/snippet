@@ -623,6 +623,7 @@
   (list (list 'car car)
         (list 'cdr cdr)
         (list 'cons cons)
+        (list 'list list)
         (list '+ +)
         (list '- -)
         (list '* *)
@@ -631,6 +632,7 @@
         (list 'eq? eq?)
         (list 'assoc assoc)
         (list 'display display)
+        (list 'newline newline)
         (list 'null? null?)))
 (define (primitive-procedure-names)
   (map car primitive-procedures))
@@ -1195,7 +1197,24 @@
 ; end Exercise 4.29
 
 ; start Exercise 4.30
+; a
+; because the parameter have been used by display
+; b
+;(define (p1 x)
+;  (set! x (cons x '(2)))
+;  x)
+;(define (p2 x)
+;  (define (p e)
+;    e
+;    x)
+;  (p (set! x (cons x '(2)))))
+; (p1 1) will return (1 2) (p2 1) will return 1,
+; c
+; d
+; I prefer the approach in the text
+
 ; end Exercise 4.30
+
 ; start Exercise 4.31
 ; end Exercise 4.31
 
