@@ -1145,7 +1145,7 @@
   (tagged-list? obj 'evaluated-thunk))
 (define (thunk-value evaluated-thunk)
   (cadr evaluated-thunk))
-(define (force-it obj)
+(define (force-it-memoized obj)
   (cond ((thunk? obj)
          (let ((result (actual-value (thunk-exp obj)
                                      (thunk-env obj))))
@@ -1157,24 +1157,25 @@
            result))
         ((evaluated-thunk? obj) (thunk-value obj))
         (else obj)))       ; forget unneeded env
+(define force-it force-it-memoized)
 
 (define eval eval-4.2.2-lazy-evaluation)
 (define apply apply-4.22-lazy-evaluation)
 
 ; start Exercise 4.27
-(define count 0)
-(define (id x) (set! count (+ count 1)) x)
+;(define count 0)
+;(define (id x) (set! count (+ count 1)) x)
 
-(define w (id (id 10)))
+;(define w (id (id 10)))
 
-count
-; <response> is 1 because the parameter of first id call "(id 10)" is delayed, then the count only inc 1
+;count
+;; <response> is 1 because the parameter of first id call "(id 10)" is delayed, then the count only inc 1
 
-w
-; <responise> is 10, and the delayed parameter was forced to eval, now count inc 1
+;w
+;; <responise> is 10, and the delayed parameter was forced to eval, now count inc 1
 
-count
-; <respoinse> is 2
+;count
+;; <respoinse> is 2
 
 ; end Exercise 4.27
 
@@ -1183,7 +1184,16 @@ count
 ; end Exercise 4.28
 
 ; start Exercise 4.29
+;(define count 0)
+;(define (square x) (* x x))
+;(square (id 10))
+;; <response> is 100
+;count
+;; <response> is 1 if memoized else 2
+
+;; if the id function is expensive function then the no-memoizatoin version will slow than the memoized one
 ; end Exercise 4.29
+
 ; start Exercise 4.30
 ; end Exercise 4.30
 ; start Exercise 4.31
