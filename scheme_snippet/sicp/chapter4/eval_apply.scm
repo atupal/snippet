@@ -1179,7 +1179,9 @@ count
 ; end Exercise 4.27
 
 ; start Exercise 4.28
+; if we don't force, then when use this paramter, the parameter's type is thunk, will be get error for the incorrect type
 ; end Exercise 4.28
+
 ; start Exercise 4.29
 ; end Exercise 4.29
 ; start Exercise 4.30
