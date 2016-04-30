@@ -70,3 +70,7 @@
     1))
 (factorial 10)
 ; end exercise 4.25
+
+; 4.2.2 lazy evaluation
+(define (try a b) (if (= a 0) 1 b))
+(try 0 (/ 1 0))
