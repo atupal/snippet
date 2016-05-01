@@ -1297,7 +1297,11 @@
 ;;
 
 ; start Exercise 4.32
+; (cons a b) will not eval a but (cons-stream) in mit-scheme will
+; from the text of book: The car of the list, as well as the cdr, is delayed. This permits us to create delayed versions of more general kinds of list structures,
+; not just sequences. Hughes 1990 discuesses some application of "lazy trees".
 ; end Exercise 4.32
+
 ; start Exercise 4.33
 ; end Exercise 4.33
 ; start Exercise 4.34
