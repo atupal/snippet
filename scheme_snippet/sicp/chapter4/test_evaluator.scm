@@ -72,7 +72,8 @@
 ; end exercise 4.25
 
 ; 4.2.2 lazy evaluation
-(define (try a b) (if (= a 0) 1 b))
+; (define (try a b) (if (= a 0) 1 b))
+(define (try a (b lazy)) (if (= a 0) 1 b))
 (try 0 (/ 1 0))
 
 
@@ -129,3 +130,30 @@ count
 
 (p2 1)
 ; end exercise 4.30
+
+; start exercise 4.31
+; commented for large output
+; (define count 0)
+; 
+; (define (square x) (* x x))
+; 
+; (square (id 10))
+; 
+; count ; 1
+; 
+; (define count 0)
+; 
+; (define (square (x lazy)) (* x x))
+; 
+; (square (id 10))
+; 
+; count ; 2
+; 
+; (define count 0)
+; 
+; (define (square (x lazy-memo)) (* x x))
+; 
+; (square (id 10))
+; 
+; count ; 1
+; end exercise 4.31
