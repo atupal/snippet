@@ -1073,10 +1073,10 @@
         ((begin? exp)
          (eval-sequence (begin-actions exp) env))
         ((cond? exp) (eval (cond->if exp) env))
-        [(application? exp)
+        ((application? exp)
           (apply (actual-value (operator exp) env)
                  (operands exp)
-                 env)]                                            ; changed
+                 env))                                            ; changed
         (else
           (error "Unknow expression type: EVAL" exp))))
 
@@ -1084,10 +1084,10 @@
   (force-it (eval exp env)))
 
 (define (apply-4.22-lazy-evaluation procedure arguments env)
-  (cond [(primitive-procedure? procedure)
+  (cond ((primitive-procedure? procedure)
          (apply-primitive-procedure
            procedure
-           (list-of-arg-values arguments env))]                   ; changed
+           (list-of-arg-values arguments env)))                   ; changed
         ((compound-procedure? procedure)
          (eval-sequence
            (procedure-body procedure)
@@ -1230,10 +1230,10 @@
 (define (procedure-raw-parameters p) (cadr p))
 
 (define (apply-ex4.31 procedure arguments env)
-  (cond [(primitive-procedure? procedure)
+  (cond ((primitive-procedure? procedure)
          (apply-primitive-procedure
            procedure
-           (list-of-arg-values arguments env))]                   ; changed
+           (list-of-arg-values arguments env)))                   ; changed
         ((compound-procedure? procedure)
          (eval-sequence
            (procedure-body procedure)
@@ -1282,10 +1282,10 @@
         (else obj)))       ; forget unneeded env
 
 
-(define apply apply-ex4.31)
-(define force-it force-it-ex4.31)
-(define procedure-parameters procedure-parameters-ex4.31)
-(define list-of-delayed-args list-of-delayed-args-ex4.31)
+;(define apply apply-ex4.31)
+;(define force-it force-it-ex4.31)
+;(define procedure-parameters procedure-parameters-ex4.31)
+;(define list-of-delayed-args list-of-delayed-args-ex4.31)
 ; end Exercise 4.31
 
 ;;
