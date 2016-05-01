@@ -159,6 +159,10 @@ count
 ; end exercise 4.31
 
 ; start 4.2.3 Streams as Lazy Lists
+(define cons-system cons)
+(define car-system car)
+(define cdr-system cdr)
+
 (define (cons x y) (lambda (m) (m x y)))
 (define (car z) (z (lambda (p q) p)))
 (define (cdr z) (z (lambda (p q) q)))
@@ -202,3 +206,7 @@ count
 
 ; these will cause stack overflow of guile vm, but mit-scheme works
 ;(list-ref (solve (lambda (x) x) 1 0.001) 1000)
+
+(define cons cons-system)
+(define car car-system)
+(define cdr cdr-system)
