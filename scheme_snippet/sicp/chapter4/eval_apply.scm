@@ -1303,7 +1303,27 @@
 ; end Exercise 4.32
 
 ; start Exercise 4.33
+(define (text-of-quotation-lazy exp)
+  (define (quotation->cons exp)
+    (if (null? exp)
+      ''()
+      (if (pair? exp)
+        (list 'cons (quotation->cons (car exp)) (quotation->cons (cdr exp)))
+        `',exp)))
+  (let ((env (cons (make-frame '() '()) '())))
+    (eval '(define (cons x y) (lambda (m) (m x y))) env)
+    (eval '(define (car z) (z (lambda (p q) p))) env)
+    (eval '(define (cdr z) (z (lambda (p q) q))) env)
+    (let ((text (cadr exp)))
+      (if (pair? text)
+        (eval (quotation->cons text) env)
+        text))))
+; if do so, all of the cons will be the lazy one even if there are already have been defined
+;(define text-of-quotation text-of-quotation-lazy)
+
+  ;(eval (quotation->cons (cadr exp)) env))
 ; end Exercise 4.33
+
 ; start Exercise 4.34
 ; end Exercise 4.34
 
