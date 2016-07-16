@@ -26,6 +26,11 @@
 
 ; end 4.3.1 Amb and Search
 
+; start 4.3.3 Implementing the amb Evaluator
+(define (amb? exp) (tagged-list? exp 'amb))
+(define (amb-choices exp) (cdr exp))
+; end 4.3.3 Implementing the amb Evaluator
+
 ;;
 ;; end 4.3 Variations on a Scheme - Condeterministic Computing
 ;;
