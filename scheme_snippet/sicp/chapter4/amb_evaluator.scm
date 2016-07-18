@@ -1,4 +1,5 @@
 (load "eval_apply.scm")
+(load "utils.scm")
 
 
 ;;
@@ -81,7 +82,7 @@
              ;; to obtain pred-value
              (lambda (pred-value fail2)
                (if (true? pred-value)
-                 (cproc env succedd fail2)
+                 (cproc env succeed fail2)
                  (aproc env succeed fail2)))
              ;; failure continuation for evaluating thepredicate
              fail))))
@@ -98,7 +99,7 @@
     (if (null? rest-procs)
       first-proc
       (loop (sequentially first-proc
-                          (car reset-procs))
+                          (car rest-procs))
             (cdr rest-procs))))
   (let ((procs (map analyze exps)))
     (if (null? procs)
@@ -163,8 +164,8 @@
      fail)))
 (define (execute-application proc args succeed fail)
   (cond ((primitive-procedure? proc)
-         (succeed (apply-primitive-procedure proc args)
-                  fail)
+          (succeed (apply-primitive-procedure proc args)
+                   fail))
          ((compound-procedure? proc)
           ((procedure-body proc)
            (extend-environment
@@ -175,7 +176,7 @@
            fail))
          (else
            (error "Unknown procedure type: EXECUTE-APPLICATION"
-                  proc)))))
+                  proc))))
 
 ; evaluating amb expressions
 (define (analyze-amb exp)
@@ -193,11 +194,13 @@
 ; driver loop
 (define input-prompt  ";;; Amb-Eval input:")
 (define output-prompt ";;; Amb-Eval value:")
-(define (driver-loop)
+(define (driver-loop-amb)
   (define (internal-loop try-again)
     (prompt-for-input input-prompt)
     (let ((input (read)))
-      (if (eq? input 'try-agian)
+      (if (eof-object? input)
+        (exit))
+      (if (eq? input 'try-again)
         (try-again)
         (begin
           (newline) (display ";;; Staring a new problem ")
@@ -214,11 +217,12 @@
               (announce-output
                 ";;; There are no more values of")
               (user-print input)
-              (driver-loop)))))))
+              (driver-loop-amb)))))))
   (internal-loop
     (lambda ()
       (newline) (display ";;; There is no current problem")
-      (driver-loop))))
+      (driver-loop-amb))))
+(define driver-loop driver-loop-amb)
 
 ; end 4.3.3 Implementing the amb Evaluator
 
