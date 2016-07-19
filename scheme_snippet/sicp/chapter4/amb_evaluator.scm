@@ -199,7 +199,8 @@
     (prompt-for-input input-prompt)
     (let ((input (read)))
       (if (eof-object? input)
-        (exit))
+        (exit)
+        (pretty-print input))
       (if (eq? input 'try-again)
         (try-again)
         (begin
