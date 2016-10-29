@@ -9,6 +9,7 @@ import ssl
 import traceback
 import re
 import contextlib
+import threading
 
 from BaseHTTPServer import BaseHTTPRequestHandler
 from StringIO import StringIO
@@ -28,7 +29,7 @@ class HTTPRequest(BaseHTTPRequestHandler):
 
 def read_data(connstream):
     ret = ""
-    connstream.settimeout(5)
+    connstream.settimeout(10)
     data = connstream.read(4096)
     ret += data
 
@@ -37,6 +38,7 @@ def read_data(connstream):
         connstream.settimeout(1)
         ret += connstream.read(4096)
 
+    connstream.settimeout(10)
     return ret 
 
 #HOST, PORT = '', 8080
@@ -83,8 +85,13 @@ def proxy(request, rooturl):
     with contextlib.closing(urllib2.urlopen(req, timeout=3)) as fd:
         return fd.headers, fd.read()
 
+def remove_bad_headers(headers):
+    return str(headers)\
+              .replace("Transfer-Encoding: chunked\r\n", "")\
+              #.replace("Connection: close\r\n", "Connection: keep-alive\r\n")
+
 def handle_others(headers, response):
-    headers_string = str(headers).replace("Transfer-Encoding: chunked\r\n", "")
+    headers_string = remove_bad_headers(headers)
 
     http_response = """\
 HTTP/1.1 200 OK
@@ -93,7 +100,10 @@ HTTP/1.1 200 OK
     return http_response
 
 def handle_google(headers, response):
-    headers_string = str(headers).replace(".hk", "").replace("www.google.com", "vpn.atupal.org").replace("google.com", "vpn.atupal.org")
+    headers_string = remove_bad_headers(headers)\
+                    .replace(".hk", "")\
+                    .replace("www.google.com", "vpn.atupal.org")\
+                    .replace("google.com", "vpn.atupal.org")
 
     http_response = """\
 HTTP/1.1 200 OK
@@ -111,7 +121,7 @@ HTTP/1.1 200 OK
     #connstream.close()
 
 def handle_youtube(headers, response):
-    headers_string = str(headers)
+    headers_string = remove_bad_headers(headers)
 
     http_response = """\
 HTTP/1.1 200 OK
@@ -133,7 +143,7 @@ HTTP/1.1 200 OK
            .replace("www.youtube.com", "vpn.atupal.org")
 
 def handle_stackoverflow(headers, response):
-    headers_string = str(headers)
+    headers_string = remove_bad_headers(headers)
 
     http_response = """\
 HTTP/1.1 200 OK
@@ -227,50 +237,69 @@ HTTP/1.1 200 OK
 
     return handle_others(headers, response)
 
-while True:
+def listen_on_single_socket(client_connection, client_address):
     try:
-        client_connection, client_address = listen_socket.accept()
-        print(client_address)
+        connstream = None
         if client_address[0] == '13.75.0.11':
-            raise Exception("blocked IP")
+            return
+            #raise Exception("blocked IP")
 
         connstream = ssl.wrap_socket(client_connection,
                                      server_side=True,
                                      certfile="/home/atupal/chained.pem",
                                      keyfile="/home/atupal/domain.key",
                                      ssl_version=ssl.PROTOCOL_TLSv1_2)
-        connstream.settimeout(5)
+        connstream.settimeout(10)
 
-        #request = client_connection.recv(4096)
-        request = read_data(connstream)
-        #print(request)
-        if not request:
-            continue
-        request = HTTPRequest(request)
+        while True:
+            print(client_address)
+            #request = client_connection.recv(4096)
+            request = read_data(connstream)
+            #print(request)
+            if not request:
+                return
+            request = HTTPRequest(request)
 
-        try:
-            response_text = route(request)
-        except Exception as ex:
-            client_connection.sendall("""\
+            try:
+                response_text = route(request)
+            except Exception as ex:
+                client_connection.sendall("""\
 HTTP/1.1 200 OK
 
 Internal Error!
 """)
-            print (traceback.format_exc())
-            raise ex
-        #client_connection.sendall(response_text)
-        connstream.write(response_text)
+                print (traceback.format_exc())
+                raise ex
+            #client_connection.sendall(response_text)
+            connstream.write(response_text)
+            break
+
     except Exception as ex:
         print(''.join(['\033[91m', "Exception: ", str(ex), '\033[0m']))
     finally:
         #client_connection.close()
         try:
-            connstream.shutdown(socket.SHUT_RDWR)
-            connstream.close()
-        except:
-            pass
+            if connstream:
+                connstream.shutdown(socket.SHUT_RDWR)
+                connstream.close()
+        except Exception as ex:
+            print (traceback.format_exc())
+            print(''.join(['\033[91m', "Exception in close ssl socket: ", str(ex), '\033[0m']))
         finally:
             try:
                 client_connection.close()
-            except:
-                pass
+            except Exception as ex:
+                print(''.join(['\033[91m', "Exception in close socket: ", str(ex), '\033[0m']))
+
+
+while True:
+    try:
+        client_connection, client_address = listen_socket.accept()
+        client_connection.settimeout(10)
+        #listen_on_single_socket(client_connection, client_address)
+        threading.Thread(target = listen_on_single_socket, args = (client_connection, client_address)).start()
+    except KeyboardInterrupt:
+        exit(0)
+    except Exception as ex:
+        print(''.join(['\033[91m', "Exception in main loop: ", str(ex), '\033[0m']))
+        continue
