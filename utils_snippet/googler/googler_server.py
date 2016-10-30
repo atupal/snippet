@@ -3,13 +3,15 @@
 ''''which python2 >/dev/null && exec python2 "$0" "$@" # '''
 ''''which python  >/dev/null && exec python  "$0" "$@" # '''
 
-import socket
-import urllib2
-import ssl
-import traceback
-import re
 import contextlib
+import random
+import re
+import socket
+import ssl
 import threading
+import time
+import traceback
+import urllib2
 
 from BaseHTTPServer import BaseHTTPRequestHandler
 from StringIO import StringIO
@@ -68,13 +70,23 @@ def proxy(request, rooturl):
     #if request.path.startswith("/__atupal/"):
         #google_url = "https://" + request.path.replace("/__atupal/", "")
 
-    req = urllib2.Request(google_url)
+    google_url = google_url.replace("vpn.atupal.org", rooturl.replace("https://", ""))
+
+    if request.command == "GET":
+        req = urllib2.Request(google_url)
+    elif request.command == "POST":
+        req = urllib2.Request(google_url, request.rfile.read())
+    else:
+        raise Exception("Unknow http method: %s" % request.command)
 
     #req.add_header('User-Agent', 'Chrome')
     #req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36')
 
     if 'cookie' in request.headers:
         req.add_header('Cookie', request.headers['cookie'])
+
+    if 'Referer' in request.headers:
+        req.add_header('Referer', request.headers['Referer'].replace("https://vpn.atupal.org", rooturl))
 
     for header in ["User-Agent"]:
         req.add_header(header, request.headers[header])
@@ -121,25 +133,27 @@ HTTP/1.1 200 OK
     #connstream.close()
 
 def handle_youtube(headers, response):
-    headers_string = remove_bad_headers(headers)
+    headers_string = remove_bad_headers(headers).\
+                                        replace("domain=.youtube.com;", "")
 
     http_response = """\
 HTTP/1.1 200 OK
 """ + headers_string + "\r\n" + response
 
-    http_response = re.sub(r'https://([-a-z0-9]+)\.googlevideo.com', r'https://vpn.atupal.org/__atupal/\1.googlevideo.com', http_response, re.DOTALL)
+    http_response = re.sub(r'([-a-z0-9]+)\.googlevideo.com', r'vpn.atupal.org/__atupal/\1.googlevideo.com', http_response, re.DOTALL)
 
     return http_response\
-           .replace("s.ytimg.com", "vpn.atupal.org/__atupal/s.ytimg.com")\
+           .replace("ad.doubleclick.net", "vpn.atupal.org/__atupal/ad.doubleclick.net")\
            .replace("fonts.gstatic.com", "vpn.atupal.org/__atupal/fonts.gstatic.com")\
+           .replace("googleads.g.doubleclick.net", "vpn.atupal.org/__atupal/googleads.g.doubleclick.net")\
            .replace("i.ytimg.com", "vpn.atupal.org/__atupal/i.ytimg.com")\
-           .replace("yt3.ggpht.com", "vpn.atupal.org/__atupal/yt3.ggpht.com")\
            .replace("pubads.g.doubleclick.net", "vpn.atupal.org/__atupal/pubads.g.doubleclick.net")\
+           .replace("redirector.googlevideo.com", "vpn.atupal.org/__atupal/redirector.googlevideo.com")\
+           .replace("s.youtube.com", "vpn.atupal.org/__atupal/s.youtube.com")\
+           .replace("s.ytimg.com", "vpn.atupal.org/__atupal/s.ytimg.com")\
            .replace("securepubads.g.doubleclick.net", "vpn.atupal.org/__atupal/securepubads.g.doubleclick.net")\
            .replace("tpc.googlesyndication.com", "vpn.atupal.org/__atupal/tpc.googlesyndication.com")\
-           .replace("s.youtube.com", "vpn.atupal.org/__atupal/s.youtube.com")\
-           .replace("googleads.g.doubleclick.net", "vpn.atupal.org/__atupal/googleads.g.doubleclick.net")\
-           .replace("redirector.googlevideo.com", "vpn.atupal.org/__atupal/redirector.googlevideo.com")\
+           .replace("yt3.ggpht.com", "vpn.atupal.org/__atupal/yt3.ggpht.com")\
            .replace("www.youtube.com", "vpn.atupal.org")
 
 def handle_stackoverflow(headers, response):
@@ -165,6 +179,7 @@ def route(request):
         for cookie in request.headers['cookie'].strip(';').split(';'):
             key, value = cookie.strip().split('=')[:2]
             if key == 'passport':
+                #time.sleep(random.random()*0.01)
                 if value == passport:
                     authenticated = True
             elif key == 'rooturl':
@@ -173,6 +188,7 @@ def route(request):
                 google_cookies.append(cookie)
         google_cookies_string = ';'.join(google_cookies).replace("vpn.atupal.org", "google.com")
         request.headers['cookie'] = google_cookies_string
+
 
     if request.path.rstrip("/") == '/setcookie':
         if request.command == "GET":
@@ -220,9 +236,10 @@ HTTP/1.1 200 OK
 
     requesturl = rooturl
     if request.path.startswith("/__atupal/"):
-        urlparser = urllib2.urlparse.urlparse("https://" + request.path.replace("/__atupal/", ""))
+        real_url = "https://" + request.path.replace("/__atupal/", "")
+        urlparser = urllib2.urlparse.urlparse(real_url)
         requesturl = "https://" + urlparser.hostname
-        request.path = urlparser.path
+        request.path = request.path.replace("/__atupal/", "").replace(urlparser.hostname, "")
 
     headers, response = proxy(request, requesturl)
 
@@ -240,6 +257,7 @@ HTTP/1.1 200 OK
 def listen_on_single_socket(client_connection, client_address):
     try:
         connstream = None
+        request_string = ""
         if client_address[0] == '13.75.0.11':
             return
             #raise Exception("blocked IP")
@@ -253,12 +271,12 @@ def listen_on_single_socket(client_connection, client_address):
 
         while True:
             print(client_address)
-            #request = client_connection.recv(4096)
-            request = read_data(connstream)
-            #print(request)
-            if not request:
+            #request_string = client_connection.recv(4096)
+            request_string = read_data(connstream)
+            #print(request_string)
+            if not request_string:
                 return
-            request = HTTPRequest(request)
+            request = HTTPRequest(request_string)
 
             try:
                 response_text = route(request)
@@ -275,6 +293,7 @@ Internal Error!
             break
 
     except Exception as ex:
+        print(request_string)
         print(''.join(['\033[91m', "Exception: ", str(ex), '\033[0m']))
     finally:
         #client_connection.close()
