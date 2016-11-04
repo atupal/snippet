@@ -97,13 +97,13 @@ def proxy(request, rooturl):
     with contextlib.closing(urllib2.urlopen(req, timeout=3)) as fd:
         return fd.headers, fd.read()
 
-def remove_bad_headers(headers):
+def remove_hopbyhop_headers(headers):
     return str(headers)\
               .replace("Transfer-Encoding: chunked\r\n", "")\
               #.replace("Connection: close\r\n", "Connection: keep-alive\r\n")
 
 def handle_others(headers, response):
-    headers_string = remove_bad_headers(headers)
+    headers_string = remove_hopbyhop_headers(headers)
 
     http_response = """\
 HTTP/1.1 200 OK
@@ -112,7 +112,7 @@ HTTP/1.1 200 OK
     return http_response
 
 def handle_google(headers, response):
-    headers_string = remove_bad_headers(headers)\
+    headers_string = remove_hopbyhop_headers(headers)\
                     .replace(".hk", "")\
                     .replace("www.google.com", "vpn.atupal.org")\
                     .replace("google.com", "vpn.atupal.org")
@@ -133,7 +133,7 @@ HTTP/1.1 200 OK
     #connstream.close()
 
 def handle_youtube(headers, response):
-    headers_string = remove_bad_headers(headers).\
+    headers_string = remove_hopbyhop_headers(headers).\
                                         replace("domain=.youtube.com;", "")
 
     http_response = """\
@@ -141,6 +141,10 @@ HTTP/1.1 200 OK
 """ + headers_string + "\r\n" + response
 
     http_response = re.sub(r'([-a-z0-9]+)\.googlevideo.com', r'vpn.atupal.org/__atupal/\1.googlevideo.com', http_response, re.DOTALL)
+
+    trusted_site = r'''/^https?:\/\/([A-Za-z0-9-]{1,63}\.)*(ba\.l\.google\.com|c\.googlesyndication\.com|corp\.google\.com|borg\.google\.com|docs\.google\.com|drive\.google\.com|googleplex\.com|googlevideo\.com|play\.google\.com|prod\.google\.com|sandbox\.google\.com|plus\.google\.com|ed\.video\.google\.com|vp\.video\.l\.google\.com|youtube\.com|youtubeeducation\.com|xfx7\.com)(:[0-9]+)?([\/\?\#]|$)/'''
+    trusted_site_include_atupal_org = r'''/^https?:\/\/([A-Za-z0-9-]{1,63}\.)*(ba\.l\.google\.com|c\.googlesyndication\.com|corp\.google\.com|borg\.google\.com|docs\.google\.com|drive\.google\.com|googleplex\.com|googlevideo\.com|play\.google\.com|prod\.google\.com|sandbox\.google\.com|plus\.google\.com|ed\.video\.google\.com|vp\.video\.l\.google\.com|youtube\.com|vpn.atupal\.org|youtubeeducation\.com|xfx7\.com)(:[0-9]+)?([\/\?\#]|$)/'''
+    http_response = http_response.replace(trusted_site, trusted_site_include_atupal_org)
 
     return http_response\
            .replace("ad.doubleclick.net", "vpn.atupal.org/__atupal/ad.doubleclick.net")\
@@ -157,7 +161,7 @@ HTTP/1.1 200 OK
            .replace("www.youtube.com", "vpn.atupal.org")
 
 def handle_stackoverflow(headers, response):
-    headers_string = remove_bad_headers(headers)
+    headers_string = remove_hopbyhop_headers(headers)
 
     http_response = """\
 HTTP/1.1 200 OK
