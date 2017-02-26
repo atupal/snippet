@@ -77,8 +77,17 @@ while true; do
    sleep 1m    # Update time every minute
 done &
 
-xmodmap -e "pointer = 3 2 1 4 5 6 7 8 9 10 11 12 13"
-synclient touchpadoff=1
+#xmodmap -e "pointer = 3 2 1 4 5 6 7 8 9 10 11 12 13"
+# also change the scroll direction to nature scroll
+#xmodmap -e "pointer = 3 2 1 5 4 7 6 8 9 10 11 12 13"
+xmodmap -e "pointer = 3 2 1 5 4 6 7 8 9 10 11 12"
+# disable touchpad touch http://askubuntu.com/questions/118892/how-do-i-disable-touchpad-tap-to-clic
+# synclient MaxTapTime=0
+synclient TapButton1=3
+# diable trackpad while typing 
+synclient PalmDetect=1
+syndaemon -i 1 -t -k -d
+#synclient touchpadoff=1
 xmodmap ~/.Xmodmap
 
 # feh  --bg-scale ~/Pictures/login_n.png
@@ -88,6 +97,8 @@ fcitx -r
 # fcitx-qimpanel
 sogou-qimpanel
 compton -b
+
+[[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
 
 #exec startdwm
 

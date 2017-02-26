@@ -107,7 +107,7 @@ export PYTHONDONTWRITEBYTECODE=x
 
 export HADOOP_HOME=/home/atupal/work/xiaomi/cloud/infra/minos/client/hadoop
 export HADOOP_CONF_DIR=/home/atupal/work/xiaomi/cloud/infra/minos/client/hadoop/etc/hadoop
-#export JAVA_HOME=/usr/lib/jvm/java/jdk1.6.0_35
+export JAVA_HOME=/home/atupal/Downloads/jdk1.8.0_66
 export EDITOR=vim
 #alias h="cd ~/fucklongpath/hue"
 #export http_proxy=192.168.122.1:3128
@@ -141,7 +141,11 @@ bindkey  clear_
 
 export PYTHONSTARTUP="$HOME/.pythonrc"
 
-wmname LG3D
+# in X session
+if [[ $DISPLAY ]]; then
+  wmname LG3D
+fi
+
 export PATH=$PATH:/matlab/bin
 alias grep='grep --color'
 
