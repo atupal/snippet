@@ -2,7 +2,7 @@ Ref:
 - https://gist.github.com/atupal/07278ff178528f8fce6b1de9149acf88
 - https://wiki.archlinux.org/index.php/Secure_Boot#PreLoader
 
-PreLoader:
+## PreLoader:
 
 ```
 cp /usr/share/preloader-signed/{PreLoader,HashTool}.efi esp/EFI/grub
@@ -13,4 +13,19 @@ efibootmgr --disk /dev/sdX --part Y --create --label "PreLoader" --loader /EFI/s
 # use "efibootmgr" or "bootctl status" to check the result.
 
 # When first start the PreLoader, use HashTool for enrolling the hash of loader.efi
+```
+## Dual boot with windows 10 (with bitblocker)?
+
+Seems following chainloader doesn't work for PreLodaer (see [Grub](https://wiki.archlinux.org/index.php/GRUB)):
+```
+if [ "${grub_platform}" == "efi" ]; then
+	menuentry "Microsoft Windows Vista/7/8/8.1 UEFI-GPT" {
+		insmod part_gpt
+		insmod fat
+		insmod search_fs_uuid
+		insmod chain
+		search --fs-uuid --set=root $hints_string $fs_uuid
+		chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+	}
+fi
 ```
