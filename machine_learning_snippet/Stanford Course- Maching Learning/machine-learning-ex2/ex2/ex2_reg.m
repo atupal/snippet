@@ -107,7 +107,10 @@ pause;
 initial_theta = zeros(size(X, 2), 1);
 
 % Set regularization parameter lambda to 1 (you should vary this)
+%lambda = 0;
 lambda = 1;
+%lambda = 10;
+%lambda = 100;
 
 % Set Options
 options = optimset('GradObj', 'on', 'MaxIter', 400);
