@@ -62,22 +62,33 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+Y = 1:num_labels == y;
+
+% Part 1:
+A1 = X;
+A1 = [ones(size(A1, 1), 1), A1];
+Z2 = A1*Theta1';
+A2 = sigmoid(Z2);
+A2 = [ones(size(A2, 1), 1), A2];
+
+Z3 = A2*Theta2';
+A3 = sigmoid(Z3);
+
+J = (1/m)*( sum(sum(-Y.*log(A3))) -sum(sum( (1-Y).*log(1-A3) )) ) + ...
+    (lambda/(2*m))*( sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2)) );
 
 
+% Part 2:
+Delta3 = A3 - Y;
+Delta2 = Delta3*Theta2(:,2:end) .* sigmoidGradient(Z2);
 
+% Note: a0(i.e. ones column) should be added to A1, A2.
+Theta1_grad = Delta2'*A1/m;
+Theta2_grad = Delta3'*A2/m;
 
-
-
-
-
-
-
-
-
-
-
-
-
+% Part 3:
+Theta1_grad(:,2:end) = Theta1_grad(:,2:end) + (lambda/m)*Theta1(:,2:end);
+Theta2_grad(:,2:end) = Theta2_grad(:,2:end) + (lambda/m)*Theta2(:,2:end);
 
 
 % -------------------------------------------------------------

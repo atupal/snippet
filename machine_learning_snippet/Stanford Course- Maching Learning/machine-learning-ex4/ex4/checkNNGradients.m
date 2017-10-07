@@ -47,6 +47,6 @@ diff = norm(numgrad-grad)/norm(numgrad+grad);
 
 fprintf(['If your backpropagation implementation is correct, then \n' ...
          'the relative difference will be small (less than 1e-9). \n' ...
-         '\nRelative Difference: %g\n'], diff);
+         '\nRelative Difference: %g, lambda: %g\n'], diff, lambda);
 
 end
