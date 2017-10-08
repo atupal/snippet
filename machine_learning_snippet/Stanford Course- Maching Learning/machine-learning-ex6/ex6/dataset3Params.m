@@ -23,7 +23,21 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+parametersToTry = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
+currentError = numel(yval);
 
+for C_toTry = parametersToTry
+    for sigma_toTry = parametersToTry
+        model= svmTrain(X, y, C_toTry, @(x1, x2) gaussianKernel(x1, x2, sigma_toTry));
+        predictions = svmPredict(model, Xval);
+        error = mean(double(predictions ~= yval));
+        if error < currentError
+            currentError = error;
+            C = C_toTry;
+            sigma = sigma_toTry;
+        end
+    end
+end
 
 
 
