@@ -29,7 +29,9 @@ centroids = zeros(K, n);
 
 
 
-
+for k = 1:K
+    centroids(k, :) = sum(X .* (idx == k)) / (sum(idx == k));
+end
 
 
 

@@ -23,7 +23,10 @@ idx = zeros(size(X,1), 1);
 
 
 
-
+for i = 1:size(X,1)
+    delta = X(i, :) - centroids;
+    [~, idx(i)] = min(sum(delta.*delta, 2));
+end
 
 
 
