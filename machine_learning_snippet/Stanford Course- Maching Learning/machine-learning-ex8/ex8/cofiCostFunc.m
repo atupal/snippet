@@ -55,9 +55,11 @@ X_grad = (X * Theta' - Y) .* R * Theta;
 %        Theta_grad(j, k) = X(:, k)' * ((X*Theta(j, :)' - Y(:, j)) .* R(:, j));
 %    end
 %end
-for j = 1:num_users
-    Theta_grad(j,:) = X'*((X*Theta(j,:)' - Y(:,j)) .* R(:,j));
-end
+%for j = 1:num_users
+%    % Here we assign n*1 vector to 1*n vector, it works in matlab
+%    Theta_grad(j,:) = X'*((X*Theta(j,:)' - Y(:,j)) .* R(:,j));
+%end
+Theta_grad = (X'*((X*Theta'-Y) .* R))';
 
 J = J + (lambda/2)*sum(sum(Theta.^2)) + (lambda/2)*sum(sum(X.^2));
 
