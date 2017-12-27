@@ -24,7 +24,8 @@ function FindProxyForURL(url, host)
         isInNet(dnsResolve(host), "127.0.0.0", "255.255.255.0"))
         return "DIRECT";
     */
-    //
+    // Ref: https://jixun.moe/2017/02/24/oversea-netease-cloud-music-by-hosts/
+    // The above shExpMatch for 163 or 126 doesn't work, mabye * just match one word
     if (host == 'music.163.com' || host == 'ip.ws.126.net') {
 		return "DIRECT";
 	} else if (host == 'music.httpdns.c.163.com') {
