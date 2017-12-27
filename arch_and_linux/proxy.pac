@@ -5,6 +5,7 @@ function FindProxyForURL(url, host)
     // Configurations
     var socksProxy = "SOCKS 192.168.1.1:8087";
 
+    /*
     // Ref: https://findproxyforurl.com/example-pac-file/
     // If the hostname matches, send direct.
     if (dnsDomainIs(host, "localhost") ||
@@ -22,6 +23,15 @@ function FindProxyForURL(url, host)
         isInNet(dnsResolve(host), "192.168.0.0",  "255.255.0.0") ||
         isInNet(dnsResolve(host), "127.0.0.0", "255.255.255.0"))
         return "DIRECT";
+    */
+    //
+    if (host == 'music.163.com' || host == 'ip.ws.126.net') {
+		return "DIRECT";
+	} else if (host == 'music.httpdns.c.163.com') {
+		return "DIRECT";
+	} else if (host == 'm10.music.126.net') {
+		return "DIRECT";
+	}
 
     return socksProxy;
 }
