@@ -10,6 +10,7 @@ function FindProxyForURL(url, host)
     if (dnsDomainIs(host, "localhost") ||
         shExpMatch(host, "(*.163.com|163.com)") ||
         shExpMatch(host, "(*.yeah.net|yeah.net)") ||
+        shExpMatch(host, "(*.126.net|126.net)") ||
         dnsDomainIs(host, "ip.ws.126.net"))
         return "DIRECT";
 
