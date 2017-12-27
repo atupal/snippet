@@ -9,7 +9,8 @@ function FindProxyForURL(url, host)
     // If the hostname matches, send direct.
     if (dnsDomainIs(host, "localhost") ||
         shExpMatch(host, "(*.163.com|163.com)") ||
-        shExpMatch(host, "(*.yeah.net|yeah.net)"))
+        shExpMatch(host, "(*.yeah.net|yeah.net)") ||
+        dnsDomainIs(host, "ip.ws.126.net"))
         return "DIRECT";
 
     // If the requested website is hosted within the internal network, send direct.
