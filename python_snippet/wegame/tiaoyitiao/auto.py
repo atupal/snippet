@@ -43,12 +43,11 @@ def dfs(colors, rgb, x, y, color):
                     colors[nextx][nexty] = color
                     stack.append((nextx, nexty))
 
-distance_sum = 0
-time_sum = 0
-
 iteration = 0
-auto_mode = False
+auto_mode = True
 train_iterations = 3
+step_one_distance = -1
+step_one_time = -1
 
 cv2.namedWindow("img")
 
@@ -59,11 +58,16 @@ while 1:
 
     img = Image.open("./screen.png")
 
+    size = img.size
+
+    if size[1] > 1000:
+        img = img.resize((size[0] / 2, size[1] / 2))
+        size = img.size
+
     #rgb = img.convert("RGB")
 
     arr = img.load()
 
-    size = img.size
 
     current_position = (0, 0)
 
@@ -111,12 +115,14 @@ while 1:
     print "color count: ", color
 
     first_color = -1
-    for y in xrange(150, size[1]):
+    #initial_height = 150
+    initial_height = int(size[1] * 0.2)
+    for y in xrange(initial_height, size[1]):
         for x in xrange(size[0]):
             ### In most cases the first condition works. If not, try the second one.
             ### TODO: combind these two conditions or use clever check
-            if first_color == -1 and colors[x][y] != colors[x][150] and color_sum[colors[x][y]] > 600: #565:
-            #if first_color == -1 and colors[x][y] != colors[x][150] and sum_of_tuple(arr[x, y], arr[current_position]) > 300 and color_sum[colors[x][y]] > 100:
+            if first_color == -1 and colors[x][y] != colors[x][initial_height] and color_sum[colors[x][y]] > 600: #565:
+            #if first_color == -1 and colors[x][y] != colors[x][initial_height] and sum_of_tuple(arr[x, y], arr[current_position]) > 300 and color_sum[colors[x][y]] > 100:
                 first_color = colors[x][y]
                 break
         if first_color != -1:
@@ -131,7 +137,7 @@ while 1:
 
     cnt = 0
     for x in xrange(size[0]):
-        for y in xrange(150, size[1]):
+        for y in xrange(initial_height, size[1]):
             if colors[x][y] == first_color:
                 arr[x, y] = (255, 0, 0, 255)
                 cnt += 1
@@ -182,10 +188,13 @@ while 1:
 
     suggestion_time = 0
 
-    if time_sum != 0:
-        suggestion_time = time_sum * 1.0 / distance_sum * distance
-
-    suggestion_time = 7 * 1.0 / 230* distance
+    if step_one_distance == -1:
+        step_one_distance = 230
+        #step_one_distance = 268
+    if step_one_time == -1:
+        step_one_time = 7
+        #step_one_time = 7.2
+    suggestion_time = step_one_time * 1.0 / step_one_distance * distance
 
     ### TODO: if the direction is right-top, this suggestion time will be a little larger than actually correct value
     if target_position[0] > current_position[0] and suggestion_time > 9:
@@ -193,13 +202,11 @@ while 1:
         suggestion_time -= 0.2
     print "suggestion time: ", suggestion_time
 
-    if suggestion_time > 0 and iteration > train_iterations:
-        auto_mode = True
-    else:
-        auto_mode = False
-
     try:
-        time = input("step length[1 - 10]: ")
+        if not auto_mode:
+            time = input("step length[1 - 10]: ")
+        else:
+            time = 0
     except Exception as ex:
         time = 0
 
@@ -208,9 +215,5 @@ while 1:
 
     time = jump.jump(time)
     t.sleep(1)
-
-    if time > 0 and not auto_mode:
-        distance_sum += distance
-        time_sum += time
 
     iteration += 1
