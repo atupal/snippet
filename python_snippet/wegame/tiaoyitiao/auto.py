@@ -38,7 +38,8 @@ def dfs(colors, rgb, x, y, color):
             nextx = pos[0] + i
             nexty = pos[1] + j
             if nextx >= 0 and nextx < sizex and nexty >= 0 and nexty < sizey and colors[nextx][nexty] == -1:
-                if sum_of_tuple(rgb[nextx, nexty], rgb[pos[0], pos[1]]) < 30:
+                #if sum_of_tuple(rgb[nextx, nexty], rgb[pos[0], pos[1]]) < 30:
+                if sum_of_tuple(rgb[nextx, nexty], rgb[pos[0], pos[1]]) < 20:
                     colors[nextx][nexty] = color
                     stack.append((nextx, nexty))
 
@@ -112,8 +113,14 @@ while 1:
     first_color = -1
     for y in xrange(150, size[1]):
         for x in xrange(size[0]):
-            if first_color == -1 and colors[x][y] != colors[x][150] and color_sum[colors[x][y]] > 600:
+            ### In most cases the first condition works. If not, try the second one.
+            ### TODO: combind these two conditions or use clever check
+            if first_color == -1 and colors[x][y] != colors[x][150] and color_sum[colors[x][y]] > 600: #565:
+            #if first_color == -1 and colors[x][y] != colors[x][150] and sum_of_tuple(arr[x, y], arr[current_position]) > 300 and color_sum[colors[x][y]] > 100:
                 first_color = colors[x][y]
+                break
+        if first_color != -1:
+            break
 
     xx = [0, 0, 0, 1, 1, 1, -1, -1, -1]
     yy = [0, 1, -1, 0, 1, -1, 0, 1, -1]
@@ -154,7 +161,7 @@ while 1:
                     bullseye[0] = bullseye[0] * 1.0 * (cnt - 1) / cnt + x * 1.0 / cnt
                     bullseye[1] = bullseye[1] * 1.0 * (cnt - 1) / cnt + y * 1.0 / cnt
 
-    if bullseye[0] != 0 and cnt < 100:
+    if bullseye[0] != 0 and cnt < 150:
         target_position = bullseye
 
     xx = [0, 0, 0, 1, 1, 1, -1, -1, -1]
@@ -166,7 +173,7 @@ while 1:
     #img.show()
     open_cv_img = numpy.array(img)
     cv2.imshow("img", open_cv_img)
-    cv2.waitKey(10)
+    cv2.waitKey(50)
 
     distance = ((current_position[0] - target_position[0]) * (current_position[0] - target_position[0]) + \
                (current_position[1] - target_position[1]) * (current_position[1] - target_position[1])) ** 0.5
@@ -179,6 +186,11 @@ while 1:
         suggestion_time = time_sum * 1.0 / distance_sum * distance
 
     suggestion_time = 7 * 1.0 / 230* distance
+
+    ### TODO: if the direction is right-top, this suggestion time will be a little larger than actually correct value
+    if target_position[0] > current_position[0] and suggestion_time > 9:
+        print "correct the right-top direction error, -0.2"
+        suggestion_time -= 0.2
     print "suggestion time: ", suggestion_time
 
     if suggestion_time > 0 and iteration > train_iterations:
