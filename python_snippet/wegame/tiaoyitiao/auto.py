@@ -47,7 +47,7 @@ def dfs(colors, rgb, x, y, color):
 def distance_of_two_point(p1, p2):
     return ((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) ** 0.5
 
-def is_area_circle(points):
+def is_area_circle(points, diff_ratio = 0.05):
     # [left, right, top, bottom]
     corner_points = [points[0]] * 4
     for p in points:
@@ -60,11 +60,14 @@ def is_area_circle(points):
         if p[1] > corner_points[3][1]:
             corner_points[3] = p
 
-    diameter1 = distance_of_two_point(corner_points[0], corner_points[1]) * 0.5
-    diameter2 = distance_of_two_point(corner_points[2], corner_points[3]) * 0.5
+    #diameter1 = distance_of_two_point(corner_points[0], corner_points[1]) * 0.5
+    #diameter2 = distance_of_two_point(corner_points[2], corner_points[3]) * 0.5
 
     #print diameter1, diameter2, len(points)
-    return abs(diameter1 - diameter2) < (diameter1 + diameter2) * 0.5 * 0.05
+    #return abs(diameter1 - diameter2) < (diameter1 + diameter2) * 0.5 * diff_ratio
+    left_right_diff = corner_points[1][0] - corner_points[0][0]
+    top_bottom_diff = corner_points[3][1] - corner_points[2][1]
+    return abs(top_bottom_diff - left_right_diff) < (left_right_diff + top_bottom_diff) * 0.5 * diff_ratio
 
 iteration = 0
 auto_mode = True
@@ -191,48 +194,49 @@ def main():
     for i,j in zip(xx, yy):
         arr[(current_position[0] + i, current_position[1] + j)] = (0, 255, 0, 255)
 
+
     target_position = [0, 0]
+    for p in color_pixels_map[first_color]:
+        arr[p] = (255, 0, 0, 255)
+        target_position[0] += p[0]
+        target_position[1] += p[1]
 
-    cnt = 0
-    for x in xrange(size[0]):
-        for y in xrange(initial_height, size[1]):
-            if colors[x][y] == first_color:
-                arr[x, y] = (255, 0, 0, 255)
-                cnt += 1
-                if target_position[0] == 0:
-                    target_position = [x, y]
-                else:
-                    target_position[0] = target_position[0] * 1.0 * (cnt - 1) / cnt + x * 1.0 / cnt
-                    target_position[1] = target_position[1] * 1.0 * (cnt - 1) / cnt + y * 1.0 / cnt
-
-    target_position[0] = int(target_position[0])
-    target_position[1] = int(target_position[1])
+    target_position[0] = int(target_position[0] * 1.0 / color_sum[first_color])
+    target_position[1] = int(target_position[1] * 1.0 / color_sum[first_color])
 
     xx = [0, 0, 0, 1, 1, 1, -1, -1, -1]
     yy = [0, 1, -1, 0, 1, -1, 0, 1, -1]
     for i,j in zip(xx, yy):
         arr[(target_position[0] + i, target_position[1] + j)] = (255, 0, 0, 255)
 
-    bullseye = [0, 0]
-    cnt = 0
-    for x in xrange(target_position[0] - 25, target_position[0] + 25):
-        for y in xrange(target_position[1] - 25, target_position[1] + 25):
-            if x >= 0 and x < size[0] and y >= 0 and y < size[1] and sum_of_tuple(arr[x, y], (245, 245, 245, 255)) < 10:
-                cnt += 1
-                if bullseye[0] == 0:
-                    bullseye= [x, y]
-                else:
-                    bullseye[0] = bullseye[0] * 1.0 * (cnt - 1) / cnt + x * 1.0 / cnt
-                    bullseye[1] = bullseye[1] * 1.0 * (cnt - 1) / cnt + y * 1.0 / cnt
+    bullseye_color = -1
+    checked_colors = set()
+    for x in xrange(target_position[0] - 35, target_position[0] + 35):
+        for y in xrange(target_position[1] - 35, target_position[1] + 35):
+            color = colors[x][y]
+            if x >= 0 and x < size[0] and y >= 0 and y < size[1] and (color not in checked_colors) and sum_of_tuple(arr[x, y], (245, 245, 245, 255)) < 10:
+                checked_colors.add(color)
+                if len(color_pixels_map[color]) < 150 and is_area_circle(color_pixels_map[color], diff_ratio = 0.8):
+                    bullseye_color = color
+                    break
+        if bullseye_color != -1:
+            break
 
-    if bullseye[0] != 0 and cnt < 150:
-        target_position = bullseye
+    if bullseye_color != -1:
+        target_position = [0, 0]
+        for p in color_pixels_map[bullseye_color]:
+            target_position[0] += p[0]
+            target_position[1] += p[1]
+        target_position[0] = int(target_position[0] * 1.0 / color_sum[bullseye_color])
+        target_position[1] = int(target_position[1] * 1.0 / color_sum[bullseye_color])
 
     xx = [0, 0, 0, 1, 1, 1, -1, -1, -1]
     yy = [0, 1, -1, 0, 1, -1, 0, 1, -1]
     for i,j in zip(xx, yy):
         arr[(target_position[0] + i, target_position[1] + j)] = (0, 0, 255, 255)
         pass
+
+    print "target_position: ", target_position, "bullseye_color: ", bullseye_color
 
     #img.show()
     open_cv_img = numpy.array(img)
