@@ -3,15 +3,32 @@
 ''''which python2 >/dev/null && exec python2 "$0" "$@" # '''
 ''''which python  >/dev/null && exec python  "$0" "$@" # '''
 
-import ipdb
 import os
-import time as t
-import numpy
-import cv2
+import random
+import sys
+import time as sys_time
 
 from PIL import Image
 
 import jump
+
+try:
+    xrange
+except NameError:
+    xrange = range
+
+try:
+    import numpy
+    cv2 = __import__("cv2")
+except ImportError:
+    print("[INFO]    cv2 or numpy is not installed")
+    cv2 = None
+
+try:
+    import ipdb
+except ImportError:
+    print ("[INFO]    ipdb not found")
+    ipdb = None
 
 
 def sum_of_tuple(a, b):
@@ -34,9 +51,14 @@ def dfs(colors, rgb, x, y, color):
     yy = [-1, 1, 0, 1, -1, 0, 1, -1]
     xx_yy = zip(xx, yy)
 
+    #ipdb.set_trace()
     while len(stack) > 0:
         pos = stack.pop()
         colors[pos[0]][pos[1]] = color
+
+        # For python3, zip is an "iterator" but not a list..., which can only be comsumed once..
+        if sys.version_info.major > 2:
+            xx_yy = zip(xx, yy)
 
         for i,j in xx_yy:
             nextx = pos[0] + i
@@ -67,7 +89,7 @@ def is_area_circle(points, diff_ratio = 0.05):
     #diameter1 = distance_of_two_point(corner_points[0], corner_points[1]) * 0.5
     #diameter2 = distance_of_two_point(corner_points[2], corner_points[3]) * 0.5
 
-    #print diameter1, diameter2, len(points)
+    #print(diameter1, diameter2, len(points))
     #return abs(diameter1 - diameter2) < (diameter1 + diameter2) * 0.5 * diff_ratio
     left_right_diff = corner_points[1][0] - corner_points[0][0]
     top_bottom_diff = corner_points[3][1] - corner_points[2][1]
@@ -76,13 +98,29 @@ def is_area_circle(points, diff_ratio = 0.05):
 iteration = 0
 auto_mode = True
 restart_game_after_fail = False
+show_screen_when_jump = False
 train_iterations = 3
 iteration_sleep_time = 1.3
 step_one_distance = -1
 step_one_time = -1
 DEBUG = 0
 
-cv2.namedWindow("img")
+if len(sys.argv) > 1:
+    try:
+        DEBUG = int(sys.argv[1])
+        print("[INFO]    Set DEBUG to ", DEBUG)
+    except:
+        pass
+
+if len(sys.argv) > 2:
+    try:
+        restart_game_after_fail = bool(sys.argv[2])
+        print("[INFO]    Set restart_game_after_fail to ", restart_game_after_fail)
+    except:
+        pass
+
+if cv2:
+    cv2.namedWindow("img")
 
 def main():
     global iteration, auto_mode, train_iterations, iteration_sleep_time, step_one_distance, step_one_time, DEBUG
@@ -109,7 +147,7 @@ def main():
 
     current_position = (0, 0)
 
-    print "size:", size
+    print("size:", size)
 
     #ipdb.set_trace()
 
@@ -117,16 +155,16 @@ def main():
         for height in xrange(size[1]-1, -1, -1):
 
             v = arr[width, height]
-            #print rgb.getpixel((width, height))
+            #print(rgb.getpixel((width, height)))
 
-            if sum_of_tuple((54, 60, 102), v) < 7:
+            if sum_of_tuple((54, 60, 102), v[:3]) < 7:
                 current_position = (width, height)
                 break
 
         if current_position[0] != 0:
             break
 
-    print "current_position: ", current_position
+    print("current_position: ", current_position)
 
     target_position = (0, 0)
 
@@ -157,7 +195,7 @@ def main():
                 color_pixels_map[colors[x][y]] = []
             color_pixels_map[colors[x][y]].append((x, y))
 
-    print "color count: ", color
+    print("color count: ", color)
 
     black_bottom = colors[current_position[0]][current_position[1]]
     black_head = -1
@@ -177,7 +215,7 @@ def main():
         for x in xrange(size[0]):
             color = colors[x][y]
             ### In most cases the first condition works. If not, try the second one.
-            ### TODO: combind next two conditions or use clever check
+            ### : combind next two conditions or use clever check
             #if first_color == -1 and colors[x][y] != colors[x][initial_height] and color_sum[colors[x][y]] > 600: #565:
             #if first_color == -1 and colors[x][y] != colors[x][initial_height] and sum_of_tuple(arr[x, y], arr[current_position]) > 300 and color_sum[colors[x][y]] > 100:
             if black_head != -1:
@@ -191,6 +229,9 @@ def main():
 
         if first_color != -1:
             break
+
+    if DEBUG:
+        print("[DEBUG]   target area pixels count: ", color_sum[first_color])
 
     # change the color after we found the black_head and target location
     for p in color_pixels_map[colors[current_position[0]][current_position[1]]]:
@@ -240,7 +281,7 @@ def main():
         target_position[0] = int(target_position[0] * 1.0 / color_sum[bullseye_color])
         target_position[1] = int(target_position[1] * 1.0 / color_sum[bullseye_color])
         if DEBUG:
-            print "bullseye pixel numbers: ", color_sum[bullseye_color]
+            print("[DEBUG]   bullseye pixel numbers: ", color_sum[bullseye_color])
 
     xx = [0, 0, 0, 1, 1, 1, -1, -1, -1]
     yy = [0, 1, -1, 0, 1, -1, 0, 1, -1]
@@ -248,17 +289,18 @@ def main():
         arr[(target_position[0] + i, target_position[1] + j)] = (0, 0, 255, 255)
         pass
 
-    print "target_position: ", target_position, "bullseye_color: ", bullseye_color
+    print("target_position: ", target_position, "bullseye_color: ", bullseye_color)
 
-    #img.show()
-    open_cv_img = numpy.array(img)
-    cv2.imshow("img", open_cv_img)
-    cv2.waitKey(50)
+    if (DEBUG or show_screen_when_jump) and cv2:
+        #img.show()
+        open_cv_img = numpy.array(img)
+        cv2.imshow("img", open_cv_img)
+        cv2.waitKey(50)
 
     distance = ((current_position[0] - target_position[0]) * (current_position[0] - target_position[0]) + \
                (current_position[1] - target_position[1]) * (current_position[1] - target_position[1])) ** 0.5
 
-    print "distance", distance
+    print("distance", distance)
 
     suggestion_time = 0
 
@@ -270,12 +312,17 @@ def main():
         #step_one_time = 7.2
     suggestion_time = step_one_time * 1.0 / step_one_distance * distance
 
-    ### TODO: if the direction is right-top, this suggestion time will be a little larger than actually correct value
+    if color_sum[first_color] > 3000:
+        random_diff = (random.random() - 0.5) * 1.2
+        print("[VERBOSE] random_diff: ", random_diff)
+        suggestion_time += random_diff
+
+    ### : if the direction is right-top, this suggestion time will be a little larger than actually correct value
     if target_position[0] > current_position[0]: #and suggestion_time > 9:
         correct_rator = 0.9677419354838709
-        print "correct the right-top direction, error term: ", suggestion_time * (1 - correct_rator)
+        print("correct the right-top direction, error term: ", suggestion_time * (1 - correct_rator))
         suggestion_time *= correct_rator
-    print "suggestion time: ", suggestion_time
+    print("suggestion time: ", suggestion_time)
 
     try:
         if not auto_mode:
@@ -289,11 +336,11 @@ def main():
         time = suggestion_time
 
     if not DEBUG:
-        #t.sleep(iteration_sleep_time)
+        #sys_time.sleep(iteration_sleep_time)
         time = jump.jump(time)
-        t.sleep(iteration_sleep_time)
+        sys_time.sleep(iteration_sleep_time)
 
-    print "current iteration: ", iteration
+    print("current iteration: ", iteration)
     iteration += 1
 
 game_count = 0
@@ -304,15 +351,17 @@ while 1:
         if DEBUG:
             break
     except Exception as e:
-        print e
+        print("Exception occured in main function: ", e)
         if restart_game_after_fail:
-            print "restaring game"
-            t.sleep(7)
+            print("restaring game")
+            sys_time.sleep(7)
             jump.restart_game()
-            t.sleep(7)
+            sys_time.sleep(7)
             game_count += 1
-            print "restared game, game_count: ", game_count
+            print("restared game, game_count: ", game_count)
             if 2 ** game_count < 60:
-                t.sleep(60 * (2 ** game_count))
+                sys_time.sleep(60 * (2 ** game_count))
             else:
-                t.sleep(60 * 60)
+                sys_time.sleep(60 * 60)
+        else:
+            raise

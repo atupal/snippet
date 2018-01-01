@@ -25,7 +25,8 @@ def jump(step_length):
     return step_length
 
 def restart_game():
-    command = adb_swipe_command_template % (245+ random.random() - 0.5,
+    command = adb_swipe_command_template % (adb_executable_path,
+            245 + random.random() - 0.5,
             705 + random.random() - 0.5,
             245 + random.random() - 0.5,
             705 + random.random() - 0.5,
