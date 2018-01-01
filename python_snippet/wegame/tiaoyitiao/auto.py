@@ -17,7 +17,11 @@ import jump
 def sum_of_tuple(a, b):
     if len(a) > len(b):
         a, b = b, a
-    return sum( abs(a[i] - b[i]) for i in xrange(len(a)) )
+    #return sum( abs(a[i] - b[i]) for i in xrange(len(a)) )
+    c = 0
+    for i in xrange(len(a)):
+        c += abs(a[i] - b[i])
+    return c
 
 def dfs(colors, rgb, x, y, color):
 
@@ -39,7 +43,7 @@ def dfs(colors, rgb, x, y, color):
             nexty = pos[1] + j
             if nextx >= 0 and nextx < sizex and nexty >= 0 and nexty < sizey and colors[nextx][nexty] == -1:
                 #if sum_of_tuple(rgb[nextx, nexty], rgb[pos[0], pos[1]]) < 30:
-                if sum_of_tuple(rgb[nextx, nexty], rgb[pos[0], pos[1]]) < 20:
+                if sum_of_tuple(rgb[nextx, nexty][:3], rgb[pos[0], pos[1]][:3]) < 20: # (15, 20)
                     colors[nextx][nexty] = color
                     stack.append((nextx, nexty))
 
@@ -71,6 +75,7 @@ def is_area_circle(points, diff_ratio = 0.05):
 
 iteration = 0
 auto_mode = True
+restart_game_after_fail = False
 train_iterations = 3
 iteration_sleep_time = 1.3
 step_one_distance = -1
@@ -81,13 +86,13 @@ cv2.namedWindow("img")
 
 def main():
     global iteration, auto_mode, train_iterations, iteration_sleep_time, step_one_distance, step_one_time, DEBUG
+    img_filename = "screen.png"
     if not DEBUG:
-        os.system("cp screen.png previous_screen.png")
-        os.system("/home/atupal/Software/Android/Sdk/platform-tools/adb shell screencap -p /sdcard/screen.png && /home/atupal/Software/Android/Sdk/platform-tools/adb pull /sdcard/screen.png && /home/atupal/Software/Android/Sdk/platform-tools/adb shell rm /sdcard/screen.png")
+        jump.screen_capture(img_filename)
     else:
         auto_mode = False
 
-    img = Image.open("./screen.png")
+    img = Image.open(os.path.join(os.curdir, img_filename))
 
     size = img.size
 
@@ -109,14 +114,17 @@ def main():
     #ipdb.set_trace()
 
     for width in xrange(size[0]):
-        for height in xrange(size[1]):
+        for height in xrange(size[1]-1, -1, -1):
 
             v = arr[width, height]
             #print rgb.getpixel((width, height))
 
             if sum_of_tuple((54, 60, 102), v) < 7:
-                if height > current_position[1]:
-                    current_position = (width, height)
+                current_position = (width, height)
+                break
+
+        if current_position[0] != 0:
+            break
 
     print "current_position: ", current_position
 
@@ -211,14 +219,16 @@ def main():
 
     bullseye_color = -1
     checked_colors = set()
-    for x in xrange(target_position[0] - 35, target_position[0] + 35):
-        for y in xrange(target_position[1] - 35, target_position[1] + 35):
-            color = colors[x][y]
-            if x >= 0 and x < size[0] and y >= 0 and y < size[1] and (color not in checked_colors) and sum_of_tuple(arr[x, y], (245, 245, 245, 255)) < 10:
-                checked_colors.add(color)
-                if len(color_pixels_map[color]) < 150 and is_area_circle(color_pixels_map[color], diff_ratio = 0.8):
-                    bullseye_color = color
-                    break
+    for x in xrange(target_position[0] - 30, target_position[0] + 31):
+        for y in xrange(target_position[1] - 30, target_position[1] + 31):
+            if x >= 0 and x < size[0] and y >= 0 and y < size[1]:
+                color = colors[x][y]
+                if (color not in checked_colors) and sum_of_tuple(arr[x, y], (245, 245, 245, 255)) < 10:
+                    checked_colors.add(color)
+                    area_to_check = color_pixels_map[color]
+                    if len(area_to_check) < 150 and len(area_to_check) > 50 and is_area_circle(area_to_check, diff_ratio = 0.7):
+                        bullseye_color = color
+                        break
         if bullseye_color != -1:
             break
 
@@ -229,6 +239,8 @@ def main():
             target_position[1] += p[1]
         target_position[0] = int(target_position[0] * 1.0 / color_sum[bullseye_color])
         target_position[1] = int(target_position[1] * 1.0 / color_sum[bullseye_color])
+        if DEBUG:
+            print "bullseye pixel numbers: ", color_sum[bullseye_color]
 
     xx = [0, 0, 0, 1, 1, 1, -1, -1, -1]
     yy = [0, 1, -1, 0, 1, -1, 0, 1, -1]
@@ -254,13 +266,13 @@ def main():
         step_one_distance = 230 # (480, 854)
         #step_one_distance = 268
     if step_one_time == -1:
-        step_one_time = 7 # (480, 854)
+        step_one_time = 7.1 # (480, 854)
         #step_one_time = 7.2
     suggestion_time = step_one_time * 1.0 / step_one_distance * distance
 
     ### TODO: if the direction is right-top, this suggestion time will be a little larger than actually correct value
     if target_position[0] > current_position[0]: #and suggestion_time > 9:
-        correct_rator = 0.9782608695652175
+        correct_rator = 0.9677419354838709
         print "correct the right-top direction, error term: ", suggestion_time * (1 - correct_rator)
         suggestion_time *= correct_rator
     print "suggestion time: ", suggestion_time
@@ -276,17 +288,31 @@ def main():
     if not time:
         time = suggestion_time
 
-    #t.sleep(iteration_sleep_time)
-    time = jump.jump(time)
-    t.sleep(iteration_sleep_time)
+    if not DEBUG:
+        #t.sleep(iteration_sleep_time)
+        time = jump.jump(time)
+        t.sleep(iteration_sleep_time)
 
     print "current iteration: ", iteration
     iteration += 1
 
-try:
-    #if __name__ == "__main__":
-    while 1:
+game_count = 0
+#if __name__ == "__main__":
+while 1:
+    try:
         main()
-except Exception as ex:
-    print(ex)
-    pass
+        if DEBUG:
+            break
+    except Exception as e:
+        print e
+        if restart_game_after_fail:
+            print "restaring game"
+            t.sleep(7)
+            jump.restart_game()
+            t.sleep(7)
+            game_count += 1
+            print "restared game, game_count: ", game_count
+            if 2 ** game_count < 60:
+                t.sleep(60 * (2 ** game_count))
+            else:
+                t.sleep(60 * 60)
