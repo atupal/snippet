@@ -67,3 +67,7 @@ and set the environment variables http_proxy and https_proxy:
 export http_proxy=http://localhost:8035/ https_proxy=http://localhost:8035/
 youtube-dl youtube.com/watch?V=xxxx
 ```
+
+Http proxy:
+
+https://github.com/senko/tornado-proxy/blob/master/tornado_proxy/proxy.py
