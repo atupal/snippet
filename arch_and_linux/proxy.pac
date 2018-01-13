@@ -3,7 +3,7 @@
 function FindProxyForURL(url, host)
 {
     // Configurations
-    var socksProxy = "SOCKS 192.168.1.1:8087";
+    var socksProxy = "SOCKS 192.168.1.1:8087; DIRECT";
 
     /*
     // Ref: https://findproxyforurl.com/example-pac-file/
@@ -26,13 +26,13 @@ function FindProxyForURL(url, host)
     */
     // Ref: https://jixun.moe/2017/02/24/oversea-netease-cloud-music-by-hosts/
     // The above shExpMatch for 163 or 126 doesn't work, mabye * just match one word
-    if (host == 'music.163.com' || host == 'ip.ws.126.net') {
-		return "DIRECT";
-	} else if (host == 'music.httpdns.c.163.com') {
-		return "DIRECT";
-	} else if (host == 'm10.music.126.net') {
-		return "DIRECT";
-	}
+    if (host == 'music.163.com'
+     || host == 'ip.ws.126.net'
+     || host == 'music.httpdns.c.163.com'
+     || host == 'm10.music.126.net')
+    {
+        return "DIRECT";
+    }
 
     return socksProxy;
 }

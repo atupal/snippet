@@ -53,3 +53,21 @@ ssh将在后台运行
 -i
 使用指定的密钥登录
 ```
+
+Ref: https://unix.stackexchange.com/questions/71481/use-socks-proxy-for-commands-in-terminal
+
+Youtube-dl supports HTTP proxies out of the box. To benefit from this support, you'll need to run a proxy on myserver.com. Pretty much any lightweight proxy will do, for example tinyproxy. The proxy only needs to listen to local connections (Listen 127.0.0.1 in tinyproxy.conf). If the HTTP proxy is listening on port 8035 (Port 8035), run the following ssh command:
+
+```
+ssh -L 8035:localhost:8035 bob@myserver.com
+```
+and set the environment variables http_proxy and https_proxy:
+
+```
+export http_proxy=http://localhost:8035/ https_proxy=http://localhost:8035/
+youtube-dl youtube.com/watch?V=xxxx
+```
+
+Http proxy:
+
+https://github.com/senko/tornado-proxy/blob/master/tornado_proxy/proxy.py
