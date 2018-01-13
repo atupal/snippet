@@ -12,8 +12,14 @@ def hexxor(a, b):     # xor two hex sterings of different lengths
     
     return [int(a[i*2:i*2+2], 16) ^ int(b[i*2:i*2+2], 16) for i in xrange(len(a)/2)]
 
+def hexStringToBytesString(hexString):
+    return "".join([chr(int(hexString[i*2:i*2+2], 16)) for i in xrange(len(hexString)/2)])
+
 def random(size=16):
     return open("/dev/urandom").read(size)
+
+def bytesStringToHexString(bytesString):
+    return bytesString.encode('hex')
 
 def encrypt(key, msg):
     c = strxor(key, msg)
