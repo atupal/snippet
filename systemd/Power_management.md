@@ -1,5 +1,10 @@
 See [Power management/Suspend and hibernate](https://wiki.archlinux.org/index.php/Power_management/Suspend_and_hibernate#High_level_interfaces) for more details.
 
+### Auto connect to network
+```bash
+systemctl enable wicd
+```
+
 ### Swap file
 
 [Creat a swap file:](https://wiki.archlinux.org/index.php/Swap#Swap_file)
