@@ -14,7 +14,17 @@ efibootmgr --disk /dev/sdX --part Y --create --label "PreLoader" --loader /EFI/s
 
 # When first start the PreLoader, use HashTool for enrolling the hash of loader.efi
 ```
-## Dual boot with windows 10 (with bitblocker)?
+
+## [Optional] Shim:
+```
+# When run, shim tries to launch grubx64.efi, 
+# if MokList does not contain the hash of grubx64.efi or the key it is signed with, 
+# shim will launch mmx64.efi
+cp /usr/share/shim-signed/{shimx64,mmx64}.efi esp/EFI/grub
+efibootmgr --disk /dev/sda --part 1 --create --label "Shim" --loader /EFI/grub/shimx64.efi
+```
+
+## Dual boot with windows 10 (doesn't work with bitblocker?)
 
 Seems following chainloader doesn't work for PreLodaer (see [Grub](https://wiki.archlinux.org/index.php/GRUB)):
 ```
