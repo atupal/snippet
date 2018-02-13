@@ -22,5 +22,10 @@ A_exp parse(string fname)
 }
 
 int main() {
+  char filename[256];
+  printf("source file name:");
+  scanf("%s", filename);
+  parse(filename);
+
   return 0;
 }

@@ -1,6 +1,6 @@
 
-a.out: main.o prog1.o slp.o util.o
-	cc -g main.o prog1.o slp.o util.o
+main: main.o prog1.o slp.o util.o
+	cc -g main.o prog1.o slp.o util.o -o main
 
 main.o: main.c slp.h util.h
 	cc -g -c main.c
