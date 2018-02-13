@@ -6,6 +6,7 @@ from PIL import Image
 from StringIO import StringIO
 
 username = 'U201110090'
+password = 'TEtZczQ2OTAxMDI='
 
 
 s = requests.Session()
@@ -22,7 +23,7 @@ vimg = None
 image_to_string = None
 def get_rand_key():
   verify_url = 'http://hub.hust.edu.cn/randomKey.action?username=%s&time=%d' % (username, TIME)
-  content = s.get(verify_url).content
+  content = s.get(verify_url, headers={'referer': 'http://hub.hust.edu.cn/index.jsp'}).content
   global k1, k2
   k1, k2 = eval(content)
   verify_image_url = 'http://hub.hust.edu.cn/randomImage.action?k1=%s&k2=%s&uno=%s&time=%d' % (k1, k2, username, TIME)
@@ -35,7 +36,11 @@ get_rand_key()
 try:
   from pytesser.pytesser import image_to_string
   vcode = image_to_string(vimg).strip()
+  vimg.save('vcode.jpg')
+  print vcode
 except:
+  import traceback, sys
+  traceback.print_exc(file=sys.stdout)
   vimg.show()
   vcode = raw_input('verify code:')
 
@@ -55,20 +60,21 @@ def login():
   data['rand'] = vcode
   data['random_key1'] = k1
   data['random_key2'] = k2
+  print vcode, k1, k2
   headers = {
-      #'Host':'hub.hust.edu.cn',
-      #'Origin':'http://hub.hust.edu.cn',
-      #'Referer':'http://hub.hust.edu.cn/index.jsp',
-      'User-Agent':
-      'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.107 Safari/537.36',
-      'Connection': 'keep-alive',
+      'Host': 'hub.hust.edu.cn',
+      'Origin': 'http://hub.hust.edu.cn',
+      'Referer': 'http://hub.hust.edu.cn/index.jsp',
+      'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36'
+      #'Connection': 'keep-alive',
       }
-  res = s.post(url, data = data)
+  # login post
+  res = s.post(url, data = data, headers=headers)
+  # print res.content
 
-  print res.content
   content = s.get('http://hub.hust.edu.cn/frames/body_left.jsp').content
-  print content
-  print s.cookies
+  #print content
+  #print s.cookies
 
 if __name__ == '__main__':
   login()
