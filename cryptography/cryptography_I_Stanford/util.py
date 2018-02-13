@@ -1,5 +1,10 @@
 import sys
 
+try:
+    xrange
+except:
+    xrange = range
+
 def strxor(a, b):     # xor two strings of different lengths
     if len(a) > len(b):
        return "".join([chr(ord(x) ^ ord(y)) for (x, y) in zip(a[:len(b)], b)])
@@ -23,14 +28,14 @@ def bytesStringToHexString(bytesString):
 
 def encrypt(key, msg):
     c = strxor(key, msg)
-    print
-    print c.encode('hex')
+    print()
+    print(c.encode('hex'))
     return c
 
 def decrypt(key, hexCipherText):
     cipherText = [int(hexCipherText[i*2:i*2+2], 16) for i in xrange(len(hexCipherText)/2)]
     msg = "".join([chr(key[i] ^ cipherText[i]) for i in xrange(len(cipherText))])
-    print msg
+    print(msg)
 
 def main():
     pass
