@@ -14,7 +14,7 @@ def strxor(a, b):     # xor two strings of different lengths
 def hexxor(a, b):     # xor two hex sterings of different lengths
     if len(a) > len(b):
         a,b = b,a
-    
+
     return [int(a[i*2:i*2+2], 16) ^ int(b[i*2:i*2+2], 16) for i in xrange(len(a)/2)]
 
 def hexStringToBytesString(hexString):
