@@ -1,5 +1,6 @@
 #!/bin/sh
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''''which python2 >/dev/null && exec python2 "$0" "$@" # '''
 ''''which python  >/dev/null && exec python  "$0" "$@" # '''
 
@@ -95,15 +96,13 @@ def is_area_circle(points, diff_ratio = 0.05):
     top_bottom_diff = corner_points[3][1] - corner_points[2][1]
     return abs(top_bottom_diff - left_right_diff) < (left_right_diff + top_bottom_diff) * 0.5 * diff_ratio
 
-iteration = 0
 auto_mode = True
 restart_game_after_fail = False
 show_screen_when_jump = False
-train_iterations = 3
-iteration_sleep_time = 1.3
+iteration_sleep_time = 2
 step_one_distance = -1
 step_one_time = -1
-DEBUG = 0
+DEBUG = False
 
 if len(sys.argv) > 1:
     try:
@@ -114,7 +113,7 @@ if len(sys.argv) > 1:
 
 if len(sys.argv) > 2:
     try:
-        restart_game_after_fail = bool(sys.argv[2])
+        restart_game_after_fail = int(sys.argv[2])
         print("[INFO]    Set restart_game_after_fail to ", restart_game_after_fail)
     except:
         pass
@@ -122,8 +121,12 @@ if len(sys.argv) > 2:
 if cv2:
     cv2.namedWindow("img")
 
+iteration = 0
+bullseye_cnt = 0
+previous_state = ((0, 0), (0, 0))
 def main():
-    global iteration, auto_mode, train_iterations, iteration_sleep_time, step_one_distance, step_one_time, DEBUG
+    global auto_mode, iteration_sleep_time, step_one_distance, step_one_time, DEBUG, iteration, bullseye_cnt
+    global previous_state
     img_filename = "screen.png"
     if not DEBUG:
         jump.screen_capture(img_filename)
@@ -223,7 +226,7 @@ def main():
                     first_color = colors[x][y]
                     break
             else:
-                if first_color == -1 and colors[x][y] != colors[x][initial_height] and sum_of_tuple(arr[x, y], arr[current_position]) > 300 and color_sum[colors[x][y]] > 100:
+                if first_color == -1 and colors[x][y] != colors[x][initial_height] and sum_of_tuple(arr[x, y], arr[current_position]) > 60 and color_sum[colors[x][y]] > 100:
                     first_color = colors[x][y]
                     break
 
@@ -302,6 +305,11 @@ def main():
 
     print("distance", distance)
 
+    if bullseye_color != -1:
+        bullseye_cnt += 1
+    else:
+        bullseye_cnt = 0
+
     suggestion_time = 0
 
     if step_one_distance == -1:
@@ -312,10 +320,18 @@ def main():
         #step_one_time = 7.2
     suggestion_time = step_one_time * 1.0 / step_one_distance * distance
 
-    if color_sum[first_color] > 3000:
-        random_diff = (random.random() - 0.5) * 1.2
-        print("[VERBOSE] random_diff: ", random_diff)
-        suggestion_time += random_diff
+    random_diff = 0
+    target_area_size = color_sum[first_color]
+    if target_area_size > 3000:
+        random_diff = (random.random() - 0.5) * 0.9
+    elif target_area_size <= 3000 and target_area_size > 2000:
+        random_diff = (random.random() - 0.5) * 0.3
+
+    if bullseye_cnt > 4 and target_area_size > 1000:
+        random_diff = random_diff if random_diff > 0.444444 else 0.4444444
+
+    print("[VERBOSE] random_diff: ", random_diff)
+    suggestion_time += random_diff
 
     ### : if the direction is right-top, this suggestion time will be a little larger than actually correct value
     if target_position[0] > current_position[0]: #and suggestion_time > 9:
@@ -338,10 +354,21 @@ def main():
     if not DEBUG:
         #sys_time.sleep(iteration_sleep_time)
         time = jump.jump(time)
-        sys_time.sleep(iteration_sleep_time)
+        sys_time.sleep(iteration_sleep_time + random.random())
+
+    if previous_state[0] == current_position and previous_state[1] == target_position:
+        raise Exception("Same state!")
+    else:
+        previous_state = (current_position, target_position)
 
     print("current iteration: ", iteration)
     iteration += 1
+    if iteration % 20 == 0:
+        sys_time.sleep(random.random() * 10)
+    if iteration % 50 == 0:
+        sys_time.sleep(random.random() * 100)
+    if iteration % 100 == 0:
+        sys_time.sleep(random.random() * 200)
 
 game_count = 0
 #if __name__ == "__main__":
@@ -351,17 +378,18 @@ while 1:
         if DEBUG:
             break
     except Exception as e:
+        previous_state = ((0, 0), (0, 0))
         print("Exception occured in main function: ", e)
         if restart_game_after_fail:
             print("restaring game")
-            sys_time.sleep(7)
+            #sys_time.sleep(7)
+            if 2 ** game_count < 60 * 10:
+                sys_time.sleep(2 ** game_count)
+            else:
+                sys_time.sleep(60 * 10)
             jump.restart_game()
-            sys_time.sleep(7)
+            sys_time.sleep(iteration_sleep_time*2)
             game_count += 1
             print("restared game, game_count: ", game_count)
-            if 2 ** game_count < 60:
-                sys_time.sleep(60 * (2 ** game_count))
-            else:
-                sys_time.sleep(60 * 60)
         else:
             raise
