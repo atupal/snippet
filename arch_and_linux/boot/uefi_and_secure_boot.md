@@ -2,6 +2,11 @@ Ref:
 - https://gist.github.com/atupal/07278ff178528f8fce6b1de9149acf88
 - https://wiki.archlinux.org/index.php/Secure_Boot#PreLoader
 
+> Note: In the entire article `esp` denotes the mountpoint of the [EFI system partition](https://wiki.archlinux.org/index.php/EFI_system_partition) aka ESP. From [GRUB](https://wiki.archlinux.org/index.php/GRUB) wiki.
+>
+> When you specify the loader using `/EFI/path`, don't confuse with the ESP, it is the absolute path of the ESP. So don't
+> use the mount point path. `/EFI/path` is right, using `bootctl status` to check the paths of all entries.
+
 ## PreLoader:
 
 ```
