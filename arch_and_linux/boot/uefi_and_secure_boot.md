@@ -8,6 +8,7 @@ Ref:
 > use the mount point path. `/EFI/path` is right, using `bootctl status` to check the paths of all entries.
 
 > BTW, you may need to update the package beforing copying, otherwise the old package files may be rejected by the UEFI.
+> For either PreLoader or Shim, you need to enroll the hash of grubefi bin at first boot time to supress future prompt.
 ## PreLoader:
 
 ```
