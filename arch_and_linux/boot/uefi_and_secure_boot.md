@@ -7,6 +7,7 @@ Ref:
 > When you specify the loader using `/EFI/path`, don't confuse with the ESP, it is the absolute path of the ESP. So don't
 > use the mount point path. `/EFI/path` is right, using `bootctl status` to check the paths of all entries.
 
+> BTW, you may need to update the package beforing copying, otherwise the old package files may be rejected by the UEFI.
 ## PreLoader:
 
 ```
