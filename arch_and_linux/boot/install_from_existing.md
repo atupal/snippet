@@ -87,8 +87,11 @@ See also above sention of the uefi_and_secure_boot.md.
 If `grub-probe --target=hints_string esp/EFI/Microsoft/Boot/bootmgfw.efi` complains unsupported device, use
 `--hint-efi=hd0,gptX`, change X to the parition number of the EFI partion. (partition number from 1).
 
+Every time you change the BIOS, include disable/enable secure boot and change the boot order, Windows 10 bitlcoker will
+ask you input the bitlocker recovery key after the changes. But then future boot doesn't ask for the key. Either for Windows Boot Manager or Grub chainloader for Windows Boot Manager. Which is good, :), otherwiwe you can set a short PIN for the bitlocker if it
+is needed at every boot :(.
 
 ### Post intalltion and troubleshotting
 ##### Kernal panic - not syncing: VFS: Unable to mount root fs on unkown-block(0,0).
-Make sure the right initramfs is loaded in grub.cfg, in my case, there is old initramfs.bak, vmlinuz-linux.bak under /boot folder and
-`grub-mkconfig` use it on the first menu.
+Make sure the right vmlinuz-linux.bak, initramfs is loaded in grub.cfg, in my case, there is old vmlinuz-linux.bak, initramfs.bak under /boot folder and
+`grub-mkconfig` use vmlinuz-linux.bak on the first menu.
