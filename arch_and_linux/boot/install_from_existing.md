@@ -3,7 +3,7 @@
 ##### USB
 Ref: https://gist.github.com/atupal/07278ff178528f8fce6b1de9149acf88
 
-Make sure the secure boot is `disable` to boot from USB, but still use UEFI. Otherwise the USB cannot boot.
+Make sure the secure boot is `disable` to boot from USB, but still use UEFI. Otherwise the USB cannot boot. (https://support.microsoft.com/en-us/help/4023511/surface-boot-surface-from-a-usb-device?os=windows-10&=undefined)
 (Although my original USB can be booted from secure mode, but after I wippped it and using the newest archlinux iso,
 it cannot be booted from secure mode either made with dd or [Rufus](https://wiki.archlinux.org/index.php/USB_flash_installation_media#Using_Rufus) tool)
 
