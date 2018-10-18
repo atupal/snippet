@@ -6,7 +6,7 @@ After installed Arch Linux (from existing backup system) to Surface Book 2. The 
 -> acpi_ns_search_one_scope
 ```
 - Use top to check the process number
-Do not use htop which looks is not accurate.
+Do not use htop which looks like is not accurate.
 ```shell
 # top
 -> PID: 482, kworker/0:3+kacpi_notify
@@ -111,7 +111,7 @@ for i in ~/linux-surface/patches/[VERSION]/*.patch; do patch -p1 < $i; done
 ```shell
 zcat /proc/config.gz > ~/arch_linux_default_config_version
 zcat /proc/config.gz > .config
-# For non-ubuntu following will cause a lot of conflict, just patch it manually according the patch file.
+# For non-ubuntu distro following patch will cause a lot of conflict, just patch it manually according the patch file diffs.
 # Note: Please set a name for CONFIG_LOCALVERSION in the .config, it is used for the kernal name and kernel modules directory name.
 # So give it a friendly name to avoid confusiing and maintaning and overwritting exising kernels.
 # patch -p1 < ~/linux-surface/patches/config.patch
