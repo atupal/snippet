@@ -91,7 +91,13 @@ Every time you change the BIOS, include disable/enable secure boot and change th
 ask you input the bitlocker recovery key after the changes. But then future boot doesn't ask for the key. Either for Windows Boot Manager or Grub chainloader for Windows Boot Manager. Which is good, :), otherwiwe you can set a short PIN for the bitlocker if it
 is needed at every boot :(.
 
-### Post intalltion and troubleshotting
+### Post intalltion
+##### Set date time
+https://github.com/atupal/snippet/blob/master/arch_and_linux/common/time_zone.md
+
+### troubleshotting
 ##### Kernal panic - not syncing: VFS: Unable to mount root fs on unkown-block(0,0).
+Google the error: https://askubuntu.com/questions/41930/kernel-panic-not-syncing-vfs-unable-to-mount-root-fs-on-unknown-block0-0
+
 Make sure the right vmlinuz-linux.bak, initramfs is loaded in grub.cfg, in my case, there is old vmlinuz-linux.bak, initramfs.bak under /boot folder and
 `grub-mkconfig` use vmlinuz-linux.bak on the first menu.
