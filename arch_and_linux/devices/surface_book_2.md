@@ -38,7 +38,7 @@ unzip -o /home/atupal/kernel/linux-surface-master/firmware/mrvl_firmware.zip -d 
 ```
 
 ##### Others
-- Hibernate (This will solve the problem that the wifi doen't work after resume from hibernate, dmesg error: mwifiex_pcie, Status: reset)
+- Hibernate (This with the NetworkManager config files will solve the problem that the wifi doen't work after resume from hibernate, dmesg error: mwifiex_pcie, Status: reset)
 ```shell
 cd /lib/systemd/system-sleep
 touch sleep # and paste https://github.com/jakeday/linux-surface/blob/master/root/lib/systemd/system-sleep/sleep
