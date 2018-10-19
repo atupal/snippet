@@ -1,3 +1,5 @@
+Ref: https://wiki.archlinux.org/index.php/time
+
 Set the hardware clock time standard to localtime if dual boot with windows, since windows
 use localtime for Real Time Clock (RTC) or CMOS clock by default.
 
