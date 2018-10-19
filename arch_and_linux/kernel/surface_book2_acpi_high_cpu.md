@@ -121,7 +121,7 @@ zcat /proc/config.gz > .config
 make -j 8
 sudo make modules_install # install the kernel modules to /lib/modules/<kernel name>
 cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux-surface-4.18
-mkinitcpio -k <kernelversion> -g /boot/initramfs-<file name>.img # initramfs-linux-surface-4.18.img
+mkinitcpio -k <kernelversion> -g /boot/initramfs-<file name>.img # sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface-4.18.img
 # -k (--kernel <kernelversion>): Specifies the modules to use when generating the initramfs image. The <kernelversion> name will be the same as the name of the custom kernel source directory (and the modules directory for it, located in /usr/lib/modules/).
 # -g (--generate <filename>): Specifies the name of the initramfs file to generate in the /boot directory. Again, using the naming convention mentioned above is recommended.
 ```
