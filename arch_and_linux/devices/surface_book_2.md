@@ -36,3 +36,13 @@ unzip -o /home/atupal/kernel/linux-surface-master/firmware/nvidia_firmware_gp108
 mkdir -p /lib/firmware/mrvl/ # backup to /lib/firmware/mrvl.ori
 unzip -o /home/atupal/kernel/linux-surface-master/firmware/mrvl_firmware.zip -d /lib/firmware/mrvl/
 ```
+
+##### Others
+- Hibernate (This will solve the problem that the wifi doen't work after resume from hibernate, dmesg error: mwifiex_pcie, Status: reset)
+```shell
+cd /lib/systemd/system-sleep
+touch sleep # and paste https://github.com/jakeday/linux-surface/blob/master/root/lib/systemd/system-sleep/sleep
+chmod a+x /lib/systemd/system-sleep/sleep
+```
+- libwacom
+TODO
