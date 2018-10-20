@@ -44,5 +44,15 @@ cd /lib/systemd/system-sleep
 touch sleep # and paste https://github.com/jakeday/linux-surface/blob/master/root/lib/systemd/system-sleep/sleep
 chmod a+x /lib/systemd/system-sleep/sleep
 ```
+My additional workaround for audio device
+```
+add 'espeak "Welcom, $USERNAME"' to post phase of /lib/systemd/system-sleep/sleep
+```
+- Audio service after clearn booting or restart(not resume from hibernate, see Hibernate section).
+```
+# Surface Book 2's audio get nosiy after booting or resuming from hibenating. For clean boot, open any GUI winsow will stop the nosiy.
+# But above doesn't work for resuming. For resume, only use the audio device works, so need add following line in sleep
+add 'espeak "Welcom, $USERNAME"' to ~/.xinitrc
+```
 - libwacom
 TODO
