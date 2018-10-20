@@ -10,6 +10,8 @@
 - /etc/X11/xorg.conf.d/20-intel-surface-book-2.conf
 - /etc/mkinitcpio.conf and `sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface-4.18.img` # already backuped to /etc/mkinitcpip.conf.resume before installing
 - /etc/modprobe.d/ath10k-surface-book-2.conf
+- /etc/pulse/daemon.conf # backup to /etc/pulse/daemon.conf.default
+- /etc/pulse/default.pa # backup to /etc/pulse/default.pa
 - /etc/udev/rules.d/98-keyboardscovers-surface-book-2.rules
 - /etc/udev/rules.d/99-touchscreens-surface-book-2.rules
 
