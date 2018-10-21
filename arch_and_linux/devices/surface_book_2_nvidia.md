@@ -90,3 +90,10 @@ Consult /var/lib/dkms/nvidia/410.57/build/make.log for more information.
 (3/3) Arming ConditionNeedsUpdate...
 # atupal at atupal in /home/atupal [1:36:27]
 
+
+
+```shell
+sudo pkgfile -u
+pkgfile nvidia-settings
+# Packages (2) libxnvctrl-410.57-2  nvidia-settings-410.57-2
+```
