@@ -97,3 +97,19 @@ sudo pkgfile -u
 pkgfile nvidia-settings
 # Packages (2) libxnvctrl-410.57-2  nvidia-settings-410.57-2
 ```
+##### Workaround
+
+Above nvidia package and drivers doesnt' work.
+So just disabled the nvidia card on BIOS (Devices - DGPU): Google "arch linux disable nvidia card"
+https://www.reddit.com/r/archlinux/comments/5dmq8q/how_to_completely_disable_nvidia/
+https://bbs.archlinux.org/viewtopic.php?id=218917
+
+and block the nouveau driver:
+```shell
+# https://wiki.archlinux.org/index.php/nouveau#Keep_NVIDIA_driver_installed
+create /etc/modprobe.d/nouveau_blacklist_surface_book_2.conf
+add:
+blacklist nouveau
+```
+
+Now the nvidia card doesn't hot anymore, and windows 10 works fine since it doesn't use this GPU from exising usage experence.
