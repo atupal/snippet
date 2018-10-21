@@ -65,3 +65,9 @@ Oct 21 14:46:21 atupal systemd-modules-load[18251]: Inserted module 'vboxnetflt'
 Oct 21 14:46:21 atupal systemd[1]: Started Load Kernel Modules.
 # atupal at atupal in /home/atupal [14:46:53]
 ```
+
+```
+/etc/modules-load.d/*.conf, /run/modules-load.d/*.conf, /usr/lib/modules-load.d/*.conf # https://www.freedesktop.org/software/systemd/man/modules-load.d.html (Google "etc/modules-load.d")
+$ pacman -Qo /lib/modules-load.d/virtualbox-host-dkms.conf
+/usr/lib/modules-load.d/virtualbox-host-dkms.conf is owned by virtualbox-host-dkms 5.2.20-1
+```
