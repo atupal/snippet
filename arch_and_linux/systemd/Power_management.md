@@ -19,6 +19,13 @@ swapon /swapfile
 
 # vim /etc/fstab
 /swapfile none swap defaults 0 0
+
+# change the swappiness
+sysctl vm.swappiness=10
+
+# To set the swappiness value permanently, edit a sysctl configuration file
+/etc/sysctl.d/99-sysctl.conf
+vm.swappiness=10
 ```
 
 ### Required kernel parameters
