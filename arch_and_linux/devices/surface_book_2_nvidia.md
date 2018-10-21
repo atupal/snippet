@@ -114,4 +114,4 @@ blacklist nouveau
 remove /etc/modules-load.d/nouveau.conf
 ```
 
-Now the nvidia card doesn't hot anymore, and windows 10 works fine since it doesn't use this GPU from exising usage experence.
+~Now the nvidia card doesn't hot anymore, and windows 10 works fine since it doesn't use this GPU from exising usage experence.~ No, the C cover is still little hot. Maybe not related with nvidia GPU
