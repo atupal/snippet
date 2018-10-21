@@ -110,6 +110,8 @@ https://bbs.archlinux.org/viewtopic.php?id=218917
 create /etc/modprobe.d/nouveau_blacklist_surface_book_2.conf
 add:
 blacklist nouveau
+
+remove /etc/modules-load.d/nouveau.conf
 ```
 
 Now the nvidia card doesn't hot anymore, and windows 10 works fine since it doesn't use this GPU from exising usage experence.
