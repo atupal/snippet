@@ -125,5 +125,8 @@ mkinitcpio -k <kernelversion> -g /boot/initramfs-<file name>.img # sudo mkinitcp
 # -k (--kernel <kernelversion>): Specifies the modules to use when generating the initramfs image. The <kernelversion> name will be the same as the name of the custom kernel source directory (and the modules directory for it, located in /usr/lib/modules/).
 # -g (--generate <filename>): Specifies the name of the initramfs file to generate in the /boot directory. Again, using the naming convention mentioned above is recommended.
 ```
-5. Add new boot-menu or `grub-mkconfig`.
-6. Reboot, issue resolved.
+5. Reinstall the DKMS modules for all the kernels: https://github.com/atupal/snippet/tree/master/arch_and_linux/kernel
+   For Arch Linux official `linux` kernel, all DKMS modules will be reinstalled when you install the kernel, but for you own kernel you
+   need do it youself.
+6. Add new boot-menu or `grub-mkconfig`.
+7. Reboot, issue resolved.
