@@ -121,7 +121,8 @@ zcat /proc/config.gz > .config
 make -j 8
 sudo make modules_install # install the kernel modules to /lib/modules/<kernel name>
 cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux-surface # No need the kernel version since you need upgrade the kernel in future so the version in name doesn't make sense, you can find the version number under /lib/modules/
-mkinitcpio -k <kernelversion> -g /boot/initramfs-<file name>.img # sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface.img
+# mkinitcpio by default use the /etc/mkinitcpio.conf if doesn't specify the -c parameter
+mkinitcpio -k <kernelversion> -g /boot/initramfs-<file name>.img # sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface.img -c /etc/mkinitcpio-surface.conf
 # -k (--kernel <kernelversion>): Specifies the modules to use when generating the initramfs image. The <kernelversion> name will be the same as the name of the custom kernel source directory (and the modules directory for it, located in /usr/lib/modules/).
 # -g (--generate <filename>): Specifies the name of the initramfs file to generate in the /boot directory. Again, using the naming convention mentioned above is recommended.
 ```
@@ -132,7 +133,7 @@ cp /etc/mkinitcpio.d/linux.preset /etc/mkinitcpio.d/linux-surface.preset
 cat <<EOF > /etc/mkinitcpio.d/linux-surface.preset
 # mkinitcpio preset file for the 'linux-surface' kernel
 
-ALL_config="/etc/mkinitcpio.conf"
+ALL_config="/etc/mkinitcpio-surface.conf"
 ALL_kver="/boot/vmlinuz-linux-surface"
 
 #PRESETS=('default' 'fallback')
@@ -147,7 +148,7 @@ default_image="/boot/initramfs-linux-surface.img"
 #fallback_options="-S autodetect"
 EOF
 
-mkinitcpio -p linux-surface # mkinitcpio can find the kernel modules directory under /lib/modules by the 'ALL_kver="/boot/vmlinuz-linux-surface"' in preset file or '-k /boot/vmlinuz-linux-surface' commandline parameter. See man examples of mkinitcpio
+mkinitcpio -p linux-surface # mkinitcpio can find the kernel modules directory under /lib/modules by the 'ALL_kver="/boot/vmlinuz-linux-surface"' in preset file or '-k /boot/vmlinuz-linux-surface' or '-k <foldername under /lib/modules>' commandline parameter. See man examples of mkinitcpio
 ```
 5. Reinstall the DKMS modules for all the kernels: https://github.com/atupal/snippet/blob/master/arch_and_linux/kernel/systemd-modules-load.service-fails_on_custom_kernel.md
    For Arch Linux official `linux` kernel, all DKMS modules will be reinstalled when you install the kernel, but for you own kernel you
