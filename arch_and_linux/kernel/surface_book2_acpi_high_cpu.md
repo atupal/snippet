@@ -147,7 +147,7 @@ default_image="/boot/initramfs-linux-surface.img"
 #fallback_options="-S autodetect"
 EOF
 
-mkinitcpio -p linux-surface
+mkinitcpio -p linux-surface # mkinitcpio can find the kernel modules directory under /lib/modules by the 'ALL_kver="/boot/vmlinuz-linux-surface"' in preset file or '-k /boot/vmlinuz-linux-surface' commandline parameter. See man examples of mkinitcpio
 ```
 5. Reinstall the DKMS modules for all the kernels: https://github.com/atupal/snippet/blob/master/arch_and_linux/kernel/systemd-modules-load.service-fails_on_custom_kernel.md
    For Arch Linux official `linux` kernel, all DKMS modules will be reinstalled when you install the kernel, but for you own kernel you
