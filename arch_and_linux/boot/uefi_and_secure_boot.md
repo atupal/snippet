@@ -31,9 +31,9 @@ cp /usr/share/shim-signed/{shimx64,mmx64}.efi esp/EFI/grub
 efibootmgr --disk /dev/sda --part 1 --create --label "Shim" --loader /EFI/grub/shimx64.efi
 ```
 
-## Dual boot with windows 10 (doesn't work with bitblocker?)
+## Dual boot with windows 10 (doesn't work with bitblocker? Update: works on at least Windows 10, 1809, Surface Book 2)
 
-Seems following chainloader doesn't work for PreLodaer (see [Grub](https://wiki.archlinux.org/index.php/GRUB)):
+Add to `grub.cfg` or `/boot/grub/custom.cfg` (see [Grub](https://wiki.archlinux.org/index.php/GRUB)):
 ```
 if [ "${grub_platform}" == "efi" ]; then
 	menuentry "Microsoft Windows Vista/7/8/8.1 UEFI-GPT" {
