@@ -8,7 +8,7 @@
 - /etc/NetworkManager/conf.d/default-wifi-powersave-on-surface-book-2.conf
 - /etc/NetworkManager/NetworkManager.conf # Backup to /etc/NetworkManager/NetworkManager.conf.default
 - /etc/X11/xorg.conf.d/20-intel-surface-book-2.conf
-- /etc/mkinitcpio.conf, use the new filename: /etc/mkinitcpio-surface.conf to save the config from the repo and `sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface.img -c /etc/mkinitcpio-surface.conf` # already backuped to /etc/mkinitcpip.conf.resume before installing, see also https://github.com/atupal/snippet/blob/master/arch_and_linux/kernel/surface_book2_acpi_high_cpu.md
+- /etc/mkinitcpio.conf, use the new filename: /etc/mkinitcpio-surface.conf to save the config from the repo and `sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface.img -c /etc/mkinitcpio-surface.conf`, `sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface-fallback.img -c /etc/mkinitcpio-surface.conf -S autodetect` # already backuped to /etc/mkinitcpip.conf.resume before installing, see also https://github.com/atupal/snippet/blob/master/arch_and_linux/kernel/surface_book2_acpi_high_cpu.md
 - /etc/modprobe.d/ath10k-surface-book-2.conf
 - /etc/pulse/daemon.conf # backup to /etc/pulse/daemon.conf.default
 - /etc/pulse/default.pa # backup to /etc/pulse/default.pa

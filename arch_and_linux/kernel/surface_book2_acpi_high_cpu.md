@@ -125,6 +125,9 @@ cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux-surface # No need the kernel 
 mkinitcpio -k <kernelversion> -g /boot/initramfs-<file name>.img # sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface.img -c /etc/mkinitcpio-surface.conf
 # -k (--kernel <kernelversion>): Specifies the modules to use when generating the initramfs image. The <kernelversion> name will be the same as the name of the custom kernel source directory (and the modules directory for it, located in /usr/lib/modules/).
 # -g (--generate <filename>): Specifies the name of the initramfs file to generate in the /boot directory. Again, using the naming convention mentioned above is recommended.
+
+# (Optional) If needs the fallback image:
+sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface-fallback.img -c /etc/mkinitcpio-surface.conf -S autodetect # See also the following preset method
 ```
 [Optional] For `mkinitcpio` you can use the preset: https://wiki.archlinux.org/index.php/Kernel/Traditional_compilation#Automated_preset_method
 ```
@@ -136,16 +139,15 @@ cat <<EOF > /etc/mkinitcpio.d/linux-surface.preset
 ALL_config="/etc/mkinitcpio-surface.conf"
 ALL_kver="/boot/vmlinuz-linux-surface"
 
-#PRESETS=('default' 'fallback')
-PRESETS=('default')
+PRESETS=('default' 'fallback')
 
 #default_config="/etc/mkinitcpio.conf"
 default_image="/boot/initramfs-linux-surface.img"
 #default_options=""
 
-##fallback_config="/etc/mkinitcpio.conf"
-#fallback_image="/boot/initramfs-linux-fallback.img"
-#fallback_options="-S autodetect"
+#fallback_config="/etc/mkinitcpio.conf"
+fallback_image="/boot/initramfs-linux-surface-fallback.img"
+fallback_options="-S autodetect"
 EOF
 
 mkinitcpio -p linux-surface # mkinitcpio can find the kernel modules directory under /lib/modules by the 'ALL_kver="/boot/vmlinuz-linux-surface"' in preset file or '-k /boot/vmlinuz-linux-surface' or '-k <foldername under /lib/modules>' commandline parameter. See man examples of mkinitcpio
