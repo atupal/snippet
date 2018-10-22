@@ -18,3 +18,6 @@ Same with `aic94xx` module: install aic94xx-firmware.
 Ref:G "Possibly missing firmware for module: wd719x"
 https://bbs.archlinux.org/viewtopic.php?id=194977
 https://wiki.archlinux.org/index.php/Mkinitcpio#Possibly_missing_firmware_for_module_XXXX
+
+Note: install the package from AUR is same with following, the git repo just contains the PKGBUILD file and use `makepkg` to install it
+https://gist.github.com/imrvelj/c65cd5ca7f5505a65e59204f5a3f7a6d
