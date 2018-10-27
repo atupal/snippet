@@ -65,12 +65,17 @@ grub-install --target=x86_64-efi --efi-directory=esp --bootloader-id=GRUB
 see https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Encrypted_boot_partition_.28GRUB.29
 also see https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Encrypted_boot_partition_.28GRUB.29
 
-If `/boot` is encypted, before entering grub menu, you need to input password to read the grub configuration file from `/boot`
+If `/boot` is encypted, before entering grub menu, you need to input password to read the grub configuration file from `/boot`: Attempting to decrypte master key...
+Enter passphrase for hd0.gpt5 (<uuid>):
+
+If wrong password, it says access denied, no such cryptodisk found, disk `ctyptouuid/<uuid>` not found
 
 ##### Make the grub configuration file.
 If the `/root` is encypted, you need to input the password after kernel loaded, which means you need to input password again if
 `/boot` and `/root` is on the same encypted disk. So you can put `/boot` on a seperated unencypted partition to avoid input two
 times password. Refer the partition plan on https://gist.github.com/atupal/07278ff178528f8fce6b1de9149acf88
+
+See also https://superuser.com/questions/1324389/how-to-avoid-encrypted-boot-partition-password-prompt-in-lvm-arch-linux (G"archlinux unlock encryption at boot")
 
 In /etc/default/grub edit the line GRUB_CMDLINE_LINUX to GRUB_CMDLINE_LINUX="cryptdevice=/dev/sdX3:luks:allow-discards" then run:
 ```
