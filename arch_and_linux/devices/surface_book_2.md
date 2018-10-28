@@ -16,6 +16,7 @@
 - /etc/udev/rules.d/99-touchscreens-surface-book-2.rules
 
 ##### firmware, see https://github.com/jakeday/linux-surface/tree/master/firmware
+> If haven't change the firmware files, no need to backup. To restore the official Arch Linux firmware, remove the changed firmware files then run `pacman -Qo /lib/firmware` and reinstall or upgrade the corresponding packages. It will give warning that the files are missing and then re-add them back.
 - IPTS
 ```shell
 mkdir -p /lib/firmware/intel/ipts # new directory
