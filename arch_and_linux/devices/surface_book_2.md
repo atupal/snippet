@@ -22,22 +22,22 @@
 mkdir -p /lib/firmware/intel/ipts # new directory
 # Googld "archlinux get sku model": https://unix.stackexchange.com/questions/75750/how-can-i-find-the-hardware-model-in-linux
 # cat /sys/devices/virtual/dmi/id/product_sku -> Surface_Book_1793
-unzip -o /home/atupal/kernel/linux-surface-master/firmware/ipts_firmware_v101.zip -d /lib/firmware/intel/ipts/
+unzip -o /home/atupal/kernel/linux-surface/firmware/ipts_firmware_v101.zip -d /lib/firmware/intel/ipts/
 ```
 - i915
 ```shell
 mkdir -p /lib/firmware/i915 # backup to /lib/firmware/i915.ori
-unzip /home/atupal/kernel/linux-surface-master/firmware/i915_firmware_kbl.zip -d /lib/firmware/i915/
+unzip /home/atupal/kernel/linux-surface/firmware/i915_firmware_kbl.zip -d /lib/firmware/i915/
 ```
 - nvidia
 ```shell
 mkdir -p /lib/firmware/nvidia/gp108 # backup to /lib/firmware/nvidia/gp108.ori
-unzip -o /home/atupal/kernel/linux-surface-master/firmware/nvidia_firmware_gp108.zip -d /lib/firmware/nvidia/gp108/
+unzip -o /home/atupal/kernel/linux-surface/firmware/nvidia_firmware_gp108.zip -d /lib/firmware/nvidia/gp108/
 ```
 - marvell
 ```shell
 mkdir -p /lib/firmware/mrvl/ # backup to /lib/firmware/mrvl.ori
-unzip -o /home/atupal/kernel/linux-surface-master/firmware/mrvl_firmware.zip -d /lib/firmware/mrvl/
+unzip -o /home/atupal/kernel/linux-surface/firmware/mrvl_firmware.zip -d /lib/firmware/mrvl/
 ```
 
 ##### Others
