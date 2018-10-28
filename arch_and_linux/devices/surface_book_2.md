@@ -8,10 +8,10 @@
 - /etc/NetworkManager/conf.d/default-wifi-powersave-on-surface-book-2.conf
 - /etc/NetworkManager/NetworkManager.conf # Backup to /etc/NetworkManager/NetworkManager.conf.default
 - /etc/X11/xorg.conf.d/20-intel_example-surface-book-2.conf
-- /etc/mkinitcpio.conf, use the new filename: /etc/mkinitcpio-surface.conf to save the config from the repo and `sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface.img -c /etc/mkinitcpio-surface.conf`, `sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface-fallback.img -c /etc/mkinitcpio-surface.conf -S autodetect` # already backuped to /etc/mkinitcpip.conf.resume before installing, see also https://github.com/atupal/snippet/blob/master/arch_and_linux/kernel/surface_book2_acpi_high_cpu.md
+- /etc/mkinitcpio.conf, use the new filename: /etc/mkinitcpio-surface.conf to add the modules from the repo (https://github.com/jakeday/linux-surface/blob/master/root/etc/initramfs-tools/modules) and `sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface.img -c /etc/mkinitcpio-surface.conf`, `sudo mkinitcpio -k 4.18.14-surface -g /boot/initramfs-linux-surface-fallback.img -c /etc/mkinitcpio-surface.conf -S autodetect` # already backuped to /etc/mkinitcpip.conf.resume before installing, or use the preset instead of the manual two times mkinitcpio: `mkinitcpio -p linux-surface`, see also https://github.com/atupal/snippet/blob/master/arch_and_linux/kernel/surface_book2_acpi_high_cpu.md
 - /etc/modprobe.d/ath10k-surface-book-2.conf
 - /etc/pulse/daemon.conf # backup to /etc/pulse/daemon.conf.default
-- /etc/pulse/default.pa # backup to /etc/pulse/default.pa
+- /etc/pulse/default.pa # backup to /etc/pulse/default.pa.default
 - /etc/udev/rules.d/98-keyboardscovers-surface-book-2.rules
 - /etc/udev/rules.d/99-touchscreens-surface-book-2.rules
 
