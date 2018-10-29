@@ -104,7 +104,7 @@ So just disabled the nvidia card on BIOS (Devices - DGPU): Google "arch linux di
 https://www.reddit.com/r/archlinux/comments/5dmq8q/how_to_completely_disable_nvidia/
 https://bbs.archlinux.org/viewtopic.php?id=218917
 
-~and block the nouveau driver:~(no need and no use, nouveau driver still loads, also see `modinfo nouveau`)
+~and block the nouveau driver:~(no need and no use, nouveau driver still loads, also see `modinfo nouveau`) This is because the file /etc/udev/rules.d/98-keyboardscovers-surface-book-2.rules load the `nouveau` module, see https://github.com/atupal/snippet/blob/master/arch_and_linux/devices/surface_book_2.md
 ```shell
 # https:/wiki.archlinux.org/index.php/nouveau#Keep_NVIDIA_driver_installed
 create /etc/modprobe.d/nouveau_blacklist_surface_book_2.conf
