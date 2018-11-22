@@ -131,4 +131,6 @@ There are problems in package hackage-security-0.5.3.0:
 Reinstall these modules and problem solved:
 ```
 yaourt haskell old-locale # etc.
+...
+xmonad --recompile
 ```
