@@ -2,7 +2,12 @@
 
 Add `xrdb -merge ~/.Xresources` to ~/.xinitrc
 
-Grub:
+# One time change
+```
+xrandr --output eDP1 --scale 0.25x0.25 # Zoom out 4 times
+```
+
+# Grub:
 ```shell
 # https://wiki.archlinux.org/index.php/GRUB/Tips_and_tricks#Setting_the_framebuffer_resolution
 # Run videoinfo from grub shell
