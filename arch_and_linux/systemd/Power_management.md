@@ -28,6 +28,8 @@ sysctl vm.swappiness=10
 vm.swappiness=10
 ```
 
+>Note: Sometimes if the hibernate failed, it might because the swap is small, try to use swap sapce = 2 * memory.
+
 ### Required kernel parameters
 ```bash
 # vim /boot/efi/grub/grub.cfg, add following parameters in the linux/kernel line
