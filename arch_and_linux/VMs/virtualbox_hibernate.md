@@ -44,7 +44,8 @@ case $1 in
     #VBoxManage controlvm "win10" resume
     # Reset the network of the VM otherwise the internet in guess OS will lose after resuming from sleep or hibernate
     # Need run as the user owns the VM, otherwise will get "VBoxManage: error: Could not find a registered machine named 'win10'" error since this script is run by root
-    sleep 7 # wait the host network connected
+    # Acually no need to wait for the network can access internet
+    #sleep 7 # wait the host network connected
     espeak "Start resetting the VM network"
     sudo su - atupal --command='VBoxManage controlvm "win10" nic1 null'
     sudo su - atupal --command='VBoxManage controlvm "win10" nic1 bridged wlp1s0'
@@ -52,3 +53,5 @@ case $1 in
     ;;
 esac
 ```
+
+See also https://github.com/atupal/snippet/blob/master/arch_and_linux/devices/surface_book_2.md
