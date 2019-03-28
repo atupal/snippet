@@ -114,6 +114,7 @@ zcat /proc/config.gz > .config
 # For non-ubuntu distro following patch will cause a lot of conflict, just patch it manually according the patch file diffs.
 # Note: Please set a name for CONFIG_LOCALVERSION in the .config, it is used for the kernal name and kernel modules directory name.
 # So give it a friendly name to avoid confusiing and maintaning and overwritting exising kernels.
+# Such as: CONFIG_LOCALVERSION="-surface"
 # patch -p1 < ~/linux-surface/patches/config.patch
 ```
 4. Compile and install the kernel: https://wiki.archlinux.org/index.php/Kernel/Traditional_compilation
