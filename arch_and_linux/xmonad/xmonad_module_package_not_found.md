@@ -65,6 +65,8 @@ Try to reinstall the arch linux packages of the missing dependencies like.
 sudo pacman -S haskell-extensible-exceptions haskell-setlocale haskell-utf8-string haskell-data-default
 ```
 
+>Note: if the installation shows errors (like "xx failed to executed" in `sudo pacman -Syu`), try again and the error might disappear and works.
+
 The dependencies missed reduced:
 ```
 $ xmonad --recompile
