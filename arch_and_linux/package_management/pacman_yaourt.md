@@ -21,3 +21,10 @@ WARNING: 66 file(s) in /usr/lib/perl5/vendor_perl are not tracked by pacman and 
     Run the following command to get a list of these files:
     LC_ALL=C find "/usr/lib/perl5/vendor_perl" -type f -exec pacman -Qqo {} + |& sed -n 's/^error: No package owns \(.*\)$/\1/p'
 ```
+
+### yaourt no space on device when build the package
+This is beacuse the `/tmp` is small. Change the yaourt temp dir:
+```
+TMPDIR="/home/$USER/tmp" yaourt -Syua
+```
+Ref: G'yaourt set temp folder' https://forum.antergos.com/topic/2866/yaourt-no-space-left-on-device
