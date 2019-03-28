@@ -18,3 +18,6 @@ Program terminated with signal SIGSEGV, Segmentation fault.
 'XmbLookupString () from /usr/lib/libX11.so.6' -> https://bbs.archlinux.org/viewtopic.php?id=217913
 
 `dmesg` shows same error
+
+Mitigation:
+Switched to [Rofi](https://wiki.archlinux.org/index.php/Rofi) for a dmenu replacement. G'dmenu vs rofi'
