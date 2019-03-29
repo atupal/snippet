@@ -1,3 +1,6 @@
+### Pacman tips and tricks
+https://wiki.archlinux.org/index.php/Pacman/Tips_and_tricks
+
 
 ### yaourt skip pgp sig check
 
