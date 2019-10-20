@@ -77,7 +77,7 @@ times password. Refer the partition plan on https://gist.github.com/atupal/07278
 
 See also https://superuser.com/questions/1324389/how-to-avoid-encrypted-boot-partition-password-prompt-in-lvm-arch-linux (G"archlinux unlock encryption at boot")
 
-In /etc/default/grub edit the line GRUB_CMDLINE_LINUX to GRUB_CMDLINE_LINUX="cryptdevice=/dev/sdX3:luks:allow-discards" then run:
+In `/etc/default/grub` edit the line `GRUB_CMDLINE_LINUX` to `GRUB_CMDLINE_LINUX="cryptdevice=/dev/sdX3:luks:allow-discards"` then run:
 ```
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
