@@ -3,7 +3,7 @@ https://github.com/jawj/IKEv2-setup/blob/master/setup.sh
 Note:
 - Don't need setup the timezone, mail and ssh settings in that script.
 - For CloudFlare proxying, need to remove the CDN setting.
-- Before generating the certificate, shouldn't reject all traffic in iptables. (The 80 port is needed for certificate requeset validation).
+- <del>Before generating the certificate, shouldn't reject all traffic in iptables. (The 80 port is needed for certificate requeset validation).</del> The new upstream source fixed this by change 443 -> 80 in the script, letsencrypt hooks.
 - Letsencrypt doesn't allow issue certificate for Azure domains such as xxx.cloudapp.net. Need to use your own domain.
 - The emall address in the script useless (sending the instructions...), just delete the "mail" command.
 - In firewall setting, open 80 (TCP) and 500 (UDP), 4500 (UDP) portal. After certificate is issued, the 80 port can be deleted.
