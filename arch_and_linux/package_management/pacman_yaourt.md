@@ -31,3 +31,12 @@ This is beacuse the `/tmp` is small. Change the yaourt temp dir:
 TMPDIR="/home/$USER/tmp" yaourt -Syua
 ```
 Ref: G'yaourt set temp folder' https://forum.antergos.com/topic/2866/yaourt-no-space-left-on-device
+
+### package-query: error while loading shared libraries: libalpm.so.11: cannot open shared object file: No such file or directory
+Ref: https://rtfm.co.ua/en/arch-linux-package-query-error-while-loading-shared-libraries-libalpm-so-11-2/
+```
+git clone https://aur.archlinux.org/package-query.git
+cd package-query/
+makepkg -si # -i, --instal
+ldd /usr/bin/package-query | grep libalpm.so # Make sure it pointed to libalpm.so.12
+```
