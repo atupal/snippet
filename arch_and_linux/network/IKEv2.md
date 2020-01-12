@@ -10,4 +10,4 @@ Note:
 - For the .mobileconfig file, need open using Safari on iOS.
 - To auto start the server, change auto=add to auto=start in /etc/ipsec.conf on the *server*.
 - The upstream script has added ${IP}.sslip.io but then removed in newer version.
-- Recommen use valid email address so you can get notification of cert renew failure.
+- Recommen use valid email address so you can get notification of cert renew failure (like 'You may need to update your client to the latest version in case it is still using the deprecated TLS-SNI-01 validation method.').
