@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # github.com/jawj/IKEv2-setup
-# Copyright (c) 2015 – 2018 George MacKerron
+# Copyright (c) 2015 – 2020 George MacKerron
 # Released under the MIT licence: http://opensource.org/licenses/mit-license
 
 echo
@@ -13,7 +13,7 @@ function exit_badly {
   exit 1
 }
 
-[[ $(lsb_release -rs) == "18.04" ]] || exit_badly "This script is for Ubuntu 18.04 only, aborting (if you know what you're doing, delete this check)."
+[[ $(lsb_release -rs) == "18.04" ]] || exit_badly "This script is for Ubuntu 18.04 only: aborting (if you know what you're doing, try deleting this check)"
 [[ $(id -u) -eq 0 ]] || exit_badly "Please re-run as root (e.g. sudo ./path/to/this/script)"
 
 echo "--- Updating and installing software ---"
@@ -42,25 +42,22 @@ echo
 echo "--- Configuration: VPN settings ---"
 echo
 
-ETH0ORSIMILAR=$(ip route get 8.8.8.8 | awk -- '{printf $5}')
-IP=$(ifdata -pa $ETH0ORSIMILAR)
-DEFAULTVPNHOST=${IP}.sslip.io
+ETH0ORSIMILAR=$(ip route get 1.1.1.1 | awk -- '{printf $5}')
+IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
 
 echo "Network interface: ${ETH0ORSIMILAR}"
 echo "External IP: ${IP}"
 echo
-echo "** Note: hostname must resolve to this machine already, to enable Let's Encrypt certificate setup **"
-
-read -p "Hostname for VPN (default: ${DEFAULTVPNHOST}): " VPNHOST
-VPNHOST=${VPNHOST:-$DEFAULTVPNHOST}
+echo "** Note: this hostname must already resolve to this machine, to enable Let's Encrypt certificate setup **"
+read -p "Hostname for VPN: " VPNHOST
 
 VPNHOSTIP=$(dig -4 +short "$VPNHOST")
-[[ -n "$VPNHOSTIP" ]] || exit_badly "Cannot resolve VPN hostname, aborting"
+[[ -n "$VPNHOSTIP" ]] || exit_badly "Cannot resolve VPN hostname: aborting"
 
 if [[ "$IP" != "$VPNHOSTIP" ]]; then
   echo "Warning: $VPNHOST resolves to $VPNHOSTIP, not $IP"
-  echo "Either you are behind NAT, or something is wrong (e.g. hostname points to wrong IP, CloudFlare proxying shenanigans, ...)"
-  read -p "Press [Return] to continue, or Ctrl-C to abort" DUMMYVAR
+  echo "Either you're behind NAT, or something is wrong (e.g. hostname points to wrong IP, CloudFlare proxying shenanigans, ...)"
+  read -p "Press [Return] to continue anyway, or Ctrl-C to abort" DUMMYVAR
 fi
 
 read -p "VPN username: " VPNUSERNAME
@@ -243,23 +240,23 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 
 sysctl -p
 
-# these ike and esp settings are tested on Mac 10.14, iOS 12 and Windows 10
-# iOS and Mac with appropriate configuration profiles use AES_GCM_16_256/PRF_HMAC_SHA2_384/ECP_521 
-# Windows 10 uses AES_GCM_16_256/PRF_HMAC_SHA2_384/ECP_384
 
 echo "config setup
   strictcrlpolicy=yes
   uniqueids=never
 
 conn roadwarrior
-  auto=start
+  auto=add
   compress=no
   type=tunnel
   keyexchange=ikev2
   fragmentation=yes
   forceencaps=yes
-  ike=aes256gcm16-prfsha384-ecp521,aes256gcm16-prfsha384-ecp384!
-  esp=aes256gcm16-ecp521,aes256gcm16-ecp384!
+
+  # CNSA/RFC 6379 Suite B (https://wiki.strongswan.org/projects/strongswan/wiki/IKEv2CipherSuites)
+  ike=aes256gcm16-prfsha384-ecp384!
+  esp=aes256gcm16-ecp384!
+
   dpdaction=clear
   dpddelay=900s
   rekey=no
@@ -290,79 +287,79 @@ echo
 
 # user + SSH
 
-#id -u $LOGINUSERNAME &>/dev/null || adduser --disabled-password --gecos "" $LOGINUSERNAME
-#echo "${LOGINUSERNAME}:${LOGINPASSWORD}" | chpasswd
-#adduser ${LOGINUSERNAME} sudo
-#
-#sed -r \
-#-e "s/^#?Port 22$/Port ${SSHPORT}/" \
-#-e 's/^#?LoginGraceTime (120|2m)$/LoginGraceTime 30/' \
-#-e 's/^#?PermitRootLogin yes$/PermitRootLogin no/' \
-#-e 's/^#?X11Forwarding yes$/X11Forwarding no/' \
-#-e 's/^#?UsePAM yes$/UsePAM no/' \
-#-i.original /etc/ssh/sshd_config
-#
-#grep -Fq 'jawj/IKEv2-setup' /etc/ssh/sshd_config || echo "
-## https://github.com/jawj/IKEv2-setup
-#MaxStartups 1
-#MaxAuthTries 2
-#UseDNS no" >> /etc/ssh/sshd_config
-#
-#if [[ $CERTLOGIN = "y" ]]; then
-#  mkdir -p /home/${LOGINUSERNAME}/.ssh
-#  chown $LOGINUSERNAME /home/${LOGINUSERNAME}/.ssh
-#  chmod 700 /home/${LOGINUSERNAME}/.ssh
-#
-#  cp /root/.ssh/authorized_keys /home/${LOGINUSERNAME}/.ssh/authorized_keys
-#  chown $LOGINUSERNAME /home/${LOGINUSERNAME}/.ssh/authorized_keys
-#  chmod 600 /home/${LOGINUSERNAME}/.ssh/authorized_keys
-#
-#  sed -r \
-#  -e "s/^#?PasswordAuthentication yes$/PasswordAuthentication no/" \
-#  -i.allows_pwd /etc/ssh/sshd_config
-#fi
-#
-#service ssh restart
-#
-#
-#echo
-#echo "--- Timezone, mail, unattended upgrades ---"
-#echo
-#
-#timedatectl set-timezone $TZONE
-#/usr/sbin/update-locale LANG=en_GB.UTF-8
-#
-#
-#sed -r \
-#-e "s/^myhostname =.*$/myhostname = ${VPNHOST}/" \
-#-e 's/^inet_interfaces =.*$/inet_interfaces = loopback-only/' \
-#-i.original /etc/postfix/main.cf
-#
-#grep -Fq 'jawj/IKEv2-setup' /etc/aliases || echo "
-## https://github.com/jawj/IKEv2-setup
-#root: ${EMAILADDR}
-#${LOGINUSERNAME}: ${EMAILADDR}
-#" >> /etc/aliases
-#
-#newaliases
-#service postfix restart
-#
-#
-#sed -r \
-#-e 's|^//Unattended-Upgrade::MinimalSteps "true";$|Unattended-Upgrade::MinimalSteps "true";|' \
-#-e 's|^//Unattended-Upgrade::Mail "root";$|Unattended-Upgrade::Mail "root";|' \
-#-e 's|^//Unattended-Upgrade::Automatic-Reboot "false";$|Unattended-Upgrade::Automatic-Reboot "true";|' \
-#-e 's|^//Unattended-Upgrade::Remove-Unused-Dependencies "false";|Unattended-Upgrade::Remove-Unused-Dependencies "true";|' \
-#-e 's|^//Unattended-Upgrade::Automatic-Reboot-Time "02:00";$|Unattended-Upgrade::Automatic-Reboot-Time "03:00";|' \
-#-i /etc/apt/apt.conf.d/50unattended-upgrades
-#
-#echo 'APT::Periodic::Update-Package-Lists "1";
-#APT::Periodic::Download-Upgradeable-Packages "1";
-#APT::Periodic::AutocleanInterval "7";
-#APT::Periodic::Unattended-Upgrade "1";
-#' > /etc/apt/apt.conf.d/10periodic
-#
-#service unattended-upgrades restart
+id -u $LOGINUSERNAME &>/dev/null || adduser --disabled-password --gecos "" $LOGINUSERNAME
+echo "${LOGINUSERNAME}:${LOGINPASSWORD}" | chpasswd
+adduser ${LOGINUSERNAME} sudo
+
+sed -r \
+-e "s/^#?Port 22$/Port ${SSHPORT}/" \
+-e 's/^#?LoginGraceTime (120|2m)$/LoginGraceTime 30/' \
+-e 's/^#?PermitRootLogin yes$/PermitRootLogin no/' \
+-e 's/^#?X11Forwarding yes$/X11Forwarding no/' \
+-e 's/^#?UsePAM yes$/UsePAM no/' \
+-i.original /etc/ssh/sshd_config
+
+grep -Fq 'jawj/IKEv2-setup' /etc/ssh/sshd_config || echo "
+# https://github.com/jawj/IKEv2-setup
+MaxStartups 1
+MaxAuthTries 2
+UseDNS no" >> /etc/ssh/sshd_config
+
+if [[ $CERTLOGIN = "y" ]]; then
+  mkdir -p /home/${LOGINUSERNAME}/.ssh
+  chown $LOGINUSERNAME /home/${LOGINUSERNAME}/.ssh
+  chmod 700 /home/${LOGINUSERNAME}/.ssh
+
+  cp /root/.ssh/authorized_keys /home/${LOGINUSERNAME}/.ssh/authorized_keys
+  chown $LOGINUSERNAME /home/${LOGINUSERNAME}/.ssh/authorized_keys
+  chmod 600 /home/${LOGINUSERNAME}/.ssh/authorized_keys
+
+  sed -r \
+  -e "s/^#?PasswordAuthentication yes$/PasswordAuthentication no/" \
+  -i.allows_pwd /etc/ssh/sshd_config
+fi
+
+service ssh restart
+
+
+echo
+echo "--- Timezone, mail, unattended upgrades ---"
+echo
+
+timedatectl set-timezone $TZONE
+/usr/sbin/update-locale LANG=en_GB.UTF-8
+
+
+sed -r \
+-e "s/^myhostname =.*$/myhostname = ${VPNHOST}/" \
+-e 's/^inet_interfaces =.*$/inet_interfaces = loopback-only/' \
+-i.original /etc/postfix/main.cf
+
+grep -Fq 'jawj/IKEv2-setup' /etc/aliases || echo "
+# https://github.com/jawj/IKEv2-setup
+root: ${EMAILADDR}
+${LOGINUSERNAME}: ${EMAILADDR}
+" >> /etc/aliases
+
+newaliases
+service postfix restart
+
+
+sed -r \
+-e 's|^//Unattended-Upgrade::MinimalSteps "true";$|Unattended-Upgrade::MinimalSteps "true";|' \
+-e 's|^//Unattended-Upgrade::Mail "root";$|Unattended-Upgrade::Mail "root";|' \
+-e 's|^//Unattended-Upgrade::Automatic-Reboot "false";$|Unattended-Upgrade::Automatic-Reboot "true";|' \
+-e 's|^//Unattended-Upgrade::Remove-Unused-Dependencies "false";|Unattended-Upgrade::Remove-Unused-Dependencies "true";|' \
+-e 's|^//Unattended-Upgrade::Automatic-Reboot-Time "02:00";$|Unattended-Upgrade::Automatic-Reboot-Time "03:00";|' \
+-i /etc/apt/apt.conf.d/50unattended-upgrades
+
+echo 'APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::Unattended-Upgrade "1";
+' > /etc/apt/apt.conf.d/10periodic
+
+service unattended-upgrades restart
 
 echo
 echo "--- Creating configuration files ---"
@@ -389,7 +386,7 @@ cat << EOF > vpn-ios-or-mac.mobileconfig
           <key>IntegrityAlgorithm</key>
           <string>SHA2-384</string>
           <key>DiffieHellmanGroup</key>
-          <integer>21</integer>
+          <integer>20</integer>
           <key>LifeTimeInMinutes</key>
           <integer>1440</integer>
         </dict>
@@ -412,7 +409,7 @@ cat << EOF > vpn-ios-or-mac.mobileconfig
           <key>IntegrityAlgorithm</key>
           <string>SHA2-384</string>
           <key>DiffieHellmanGroup</key>
-          <integer>21</integer>
+          <integer>20</integer>
           <key>LifeTimeInMinutes</key>
           <integer>1440</integer>
         </dict>
@@ -505,8 +502,8 @@ conn ikev2vpn
         rekeymargin=3m
         keyingtries=1
         keyexchange=ikev2
-        ike=aes256gcm16-prfsha384-ecp521!
-        esp=aes256gcm16-ecp521!
+        ike=aes256gcm16-prfsha384-ecp384!
+        esp=aes256gcm16-ecp384!
         leftsourceip=%config
         leftauth=eap-mschapv2
         eap_identity=\${VPNUSERNAME}
@@ -537,7 +534,7 @@ if [[ "\$VPNIP" == "\$ACTUALIP" ]]; then echo "PASSED (IP: \${VPNIP})"; else ech
 
 echo
 echo "To disconnect: ipsec down ikev2vpn"
-echo "To resconnect: ipsec up ikev2vpn"
+echo "To reconnect:  ipsec up ikev2vpn"
 echo "To connect automatically: change auto=add to auto=start in /etc/ipsec.conf"
 EOF
 
@@ -589,7 +586,7 @@ A bash script to set up strongSwan as a VPN client is attached as vpn-ubuntu-cli
 
 EOF
 
-#EMAIL=$USER@$VPNHOST mutt -s "VPN configuration" -a vpn-ios-or-mac.mobileconfig vpn-ubuntu-client.sh -- $EMAILADDR < vpn-instructions.txt
+EMAIL=$USER@$VPNHOST mutt -s "VPN configuration" -a vpn-ios-or-mac.mobileconfig vpn-ubuntu-client.sh -- $EMAILADDR < vpn-instructions.txt
 
 echo
 echo "--- How to connect ---"
