@@ -6,9 +6,10 @@ Config { font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*"
         , bgColor = "black"
         , fgColor = "grey"
         , position = TopW L 100
-        , commands = [ Run Weather "CODE" ["-t","<tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
-                        , Run Network "enp0s25" ["-L","0","-H","32","--normal","green","--high","red"] 10
-                        , Run Network "wlp4s0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+        , commands = [ --Run Weather "ZSSZ" ["-t","<tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
+                        Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                        , Run Network "enp0s20f0u4u2" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                        , Run Network "wlp1s0" ["-L","0","-H","32","--normal","green","--high","red"] 10
                         , Run Network "ppp0" ["-L","0","-H","32","--normal","green","--high","red"] 10
                         , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
                         , Run Memory ["-t","Mem: <usedratio>%"] 10
@@ -16,7 +17,7 @@ Config { font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*"
                         , Run Com "uname" ["-s","-r"] "" 36000
                         , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
                         , Run StdinReader
-                        , Run BatteryP ["BAT0"]
+                        , Run BatteryP ["BAT1", "BAT2"]
                         ["-t", "<acstatus>"
                         , "-L", "10", "-H", "80"
                         , "-l", "red", "-h", "green"
@@ -26,6 +27,6 @@ Config { font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*"
                         ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "%StdinReader% | %cpu% | %memory% * %swap% | %enp0s25% - %wlp4s0% - %ppp0% | %battery% }{<fc=#ee9a00>%date%</fc> | %uname% | %CODE% "
+        , template = "%StdinReader% | %cpu% | %memory% * %swap% | %eth0% - %enp0s20f0u4u2% - %wlp1s0% - %ppp0% | %battery% }{<fc=#ee9a00>%date%</fc> | %uname% "--| %ZSSZ% "
         }
 
