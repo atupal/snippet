@@ -158,3 +158,6 @@ mkinitcpio -p linux-surface # mkinitcpio can find the kernel modules directory u
    need do it youself.
 6. Add new boot-menu or `grub-mkconfig`.
 7. Reboot, issue resolved.
+
+
+# Note: the CPU issue was resolved from 5.13.4 in Arch: pacman.log: "upgraded linux (5.13.4.arch2-1 -> 5.15.10.arch1-1)"
