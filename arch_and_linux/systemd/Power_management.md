@@ -43,6 +43,12 @@ resume=/dev/sda5
 filefrag -v /swapfile
 resume_offset=xxxxxx
 ```
+Or update `/etc/default/grub` to generate grub.cfg automatically:
+```
+Using a swap file requires also setting the resume=swap_device and additionally a resume_offset=swap_file_offset kernel parameters
+The following command may be used to identify swap_device: findmnt -no UUID -T /swapfile
+The following command may be used to identify swap_file_offset: filefrag -v /swapfile | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'
+```
 
 ### Configure the initramfs
 ```bash
