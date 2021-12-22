@@ -46,3 +46,7 @@ if [ "${grub_platform}" == "efi" ]; then
 	}
 fi
 ```
+
+# More readings:
+- G'Secure Boot, Signed Modules and Signed ELF Binaries' from (https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot)
+  https://unix.stackexchange.com/questions/652738/what-does-signing-drivers-modules-do-and-what-is-the-significance
