@@ -84,7 +84,7 @@ In `/etc/default/grub` edit the line `GRUB_CMDLINE_LINUX` to `GRUB_CMDLINE_LINUX
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-##### Enroll UEFI key
+##### Enroll UEFI key or hash
 Ref: https://github.com/atupal/snippet/blob/master/arch_and_linux/boot/uefi_and_secure_boot.md
 
 ##### Dual boot UEFI Windows 10
