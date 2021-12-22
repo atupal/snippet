@@ -70,6 +70,8 @@ Enter passphrase for hd0.gpt5 (<uuid>):
 
 If wrong password, it says access denied, no such cryptodisk found, disk `ctyptouuid/<uuid>` not found
 
+Note: the location of the boot partition is embedded in `grubx64.efi`. Use `strings EFI/GRUB/grubx64.efi` to check. Should be in the last. E.g: `(,gpt6)/grub`
+
 ##### Make the grub configuration file.
 If the `/root` is encypted, you need to input the password after kernel loaded, which means you need to input password again if
 `/boot` and `/root` is on the same encypted disk. So you can put `/boot` on a seperated unencypted partition to avoid input two
