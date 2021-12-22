@@ -105,7 +105,7 @@ See https://wiki.archlinux.org/index.php/Microsoft_Surface_Book_2
 1. Download the kernel sources file from https://kernel.org, download the patchs from https://github.com/jakeday/linux-surface/
 2.
 ```shell
-for i in ~/linux-surface/patches/[VERSION]/*.patch; do patch -p1 < $i; done
+for i in ~/kernel/linux-surface/patches/[VERSION]/*.patch; do patch -p1 < $i; done
 ```
 3. Get current config file and patch it, google 'arch linux kernel config file location', /boot/configxx doesn't exist for archlinux
 ```shell
