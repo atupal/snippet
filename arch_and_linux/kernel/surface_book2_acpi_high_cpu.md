@@ -162,6 +162,6 @@ mkinitcpio -p linux-surface # mkinitcpio can find the kernel modules directory u
 
 # New!
  - The CPU issue was resolved from 5.13.4 in Arch: pacman.log: "upgraded linux (5.13.4.arch2-1 -> 5.15.10.arch1-1)"
- - You can use the Arch Surface Kernel PKGBUILD to automate the kernal compliation and installation: https://github.com/linux-surface/linux-surface/tree/master/pkg/arch
+ - You can use the Arch Surface Kernel PKGBUILD to automate the kernal compliation and installation: https://github.com/linux-surface/linux-surface/tree/master/pkg/arch (To uninstall: `sudo pacman -R linux-surface linux-surface-headers; sudo grub-mkconfig  > /boot/grub/grub.cfg`)
    May need the mkinitcpio preset for the Surface kernel.
    Or use the packages from the additional source, which is not tried: https://github.com/linux-surface/linux-surface/wiki/Installation-and-Setup#arch
